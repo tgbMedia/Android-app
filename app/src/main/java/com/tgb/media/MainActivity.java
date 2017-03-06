@@ -60,7 +60,9 @@ public class MainActivity extends AppCompatActivity {
         mAdapter = new GalleryAdapter(getApplicationContext(), movies);
 
         //Recycler view grid
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(),
+                getResources().getInteger(R.integer.gallery_columns));
+
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new SpacesItemDecoration(10));
