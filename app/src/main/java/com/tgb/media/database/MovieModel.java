@@ -1,5 +1,8 @@
 package com.tgb.media.database;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
@@ -8,7 +11,8 @@ import org.greenrobot.greendao.annotation.Generated;
 import tgb.tmdb.models.Movie;
 
 @Entity
-public class MovieModel {
+public class MovieModel implements Parcelable {
+
     @Id
     public long id;
 
@@ -21,16 +25,17 @@ public class MovieModel {
     //public List<Integer> genreIds;
     public String originalTitle;
     public String originalLanguage;
+    public String relaseDate;
     public String backdropPath;
     public float popularity;
     public int voteCount;
     public boolean video;
     public float voteAverage;
-    @Generated(hash = 1840626006)
+    @Generated(hash = 1518686642)
     public MovieModel(long id, String title, String posterPath, boolean adult,
             String overview, String originalTitle, String originalLanguage,
-            String backdropPath, float popularity, int voteCount, boolean video,
-            float voteAverage) {
+            String relaseDate, String backdropPath, float popularity, int voteCount,
+            boolean video, float voteAverage) {
         this.id = id;
         this.title = title;
         this.posterPath = posterPath;
@@ -38,6 +43,7 @@ public class MovieModel {
         this.overview = overview;
         this.originalTitle = originalTitle;
         this.originalLanguage = originalLanguage;
+        this.relaseDate = relaseDate;
         this.backdropPath = backdropPath;
         this.popularity = popularity;
         this.voteCount = voteCount;
@@ -50,7 +56,7 @@ public class MovieModel {
     public long getId() {
         return this.id;
     }
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
     public String getTitle() {
@@ -89,6 +95,12 @@ public class MovieModel {
     public void setOriginalLanguage(String originalLanguage) {
         this.originalLanguage = originalLanguage;
     }
+    public String getRelaseDate() {
+        return this.relaseDate;
+    }
+    public void setRelaseDate(String relaseDate) {
+        this.relaseDate = relaseDate;
+    }
     public String getBackdropPath() {
         return this.backdropPath;
     }
@@ -119,12 +131,14 @@ public class MovieModel {
     public void setVoteAverage(float voteAverage) {
         this.voteAverage = voteAverage;
     }
+
     public void createFromGsonModel(Movie movie){
         this.id = movie.id;
         this.title = movie.title;
         this.posterPath = movie.posterPath;
         this.adult = movie.adult;
         this.overview = movie.overview;
+        this.relaseDate = movie.relaseDate;
         //this.genreIds = movie.genreIds;
         this.originalTitle = movie.originalTitle;
         this.originalLanguage = movie.originalLanguage;
@@ -136,23 +150,52 @@ public class MovieModel {
     }
 
     @Override
-    public String toString() {
-        return "MovieModel{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", posterPath='" + posterPath + '\'' +
-                ", adult=" + adult +
-                ", overview='" + overview + '\'' +
-                ", originalTitle='" + originalTitle + '\'' +
-                ", originalLanguage='" + originalLanguage + '\'' +
-                ", backdropPath='" + backdropPath + '\'' +
-                ", popularity=" + popularity +
-                ", voteCount=" + voteCount +
-                ", video=" + video +
-                ", voteAverage=" + voteAverage +
-                '}';
+    public int describeContents() {
+        return 0;
     }
-    public void setId(long id) {
-        this.id = id;
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.id);
+        dest.writeString(this.title);
+        dest.writeString(this.posterPath);
+        dest.writeByte(this.adult ? (byte) 1 : (byte) 0);
+        dest.writeString(this.overview);
+        dest.writeString(this.originalTitle);
+        dest.writeString(this.originalLanguage);
+        dest.writeString(this.relaseDate);
+        dest.writeString(this.backdropPath);
+        dest.writeFloat(this.popularity);
+        dest.writeInt(this.voteCount);
+        dest.writeByte(this.video ? (byte) 1 : (byte) 0);
+        dest.writeFloat(this.voteAverage);
     }
+
+    protected MovieModel(Parcel in) {
+        this.id = in.readLong();
+        this.title = in.readString();
+        this.posterPath = in.readString();
+        this.adult = in.readByte() != 0;
+        this.overview = in.readString();
+        this.originalTitle = in.readString();
+        this.originalLanguage = in.readString();
+        this.relaseDate = in.readString();
+        this.backdropPath = in.readString();
+        this.popularity = in.readFloat();
+        this.voteCount = in.readInt();
+        this.video = in.readByte() != 0;
+        this.voteAverage = in.readFloat();
+    }
+
+    public static final Parcelable.Creator<MovieModel> CREATOR = new Parcelable.Creator<MovieModel>() {
+        @Override
+        public MovieModel createFromParcel(Parcel source) {
+            return new MovieModel(source);
+        }
+
+        @Override
+        public MovieModel[] newArray(int size) {
+            return new MovieModel[size];
+        }
+    };
 }

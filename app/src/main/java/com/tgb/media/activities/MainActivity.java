@@ -75,7 +75,12 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getApplicationContext(), recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
-                        startActivity(new Intent(getBaseContext(), DetailsActivity.class));
+
+                        MovieModel movieMdel = mAdapter.getItem(position);
+                        Intent detailsActivityIntent = new Intent(getBaseContext(), DetailsActivity.class);
+                        detailsActivityIntent.putExtra(DetailsActivity.MOVIE, movieMdel);
+
+                        startActivity(detailsActivityIntent);
                     }
 
                     @Override public void onLongItemClick(View view, int position) {
