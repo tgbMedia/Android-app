@@ -1,5 +1,6 @@
-package com.tgb.media;
+package com.tgb.media.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -12,9 +13,12 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 
+import com.tgb.media.R;
+import com.tgb.media.TgbApp;
 import com.tgb.media.adapter.GalleryAdapter;
 import com.tgb.media.database.MovieModel;
 import com.tgb.media.helper.SpacesItemDecoration;
+import com.tgb.media.listener.RecyclerItemClickListener;
 import com.tgb.media.videos.VideosLibrary;
 
 import java.util.ArrayList;
@@ -65,8 +69,20 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new SpacesItemDecoration(10));
+        recyclerView.addItemDecoration(new SpacesItemDecoration(5));
         recyclerView.setAdapter(mAdapter);
+
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getApplicationContext(), recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        startActivity(new Intent(getBaseContext(), DetailsActivity.class));
+                    }
+
+                    @Override public void onLongItemClick(View view, int position) {
+                        // do whatever
+                    }
+                })
+        );
 
         List<String> requestedMovies = new ArrayList<>();
 

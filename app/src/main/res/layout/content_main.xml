@@ -7,14 +7,15 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:fillViewport="true"
-    tools:context=".MainActivity"
+    tools:context=".activities.MainActivity"
     tools:showIn="@layout/activity_main">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        android:focusable="true"/>
 
     <include
         android:id="@+id/overlay_loading"

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <android.support.constraint.Guideline
+        android:id="@+id/poster_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.25"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/poster_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05"/>
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="@dimen/details_poster_width"
+        android:layout_height="@dimen/details_poster_height"
+        android:layout_marginLeft="0dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintLeft_toLeftOf="@+id/poster_left"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/deadpool_poster" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Deadpool"
+        android:textColor="@color/title_color"
+        android:textSize="@dimen/details_poster_title_text_size"
+        app:layout_constraintTop_toTopOf="@+id/imageView3"
+        app:layout_constraintLeft_toRightOf="@+id/imageView3"
+        android:layout_marginLeft="@dimen/details_poster_title_margin"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+        android:layout_marginBottom="0dp"
+        app:layout_constraintVertical_bias="0.507" />
+
+    <TextView
+        android:id="@+id/subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:text="2016"
+        android:textSize="@dimen/details_poster_subtitle_text_size"
+        app:layout_constraintLeft_toLeftOf="@+id/title"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/details_description_side_margin"
+        android:layout_marginRight="@dimen/details_description_side_margin"
+        android:layout_marginTop="@dimen/details_description_top_margin"
+        android:text="@string/lorem"
+        android:textSize="@dimen/details_description_text_size"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="@+id/poster_left"
+        app:layout_constraintRight_toLeftOf="@+id/guideline11"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline11"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
+
+</android.support.constraint.ConstraintLayout>

@@ -1,6 +1,6 @@
 package com.tgb.media.component;
 
-import com.tgb.media.MainActivity;
+import com.tgb.media.activities.MainActivity;
 import com.tgb.media.module.AppModule;
 import com.tgb.media.module.MoviesModule;
 import com.tgb.media.module.NetModule;

@@ -17,8 +17,6 @@ import com.tgb.media.database.MovieModel;
 
 import java.util.List;
 
-import tgb.tmdb.models.Movie;
-
 
 /**
  * Created by Lincoln on 31/03/16.

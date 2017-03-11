@@ -10,4 +10,8 @@
     <!-- Gallery thumb -->
     <color name="gallery_thumb_text_background">#80000000</color>
     <color name="gallery_thumb_text_color">#eee</color>
+
+    <!-- Information page -->
+    <color name="title_color">#eee</color>
+
 </resources>
