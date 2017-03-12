@@ -4,5 +4,6 @@
     
     <!-- Details activity -->
     <string name="play">Play</string>
+    <string name="release_date">Release date</string>
     <string name="lorem">A fast-talking mercenary with a morbid sense of humor is subjected to a rogue experiment that leaves him with accelerated healing powers and a quest for revenge.</string>
 </resources>

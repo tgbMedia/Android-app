@@ -6,11 +6,14 @@
     <dimen name="details_poster_width">125dp</dimen>
     <dimen name="details_poster_height">185dp</dimen>
     <dimen name="details_poster_title_margin">16dp</dimen>
+    <dimen name="details_poster_title_right_margin">0dp</dimen>
+    <dimen name="details_poster_title_left_margin">160dp</dimen>
     <dimen name="details_poster_title_text_size">36sp</dimen>
     <dimen name="details_poster_subtitle_text_size">18sp</dimen>
     <dimen name="details_overview_top_margin">16dp</dimen>
     <dimen name="details_overview_side_margin">8dp</dimen>
     <dimen name="details_overview_text_size">18sp</dimen>
+
 
 
 </resources>
