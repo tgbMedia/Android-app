@@ -3,8 +3,10 @@ package com.tgb.media.activities;
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,6 +26,7 @@ public class DetailsActivity extends AppCompatActivity {
     @BindView(R.id.subtitle) TextView subtitle;
     @BindView(R.id.poster) ImageView poster;
     @BindView(R.id.overview) TextView overview;
+    @BindView(R.id.play_button) FloatingActionButton playButton;
 
 
     //Finals
@@ -32,7 +35,6 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_details);
         ButterKnife.bind(this);
 
@@ -55,5 +57,11 @@ public class DetailsActivity extends AppCompatActivity {
                 .into(theme);
 
 
+    }
+
+    @Override
+    protected void onStop() {
+        playButton.setVisibility(View.GONE);
+        super.onStop();
     }
 }

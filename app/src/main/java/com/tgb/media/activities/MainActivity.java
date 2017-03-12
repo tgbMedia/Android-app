@@ -2,6 +2,7 @@ package com.tgb.media.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -77,10 +78,19 @@ public class MainActivity extends AppCompatActivity {
                     @Override public void onItemClick(View view, int position) {
 
                         MovieModel movieMdel = mAdapter.getItem(position);
-                        Intent detailsActivityIntent = new Intent(getBaseContext(), DetailsActivity.class);
+
+                        Intent detailsActivityIntent = new Intent(
+                                getBaseContext(),
+                                DetailsActivity.class);
+
                         detailsActivityIntent.putExtra(DetailsActivity.MOVIE, movieMdel);
 
-                        startActivity(detailsActivityIntent);
+                        ActivityOptionsCompat options = ActivityOptionsCompat.
+                                makeSceneTransitionAnimation(MainActivity.this, view.findViewById(R.id.thumbnail), getString(R.string.gallery_transition));
+
+                        startActivity(detailsActivityIntent, options.toBundle());
+
+                        //startActivity(detailsActivityIntent);
                     }
 
                     @Override public void onLongItemClick(View view, int position) {
@@ -91,113 +101,43 @@ public class MainActivity extends AppCompatActivity {
 
         List<String> requestedMovies = new ArrayList<>();
 
+        requestedMovies.add("Moonlight");
+        requestedMovies.add("Zootopia");
         requestedMovies.add("Minions");
+        requestedMovies.add("Hell or High Water");
+        requestedMovies.add("Manchester by the Sea");
         requestedMovies.add("Hacksaw Ridge");
-        requestedMovies.add("Now you see me 2");
+        requestedMovies.add("Arrival");
+        requestedMovies.add("La La Land");
         requestedMovies.add("The Magnificent Seven");
-        requestedMovies.add("Doctor strange");
-        requestedMovies.add("Ted");
-        requestedMovies.add("Ted 2");
         requestedMovies.add("Sausage Party");
+        requestedMovies.add("The Jungle Book");
+        requestedMovies.add("Love & Friendship");
+        requestedMovies.add("Ted 2");
+        requestedMovies.add("Finding Dory");
+        requestedMovies.add("Kubo and the Two Strings");
+        requestedMovies.add("Hunt for the Wilderpeople");
+        requestedMovies.add("Deadpool");
         requestedMovies.add("American Sniper");
-        requestedMovies.add("The Godfather");
-        requestedMovies.add("The Shawshank Redemption");
-        requestedMovies.add("Schindler's List");
-        requestedMovies.add("Raging Bull");
-        requestedMovies.add("Casablanca");
-        requestedMovies.add("Citizen Kane");
-        requestedMovies.add("Gone with the Wind");
-        requestedMovies.add("The Wizard of Oz");
-        requestedMovies.add("One Flew Over the Cuckoo's Nest");
-        requestedMovies.add("Lawrence of Arabia");
-        requestedMovies.add("Vertigo");
-        requestedMovies.add("Psycho");
-        requestedMovies.add("The Godfather: Part II");
-        requestedMovies.add("On the Waterfront");
-        requestedMovies.add("Forrest Gump");
-        requestedMovies.add("The Sound of Music");
-        requestedMovies.add("12 Angry Men");
-        requestedMovies.add("West Side Story");
-        requestedMovies.add("Star Wars");
-        requestedMovies.add("2001: A Space Odyssey");
-        requestedMovies.add("E.T. the Extra-Terrestrial");
-        requestedMovies.add("The Silence of the Lambs");
-        requestedMovies.add("Chinatown");
-        requestedMovies.add("The Bridge on the River Kwai");
-        requestedMovies.add("Singin' in the Rain");
-        requestedMovies.add("It's a Wonderful Life");
-        requestedMovies.add("Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb");
-        requestedMovies.add("Some Like It Hot");
-        requestedMovies.add("Ben-Hur");
-        requestedMovies.add("Apocalypse Now");
-        requestedMovies.add("Amadeus");
-        requestedMovies.add("The Lord of the Rings: The Return of the King");
-        requestedMovies.add("Gladiator");
-        requestedMovies.add("Titanic");
-        requestedMovies.add("From Here to Eternity");
-        requestedMovies.add("Saving Private Ryan");
-        requestedMovies.add("Unforgiven");
-        requestedMovies.add("Raiders of the Lost Ark");
-        requestedMovies.add("Rocky");
-        requestedMovies.add("A Streetcar Named Desire");
-        requestedMovies.add("The Philadelphia Story");
-        requestedMovies.add("To Kill a Mockingbird");
-        requestedMovies.add("An American in Paris");
-        requestedMovies.add("The Best Years of Our Lives");
-        requestedMovies.add("My Fair Lady");
-        requestedMovies.add("A Clockwork Orange");
-        requestedMovies.add("Doctor Zhivago");
-        requestedMovies.add("The Searchers");
-        requestedMovies.add("Jaws");
-        requestedMovies.add("Patton");
-        requestedMovies.add("Butch Cassidy and the Sundance Kid");
-        requestedMovies.add("The Treasure of the Sierra Madre");
-        requestedMovies.add("Il buono, il brutto, il cattivo");
-        requestedMovies.add("The Apartment");
-        requestedMovies.add("Platoon");
-        requestedMovies.add("High Noon");
-        requestedMovies.add("Braveheart");
-        requestedMovies.add("Dances with Wolves");
-        requestedMovies.add("Jurassic Park");
-        requestedMovies.add("The Exorcist");
-        requestedMovies.add("The Pianist");
-        requestedMovies.add("Goodfellas");
-        requestedMovies.add("The Deer Hunter");
-        requestedMovies.add("All Quiet on the Western Front");
-        requestedMovies.add("Bonnie and Clyde");
-        requestedMovies.add("The French Connection");
-        requestedMovies.add("City Lights");
-        requestedMovies.add("It Happened One Night");
-        requestedMovies.add("A Place in the Sun");
-        requestedMovies.add("Midnight Cowboy");
-        requestedMovies.add("Mr. Smith Goes to Washington");
-        requestedMovies.add("Rain Man");
-        requestedMovies.add("Annie Hall");
-        requestedMovies.add("Fargo");
-        requestedMovies.add("Giant");
-        requestedMovies.add("Shane");
-        requestedMovies.add("The Grapes of Wrath");
-        requestedMovies.add("The Green Mile");
-        requestedMovies.add("Close Encounters of the Third Kind");
-        requestedMovies.add("Nashville");
-        requestedMovies.add("Network");
-        requestedMovies.add("The Graduate");
-        requestedMovies.add("American Graffiti");
-        requestedMovies.add("Pulp Fiction");
-        requestedMovies.add("Terms of Endearment");
-        requestedMovies.add("Good Will Hunting");
-        requestedMovies.add("The African Queen");
-        requestedMovies.add("Stagecoach");
-        requestedMovies.add("Mutiny on the Bounty");
-        requestedMovies.add("The Great Dictator");
-        requestedMovies.add("Double Indemnity");
-        requestedMovies.add("The Maltese Falcon");
-        requestedMovies.add("Wuthering Heights");
-        requestedMovies.add("Taxi Driver");
-        requestedMovies.add("Rear Window");
-        requestedMovies.add("The Third Man");
-        requestedMovies.add("Rebel Without a Cause");
-        requestedMovies.add("North by Northwest");
+        requestedMovies.add("Moana");
+        requestedMovies.add("Captain America: Civil War");
+        requestedMovies.add("Sing Street");
+        requestedMovies.add("Tower");
+        requestedMovies.add("The Nice Guys");
+        requestedMovies.add("Ted");
+        requestedMovies.add("Eye In The Sky");
+        requestedMovies.add("Embrace Of The Serpent");
+        requestedMovies.add("The Witch");
+        requestedMovies.add("The Wailing (Goksung)");
+        requestedMovies.add("Doctor Strange");
+        requestedMovies.add("Kung Fu Panda 3");
+        requestedMovies.add("The Edge of Seventeen");
+        requestedMovies.add("Fences");
+        requestedMovies.add("10 Cloverfield Lane");
+        requestedMovies.add("Long Way North (Tout en haut du monde)");
+        requestedMovies.add("Cemetery of Splendor");
+        requestedMovies.add("Jackie");
+
 
         final AtomicInteger counter = new AtomicInteger();
 

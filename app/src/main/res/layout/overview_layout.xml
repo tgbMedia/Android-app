@@ -9,6 +9,7 @@
 
     <ImageView
         android:id="@+id/poster"
+        android:transitionName="@string/gallery_transition"
         android:layout_width="@dimen/details_poster_width"
         android:layout_height="@dimen/details_poster_height"
         android:scaleType="centerCrop"
@@ -27,7 +28,6 @@
         android:layout_marginLeft="@dimen/details_poster_title_left_margin"
         android:layout_marginRight="@dimen/details_poster_title_right_margin"
         android:layout_marginTop="@dimen/details_poster_title_top_margin"
-        android:text="Deadpool"
         android:textColor="@color/title_color"
         android:textSize="@dimen/details_poster_title_text_size"
         app:layout_constraintHorizontal_bias="0.0"
@@ -44,7 +44,6 @@
         android:layout_marginRight="@dimen/details_poster_title_right_margin"
         android:layout_marginTop="0dp"
         android:lines="1"
-        android:text="dfsddfg"
         android:textSize="@dimen/details_poster_subtitle_text_size"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
