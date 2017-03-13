@@ -5,7 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:id="@+id/coordinator">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/main.appbar"
@@ -39,14 +40,15 @@
         android:layout_margin="@dimen/activity_horizontal_margin"
         app:srcCompat="@drawable/ic_play_button"
         app:layout_anchor="@id/main.appbar"
-        app:layout_anchorGravity="bottom|right|end"/>
+        app:layout_anchorGravity="bottom|right"/>
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/details_content_top_margin"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:id="@+id/nested_scroll">
 
         <include
             android:layout_width="match_parent"

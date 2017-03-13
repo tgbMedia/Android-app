@@ -1,12 +1,12 @@
 package com.tgb.media.activities;
 
+import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,6 +17,8 @@ import com.tgb.media.database.MovieModel;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static android.view.View.GONE;
 
 public class DetailsActivity extends AppCompatActivity {
 
@@ -31,12 +33,20 @@ public class DetailsActivity extends AppCompatActivity {
 
     //Finals
     public static final String MOVIE = "movie";
+    private static final String CONFIGURATION_CHANGED = "CONFIGURATION_CHANGED";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
         ButterKnife.bind(this);
+
+        if(savedInstanceState != null
+                && savedInstanceState.getBoolean(CONFIGURATION_CHANGED, false)
+                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            //Bug fix, remove poster transition if configuration changed...
+            poster.setTransitionName(null);
+        }
 
         MovieModel movie = getIntent().getParcelableExtra(MOVIE);
 
@@ -60,8 +70,17 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        playButton.setVisibility(View.GONE);
-        super.onStop();
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        //Bug fix, fab blink after back button is pressed - WTF?
+        playButton.setVisibility(GONE);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putBoolean(CONFIGURATION_CHANGED, true);
     }
 }
