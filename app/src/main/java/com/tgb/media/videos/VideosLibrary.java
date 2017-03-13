@@ -1,5 +1,7 @@
 package com.tgb.media.videos;
 
+import android.util.Log;
+
 import com.tgb.media.database.DaoSession;
 import com.tgb.media.database.KeywordModel;
 import com.tgb.media.database.KeywordModelDao;
@@ -40,7 +42,10 @@ public class VideosLibrary {
 
     private MovieModel searchMovieById(long id){
         List<MovieModel> movie = movieModelDao.queryBuilder()
-                .where(MovieModelDao.Properties.Id.eq(id))
+                .where(
+                        MovieModelDao.Properties.Id.eq(id),
+                        MovieModelDao.Properties.ApiLanguage.eq(tmdbAPI.getLanguage())
+                )
                 .limit(1)
                 .list();
 
@@ -52,7 +57,10 @@ public class VideosLibrary {
 
     private MovieModel searchMovieByKeyword(final String searchedKeyword){
         List<KeywordModel> keyword = keywordModelDao.queryBuilder()
-                .where(KeywordModelDao.Properties.Keyword.eq(searchedKeyword))
+                .where(
+                        KeywordModelDao.Properties.Keyword.eq(searchedKeyword),
+                        KeywordModelDao.Properties.ApiLanguage.eq(tmdbAPI.getLanguage())
+                )
                 .limit(1)
                 .list();
 
@@ -61,19 +69,6 @@ public class VideosLibrary {
 
         //Search movie by id
         return searchMovieById(keyword.get(0).movieId);
-    }
-
-    private MovieModel searchByOriginalTitle(final String originalTitle){
-        List<MovieModel> movie = movieModelDao.queryBuilder()
-                .where(MovieModelDao.Properties.OriginalTitle.eq(originalTitle))
-                .limit(1)
-                .list();
-
-        if(movie.size() == 0)
-            return null;
-
-        //Search movie by id
-        return movie.get(0);
     }
 
     public Observable<MovieModel> details(final List<String> moviesName){
@@ -90,6 +85,8 @@ public class VideosLibrary {
                     emitter.onNext(movieModel);
                     continue;
                 }
+
+                Log.i("videosLibrary", "Load " + movieName + " From the API");
 
                 //Load from TMDB
                 Response<Search> searchResponse = tmdbAPI.call()
@@ -109,7 +106,9 @@ public class VideosLibrary {
                     daoSession.getDatabase().beginTransaction();
 
                     //Insert new keyword
-                    KeywordModel keyword = new KeywordModel(movieName, movieGson.id);
+                    KeywordModel keyword = new KeywordModel(movieName, movieGson.id,
+                            tmdbAPI.getLanguage());
+
                     keywordModelDao.insertOrReplace(keyword);
 
                     if(movieModel != null){
@@ -123,7 +122,7 @@ public class VideosLibrary {
 
                     //The movie does not exists in the database...
                     movieModel = new MovieModel();
-                    movieModel.createFromGsonModel(movieGson);
+                    movieModel.createFromGsonModel(movieGson, tmdbAPI.getLanguage());
 
                     movieModelDao.insertOrReplace(movieModel);
                     daoSession.getDatabase().setTransactionSuccessful();

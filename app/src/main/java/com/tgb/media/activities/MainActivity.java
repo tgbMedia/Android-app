@@ -124,14 +124,11 @@ public class MainActivity extends AppCompatActivity {
         requestedMovies.add("Eye In The Sky");
         requestedMovies.add("Embrace Of The Serpent");
         requestedMovies.add("The Witch");
-        requestedMovies.add("The Wailing (Goksung)");
         requestedMovies.add("Doctor Strange");
         requestedMovies.add("Kung Fu Panda 3");
         requestedMovies.add("The Edge of Seventeen");
         requestedMovies.add("Fences");
         requestedMovies.add("10 Cloverfield Lane");
-        requestedMovies.add("Long Way North (Tout en haut du monde)");
-        requestedMovies.add("Cemetery of Splendor");
         requestedMovies.add("Jackie");
 
 

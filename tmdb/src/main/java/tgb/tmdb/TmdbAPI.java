@@ -80,6 +80,10 @@ public class TmdbAPI {
         service = retrofit.create(TmdbService.class);
     }
 
+    public String getLanguage(){
+        return this.language;
+    }
+
     public TmdbService call(){
         return service;
     }

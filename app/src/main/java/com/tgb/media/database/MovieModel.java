@@ -4,25 +4,24 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
 import org.greenrobot.greendao.annotation.Generated;
 
 import tgb.tmdb.models.Movie;
 
-@Entity
+
+@Entity(
+        indexes = {
+                @Index(value = "id, title", unique = true)
+        }
+)
 public class MovieModel implements Parcelable {
 
-    @Id
     public long id;
-
-    @Index(unique = true)
     public String title;
-
     public String posterPath;
     public boolean adult;
     public String overview;
-    //public List<Integer> genreIds;
     public String originalTitle;
     public String originalLanguage;
     public String relaseDate;
@@ -31,11 +30,13 @@ public class MovieModel implements Parcelable {
     public int voteCount;
     public boolean video;
     public float voteAverage;
-    @Generated(hash = 1518686642)
+    public String apiLanguage;
+
+    @Generated(hash = 175882290)
     public MovieModel(long id, String title, String posterPath, boolean adult,
             String overview, String originalTitle, String originalLanguage,
             String relaseDate, String backdropPath, float popularity, int voteCount,
-            boolean video, float voteAverage) {
+            boolean video, float voteAverage, String apiLanguage) {
         this.id = id;
         this.title = title;
         this.posterPath = posterPath;
@@ -49,6 +50,7 @@ public class MovieModel implements Parcelable {
         this.voteCount = voteCount;
         this.video = video;
         this.voteAverage = voteAverage;
+        this.apiLanguage = apiLanguage;
     }
     @Generated(hash = 1776155561)
     public MovieModel() {
@@ -131,8 +133,19 @@ public class MovieModel implements Parcelable {
     public void setVoteAverage(float voteAverage) {
         this.voteAverage = voteAverage;
     }
+    public String getApiLanguage() {
+        return this.apiLanguage;
+    }
+    public void setApiLanguage(String apiLanguage) {
+        this.apiLanguage = apiLanguage;
+}
 
-    public void createFromGsonModel(Movie movie){
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public void createFromGsonModel(Movie movie, String apiLanguage){
         this.id = movie.id;
         this.title = movie.title;
         this.posterPath = movie.posterPath;
@@ -147,11 +160,7 @@ public class MovieModel implements Parcelable {
         this.voteCount = movie.voteCount;
         this.video = movie.video;
         this.voteAverage = movie.voteAverage;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
+        this.apiLanguage = apiLanguage;
     }
 
     @Override
@@ -169,6 +178,7 @@ public class MovieModel implements Parcelable {
         dest.writeInt(this.voteCount);
         dest.writeByte(this.video ? (byte) 1 : (byte) 0);
         dest.writeFloat(this.voteAverage);
+        dest.writeString(this.apiLanguage);
     }
 
     protected MovieModel(Parcel in) {
@@ -185,6 +195,7 @@ public class MovieModel implements Parcelable {
         this.voteCount = in.readInt();
         this.video = in.readByte() != 0;
         this.voteAverage = in.readFloat();
+        this.apiLanguage = in.readString();
     }
 
     public static final Parcelable.Creator<MovieModel> CREATOR = new Parcelable.Creator<MovieModel>() {
