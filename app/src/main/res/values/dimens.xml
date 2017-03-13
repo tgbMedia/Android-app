@@ -5,7 +5,8 @@
 
     <!-- Gallery thumb -->
     <dimen name="thumb_elevation">3dp</dimen>
-    
+    <dimen name="thumb_title_padding">4dp</dimen>
+
     <!-- Details -->
     <dimen name="details_app_bar_height">300dp</dimen>
     <dimen name="details_content_top_margin">-60dp</dimen>

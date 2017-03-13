@@ -10,14 +10,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 
 import com.tgb.media.R;
 import com.tgb.media.TgbApp;
 import com.tgb.media.adapter.GalleryAdapter;
 import com.tgb.media.database.MovieModel;
+import com.tgb.media.helper.LoadingDialog;
 import com.tgb.media.helper.SpacesItemDecoration;
 import com.tgb.media.listener.RecyclerItemClickListener;
 import com.tgb.media.videos.VideosLibrary;
@@ -36,7 +34,7 @@ import io.reactivex.schedulers.Schedulers;
 public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
-    @BindView(R.id.overlay_loading) View overlayLoading;
+    @BindView(R.id.loading_dialog) LoadingDialog loadingDialog;
 
     private ArrayList<MovieModel> movies;
     private GalleryAdapter mAdapter;
@@ -89,8 +87,6 @@ public class MainActivity extends AppCompatActivity {
                                 makeSceneTransitionAnimation(MainActivity.this, view.findViewById(R.id.thumbnail), getString(R.string.gallery_transition));
 
                         startActivity(detailsActivityIntent, options.toBundle());
-
-                        //startActivity(detailsActivityIntent);
                     }
 
                     @Override public void onLongItemClick(View view, int position) {
@@ -153,15 +149,7 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .doOnComplete(() -> {
                     mAdapter.notifyDataSetChanged();
-
-                    //Loading layout - fade out
-                    Animation fadeOut = new AlphaAnimation(1, 0);  // the 1, 0 here notifies that we want the opacity to go from opaque (1) to transparent (0)
-                    fadeOut.setInterpolator(new AccelerateInterpolator());
-                    fadeOut.setStartOffset(500); // Start fading out after 500 milli seconds
-                    fadeOut.setDuration(1200); // Fadeout duration should be 1000 milli seconds
-                    fadeOut.setFillAfter(true);
-
-                    overlayLoading.startAnimation(fadeOut);
+                    loadingDialog.hide();
                 })
                 .subscribe();
     }

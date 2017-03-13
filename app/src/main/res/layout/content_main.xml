@@ -17,9 +17,10 @@
         android:scrollbars="vertical"
         android:focusable="true"/>
 
-    <include
-        android:id="@+id/overlay_loading"
-        layout="@layout/overlay_loading_gallery" />
+    <com.tgb.media.helper.LoadingDialog
+        android:id="@+id/loading_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 
 </RelativeLayout>

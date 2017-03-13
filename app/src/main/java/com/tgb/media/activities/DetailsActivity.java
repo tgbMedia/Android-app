@@ -1,6 +1,5 @@
 package com.tgb.media.activities;
 
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -8,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,8 +17,6 @@ import com.tgb.media.database.MovieModel;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static android.view.View.GONE;
 
 public class DetailsActivity extends AppCompatActivity {
 

@@ -34,10 +34,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:lines="1"
+                android:maxLines="1"
                 android:ellipsize="none"
+                android:padding="@dimen/thumb_title_padding"
                 android:background="@color/gallery_thumb_text_background"
-                android:padding="3dp"
                 android:textColor="@color/gallery_thumb_text_color"
                 android:textStyle="bold" />
 
