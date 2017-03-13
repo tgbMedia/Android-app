@@ -40,20 +40,20 @@
         android:layout_margin="@dimen/activity_horizontal_margin"
         app:srcCompat="@drawable/ic_play_button"
         app:layout_anchor="@id/main.appbar"
-        app:layout_anchorGravity="bottom|right"/>
+        app:layout_anchorGravity="bottom|end"/>
 
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nested_scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/details_content_top_margin"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:fillViewport="true"
-        android:id="@+id/nested_scroll">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <include
+            layout="@layout/overview_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            layout="@layout/overview_layout" />
+            android:layout_height="match_parent" />
 
 
     </android.support.v4.widget.NestedScrollView>

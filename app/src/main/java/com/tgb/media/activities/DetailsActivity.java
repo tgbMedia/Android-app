@@ -5,8 +5,10 @@ import android.os.Build;
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,6 +25,7 @@ import static android.view.View.GONE;
 public class DetailsActivity extends AppCompatActivity {
 
     //Views
+    @BindView(R.id.coordinator) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.theme_poster) ImageView theme;
     @BindView(R.id.title) TextView title;
     @BindView(R.id.subtitle) TextView subtitle;
@@ -74,7 +77,7 @@ public class DetailsActivity extends AppCompatActivity {
         super.onBackPressed();
 
         //Bug fix, fab blink after back button is pressed - WTF?
-        playButton.setVisibility(GONE);
+        coordinatorLayout.removeView(playButton);
     }
 
     @Override
