@@ -118,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
         requestedMovies.add("Moana");
         requestedMovies.add("Captain America: Civil War");
         requestedMovies.add("Sing Street");
-        requestedMovies.add("Tower");
         requestedMovies.add("The Nice Guys");
         requestedMovies.add("Ted");
         requestedMovies.add("Eye In The Sky");

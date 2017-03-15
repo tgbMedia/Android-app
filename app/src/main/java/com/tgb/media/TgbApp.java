@@ -5,6 +5,8 @@ import com.tgb.media.component.DaggerAppComponent;
 import com.tgb.media.module.AppModule;
 import com.tgb.media.module.NetModule;
 
+import java.util.Locale;
+
 public class TgbApp extends android.app.Application {
 
     //Dagger components
@@ -20,6 +22,10 @@ public class TgbApp extends android.app.Application {
                 .build();
         //appComponent = DaggerAppComponent.builder()
         //        .build();
+    }
+
+    public String getDeviceLanguage(){
+        return Locale.getDefault().getISO3Language();
     }
 
     public AppComponent getAppComponent(){

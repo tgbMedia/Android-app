@@ -54,13 +54,13 @@ public class DetailsActivity extends AppCompatActivity {
         overview.setText(movie.overview);
 
         Glide.with(getBaseContext()).load("https://image.tmdb.org/t/p/w640/" + movie.posterPath)
-                .thumbnail(0.5f)
+                .thumbnail(1)
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(poster);
 
         Glide.with(getBaseContext()).load("https://image.tmdb.org/t/p/w1300_and_h730_bestv2/" + movie.backdropPath)
-                .thumbnail(0.5f)
+                .thumbnail(1)
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(theme);

@@ -42,10 +42,7 @@ public class VideosLibrary {
 
     private MovieModel searchMovieById(long id){
         List<MovieModel> movie = movieModelDao.queryBuilder()
-                .where(
-                        MovieModelDao.Properties.Id.eq(id),
-                        MovieModelDao.Properties.ApiLanguage.eq(tmdbAPI.getLanguage())
-                )
+                .where(MovieModelDao.Properties.Id.eq(id))
                 .limit(1)
                 .list();
 
@@ -57,10 +54,7 @@ public class VideosLibrary {
 
     private MovieModel searchMovieByKeyword(final String searchedKeyword){
         List<KeywordModel> keyword = keywordModelDao.queryBuilder()
-                .where(
-                        KeywordModelDao.Properties.Keyword.eq(searchedKeyword),
-                        KeywordModelDao.Properties.ApiLanguage.eq(tmdbAPI.getLanguage())
-                )
+                .where(KeywordModelDao.Properties.Keyword.eq(searchedKeyword))
                 .limit(1)
                 .list();
 
@@ -99,6 +93,19 @@ public class VideosLibrary {
                 }
 
                 Movie movieGson = searchResponse.body().results.get(0);
+
+                //Load movie overview
+                if(!searchResponse.isSuccessful())
+                    continue;
+
+                /*Response<MovieOverview> movieDiscoverResponse = tmdbAPI.call()
+                        .movie(movieGson.id)
+                        .execute();
+
+                MovieOverview movieOverview = movieDiscoverResponse.body();
+
+                Log.i("yoni", movieOverview.toString());*/
+
                 movieModel = searchMovieById(movieGson.id);
 
                 try{
@@ -106,8 +113,7 @@ public class VideosLibrary {
                     daoSession.getDatabase().beginTransaction();
 
                     //Insert new keyword
-                    KeywordModel keyword = new KeywordModel(movieName, movieGson.id,
-                            tmdbAPI.getLanguage());
+                    KeywordModel keyword = new KeywordModel(movieName, movieGson.id);
 
                     keywordModelDao.insertOrReplace(keyword);
 
@@ -122,7 +128,7 @@ public class VideosLibrary {
 
                     //The movie does not exists in the database...
                     movieModel = new MovieModel();
-                    movieModel.createFromGsonModel(movieGson, tmdbAPI.getLanguage());
+                    movieModel.createFromGsonModel(movieGson);
 
                     movieModelDao.insertOrReplace(movieModel);
                     daoSession.getDatabase().setTransactionSuccessful();

@@ -62,7 +62,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
         MovieModel movie = movies.get(position);
 
         Glide.with(mContext).load("https://image.tmdb.org/t/p/w640/" + movie.posterPath)
-                .thumbnail(0.5f)
+                .thumbnail(1)
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.thumbnail);

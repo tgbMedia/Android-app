@@ -25,7 +25,7 @@ public class AppModule {
     }
 
     @Provides @Singleton DaoSession provideDatabase(){
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(app, "movies-db", null);
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(app, "movies-db-" + app.getDeviceLanguage(), null);
         SQLiteDatabase db = helper.getWritableDatabase();
         DaoMaster daoMaster = new DaoMaster(db);
 
