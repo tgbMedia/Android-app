@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.tgb.media.R;
-import com.tgb.media.database.MovieModel;
+import com.tgb.media.database.MovieOverviewModel;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ import java.util.List;
 
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHolder> {
 
-    private List<MovieModel> movies;
+    private List<MovieOverviewModel> movies;
     private Context mContext;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -40,12 +40,12 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
     }
 
 
-    public GalleryAdapter(Context context, List<MovieModel> movies) {
+    public GalleryAdapter(Context context, List<MovieOverviewModel> movies) {
         mContext = context;
         this.movies = movies;
     }
 
-    public MovieModel getItem(int position){
+    public MovieOverviewModel getItem(int position){
         return movies.get(position);
     }
 
@@ -59,7 +59,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        MovieModel movie = movies.get(position);
+        MovieOverviewModel movie = movies.get(position);
 
         Glide.with(mContext).load("https://image.tmdb.org/t/p/w640/" + movie.posterPath)
                 .thumbnail(1)

@@ -14,7 +14,7 @@ import android.view.View;
 import com.tgb.media.R;
 import com.tgb.media.TgbApp;
 import com.tgb.media.adapter.GalleryAdapter;
-import com.tgb.media.database.MovieModel;
+import com.tgb.media.database.MovieOverviewModel;
 import com.tgb.media.helper.LoadingDialog;
 import com.tgb.media.helper.SpacesItemDecoration;
 import com.tgb.media.listener.RecyclerItemClickListener;
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
     @BindView(R.id.loading_dialog) LoadingDialog loadingDialog;
 
-    private ArrayList<MovieModel> movies;
+    private ArrayList<MovieOverviewModel> movies;
     private GalleryAdapter mAdapter;
 
     //Tmdb API
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                 new RecyclerItemClickListener(getApplicationContext(), recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
 
-                        MovieModel movieMdel = mAdapter.getItem(position);
+                        MovieOverviewModel movieMdel = mAdapter.getItem(position);
 
                         Intent detailsActivityIntent = new Intent(
                                 getBaseContext(),

@@ -13,6 +13,8 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import tgb.tmdb.models.MovieOverview;
+import tgb.tmdb.models.Search;
 
 public class TmdbAPI {
 
@@ -60,7 +62,7 @@ public class TmdbAPI {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
             @Override public void log(String message) {
                 //Timber.tag("OkHttp").d(message);
-                Log.i("yoni", message);
+                Log.i("retrofitlog", message);
             }
         });
         logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
@@ -82,6 +84,26 @@ public class TmdbAPI {
 
     public String getLanguage(){
         return this.language;
+    }
+
+    public MovieOverview searchMovieByName(final String movieName) throws Exception{
+        //Search
+        retrofit2.Response<Search> searchResponse = call()
+                        .search(movieName, 1)
+                        .execute();
+
+        if(!searchResponse.isSuccessful() || searchResponse.body().results.size() < 1)
+            return null;
+
+        //Movie overview
+        retrofit2.Response<MovieOverview> movieDiscoverResponse = call()
+                        .movie(searchResponse.body().results.get(0).id)
+                        .execute();
+
+        if(!movieDiscoverResponse.isSuccessful())
+            return null;
+
+        return movieDiscoverResponse.body();
     }
 
     public TmdbService call(){

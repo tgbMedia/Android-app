@@ -3,18 +3,22 @@ package com.tgb.media.videos;
 import android.util.Log;
 
 import com.tgb.media.database.DaoSession;
+import com.tgb.media.database.GenreModel;
+import com.tgb.media.database.GenreModelDao;
 import com.tgb.media.database.KeywordModel;
 import com.tgb.media.database.KeywordModelDao;
-import com.tgb.media.database.MovieModel;
-import com.tgb.media.database.MovieModelDao;
+import com.tgb.media.database.MovieGenreRelation;
+import com.tgb.media.database.MovieGenreRelationDao;
+import com.tgb.media.database.MovieOverviewModel;
+import com.tgb.media.database.MovieOverviewModelDao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
-import retrofit2.Response;
 import tgb.tmdb.TmdbAPI;
-import tgb.tmdb.models.Movie;
-import tgb.tmdb.models.Search;
+import tgb.tmdb.models.Genre;
+import tgb.tmdb.models.MovieOverview;
 
 public class VideosLibrary {
 
@@ -22,8 +26,10 @@ public class VideosLibrary {
     private DaoSession daoSession;
 
     //Database models
-    private MovieModelDao movieModelDao;
+    private MovieOverviewModelDao movieModelDao;
     private KeywordModelDao keywordModelDao;
+    private GenreModelDao genreModelDao;
+    private MovieGenreRelationDao movieGenreRelationDao;
 
     //TMDB
     private TmdbAPI tmdbAPI;
@@ -33,16 +39,18 @@ public class VideosLibrary {
         this.daoSession = daoSession;
 
         //Database models
-        this.movieModelDao = daoSession.getMovieModelDao();
+        this.movieModelDao = daoSession.getMovieOverviewModelDao();
         this.keywordModelDao = daoSession.getKeywordModelDao();
+        this.genreModelDao = daoSession.getGenreModelDao();
+        this.movieGenreRelationDao = daoSession.getMovieGenreRelationDao();
 
         //TMDB
         this.tmdbAPI = tmdbAPI;
     }
 
-    private MovieModel searchMovieById(long id){
-        List<MovieModel> movie = movieModelDao.queryBuilder()
-                .where(MovieModelDao.Properties.Id.eq(id))
+    private MovieOverviewModel searchMovieById(long id){
+        List<MovieOverviewModel> movie = movieModelDao.queryBuilder()
+                .where(MovieOverviewModelDao.Properties.Id.eq(id))
                 .limit(1)
                 .list();
 
@@ -52,7 +60,7 @@ public class VideosLibrary {
         return movie.get(0);
     }
 
-    private MovieModel searchMovieByKeyword(final String searchedKeyword){
+    private MovieOverviewModel searchMovieByKeyword(final String searchedKeyword){
         List<KeywordModel> keyword = keywordModelDao.queryBuilder()
                 .where(KeywordModelDao.Properties.Keyword.eq(searchedKeyword))
                 .limit(1)
@@ -65,90 +73,79 @@ public class VideosLibrary {
         return searchMovieById(keyword.get(0).movieId);
     }
 
-    public Observable<MovieModel> details(final List<String> moviesName){
+    private void addKeyword(String keyword, long movieId) throws Exception
+    {
+        keywordModelDao.insertOrReplace(
+                new KeywordModel(keyword, movieId)
+        );
+    }
+
+    private void addGenre(Genre genre){
+        genreModelDao.insertOrReplace(new GenreModel(genre.id, genre.name));
+    }
+
+    private MovieOverviewModel inserMovieToDb(MovieOverview movieOverview) throws Exception{
+
+        //Add genres to db & create list of genre relations
+        movieOverview.genres.forEach(genre ->{
+            addGenre(genre);
+
+            movieGenreRelationDao.insertOrReplace(
+                    new MovieGenreRelation(genre.id, movieOverview.id)
+            );
+        });
+
+        //Cast MovieOverview(GSON) to MovieOverviewModel & insert movie to database
+        movieModelDao.insertOrReplace(
+                new MovieOverviewModel(movieOverview)
+        );
+
+        return searchMovieById(movieOverview.id);
+    }
+
+    public Observable<MovieOverviewModel> details(final List<String> moviesName){
         return Observable.create(emitter -> {
 
-            MovieModel movieModel = null;
+            MovieOverviewModel movieOverview = null;
 
             for(String movieName : moviesName){
-                //Search by keyword
-                movieModel = searchMovieByKeyword(movieName);
-
-                if(movieModel != null)
-                {
-                    emitter.onNext(movieModel);
-                    continue;
-                }
-
-                Log.i("videosLibrary", "Load " + movieName + " From the API");
-
-                //Load from TMDB
-                Response<Search> searchResponse = tmdbAPI.call()
-                        .search(movieName, 1)
-                        .execute();
-
-                if(!searchResponse.isSuccessful() || searchResponse.body().results.size() == 0){
-                    //emitter.onError(new RuntimeException());
-                    continue;
-                }
-
-                Movie movieGson = searchResponse.body().results.get(0);
-
-                //Load movie overview
-                if(!searchResponse.isSuccessful())
-                    continue;
-
-                /*Response<MovieOverview> movieDiscoverResponse = tmdbAPI.call()
-                        .movie(movieGson.id)
-                        .execute();
-
-                MovieOverview movieOverview = movieDiscoverResponse.body();
-
-                Log.i("yoni", movieOverview.toString());*/
-
-                movieModel = searchMovieById(movieGson.id);
-
                 try{
-                    //Begin transaction
-                    daoSession.getDatabase().beginTransaction();
+                    //Search item by keyword
+                    movieOverview = searchMovieByKeyword(movieName);
 
-                    //Insert new keyword
-                    KeywordModel keyword = new KeywordModel(movieName, movieGson.id);
-
-                    keywordModelDao.insertOrReplace(keyword);
-
-                    if(movieModel != null){
-                        //The movie is already exists in db
-
-                        daoSession.getDatabase().setTransactionSuccessful();
-                        emitter.onNext(movieModel);
-
+                    if(movieOverview != null)
+                    {
+                        emitter.onNext(movieOverview);
                         continue;
                     }
 
-                    //The movie does not exists in the database...
-                    movieModel = new MovieModel();
-                    movieModel.createFromGsonModel(movieGson);
+                    //Search item in TMDB
+                    MovieOverview overview = tmdbAPI.searchMovieByName(movieName);
 
-                    movieModelDao.insertOrReplace(movieModel);
-                    daoSession.getDatabase().setTransactionSuccessful();
+                    if(overview == null)
+                    {
+                        Log.wtf("videoLibraries", "No data for: " + movieName);
+                        //emitter.onError(new RuntimeException());
+                        continue;
+                    }
 
-                    emitter.onNext(movieModel);
+                    //Insert movie to database
+                    movieOverview = inserMovieToDb(overview);
+                    addKeyword(movieName, movieOverview.id);
+
+                    emitter.onNext(movieOverview);
+
                 }
-                catch (Exception e){
+                catch(Exception e){
+                    e.printStackTrace();
                     emitter.onError(e);
-                }
-                finally{
-                    daoSession.getDatabase().endTransaction();
                 }
 
             }
 
             emitter.onComplete();
+
         });
     }
-
-
-
 
 }

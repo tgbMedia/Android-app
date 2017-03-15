@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.tgb.media.R;
-import com.tgb.media.database.MovieModel;
+import com.tgb.media.database.MovieOverviewModel;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,10 +47,10 @@ public class DetailsActivity extends AppCompatActivity {
             poster.setTransitionName(null);
         }
 
-        MovieModel movie = getIntent().getParcelableExtra(MOVIE);
+        MovieOverviewModel movie = getIntent().getParcelableExtra(MOVIE);
 
         title.setText(movie.title);
-        subtitle.setText(movie.relaseDate);
+        //subtitle.setText(movie.relaseDate);
         overview.setText(movie.overview);
 
         Glide.with(getBaseContext()).load("https://image.tmdb.org/t/p/w640/" + movie.posterPath)

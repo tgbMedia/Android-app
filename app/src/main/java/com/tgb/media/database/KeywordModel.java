@@ -7,8 +7,7 @@ import org.greenrobot.greendao.annotation.Generated;
 @Entity
 public class KeywordModel {
 
-    @Index(unique = true)
-    public String keyword;
+    public @Index(unique = false)String keyword;
     public long movieId;
     @Generated(hash = 1543743071)
     public KeywordModel(String keyword, long movieId) {
@@ -30,4 +29,6 @@ public class KeywordModel {
     public void setMovieId(long movieId) {
         this.movieId = movieId;
     }
+
+
 }
