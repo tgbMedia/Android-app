@@ -1,35 +1,42 @@
 package com.tgb.media.database;
 
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Index;
-import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Id;
 
 @Entity
 public class MovieGenreRelation {
 
-    public @NotNull @Index(unique = false) long movieId;
-    public @NotNull long genreId;
-    @Generated(hash = 521213356)
-    public MovieGenreRelation(long movieId, long genreId) {
+    @Id private Long id;
+    public Long movieId;
+    public Long genreId;
+    @Generated(hash = 1591858491)
+    public MovieGenreRelation(Long id, Long movieId, Long genreId) {
+        this.id = id;
         this.movieId = movieId;
         this.genreId = genreId;
     }
     @Generated(hash = 1292453685)
     public MovieGenreRelation() {
     }
-    public long getMovieId() {
+    public Long getId() {
+        return this.id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+    public Long getMovieId() {
         return this.movieId;
     }
-    public void setMovieId(long movieId) {
+    public void setMovieId(Long movieId) {
         this.movieId = movieId;
     }
-    public long getGenreId() {
+    public Long getGenreId() {
         return this.genreId;
     }
-    public void setGenreId(long genreId) {
+    public void setGenreId(Long genreId) {
         this.genreId = genreId;
     }
 
-    
+
 }

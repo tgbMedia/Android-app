@@ -1,8 +1,8 @@
 package com.tgb.media.activities;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -48,6 +48,8 @@ public class DetailsActivity extends AppCompatActivity {
         }
 
         MovieOverviewModel movie = getIntent().getParcelableExtra(MOVIE);
+        //List<GenreModel> genres = movie.getGenres();
+        //Log.i("yoni", "genres: " + genres);
 
         title.setText(movie.title);
         //subtitle.setText(movie.relaseDate);
@@ -65,7 +67,10 @@ public class DetailsActivity extends AppCompatActivity {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(theme);
 
-
+        playButton.setOnClickListener(v -> {
+            Intent i = new Intent(getBaseContext(), PlayerActivity.class);
+            startActivity(i);
+        });
     }
 
     @Override

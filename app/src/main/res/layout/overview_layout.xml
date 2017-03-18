@@ -2,20 +2,26 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
 
     <ImageView
-        android:src="@mipmap/ic_launcher"
         android:id="@+id/poster"
         android:transitionName="@string/gallery_transition"
         app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
         app:layout_constraintRight_toLeftOf="@+id/right_guideline"
         android:layout_width="@dimen/details_poster_width"
-        android:layout_height="@dimen/details_poster_height"
+        android:layout_height="0dp"
         android:scaleType="centerCrop"
-        app:layout_constraintHorizontal_bias="0.0" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/poster_bottom_guideline"
+        app:layout_constraintVertical_bias="0.0"
+        android:adjustViewBounds="true"/>
 
     <TextView
         android:id="@+id/title"
@@ -27,10 +33,13 @@
         android:ellipsize="end"
         app:layout_constraintStart_toEndOf="@+id/poster"
         app:layout_constraintTop_toTopOf="@+id/poster"
-        android:layout_marginTop="@dimen/details_poster_title_top_margin"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="@dimen/details_poster_title_start_margin"
         android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_marginBottom="8dp"
+        tools:layout_editor_absoluteX="157dp"
+        app:layout_constraintBottom_toBottomOf="@+id/poster"
+        app:layout_constraintVertical_bias="0.6" />
 
     <TextView
         android:id="@+id/subtitle"
@@ -66,5 +75,12 @@
         android:id="@+id/right_guideline"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.95" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/poster_bottom_guideline"
+        app:layout_constraintGuide_begin="@dimen/details_poster_height"
+        android:orientation="horizontal" />
 
 </android.support.constraint.ConstraintLayout>

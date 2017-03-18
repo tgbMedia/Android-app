@@ -71,4 +71,7 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile project(':tmdb')
 
+    //exoplayer
+    compile 'com.devbrackets.android:exomedia:3.1.1'
+
 }

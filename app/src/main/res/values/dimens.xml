@@ -13,7 +13,7 @@
 
     <!-- Overview poster -->
     <dimen name="details_poster_width">125dp</dimen>
-    <dimen name="details_poster_height">185dp</dimen>
+    <dimen name="details_poster_height">207dp</dimen>
 
     <!-- Overview -->
     <dimen name="details_poster_title_top_margin">92dp</dimen>  <!-- poster_height / 2 -->

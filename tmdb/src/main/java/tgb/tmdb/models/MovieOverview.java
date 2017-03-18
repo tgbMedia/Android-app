@@ -18,7 +18,7 @@ public class MovieOverview {
     public Object belongsToCollection;
     @SerializedName("budget")
     @Expose
-    public Integer budget;
+    public Long budget;
     @SerializedName("genres")
     @Expose
     public List<Genre> genres = null;
@@ -27,7 +27,7 @@ public class MovieOverview {
     public String homepage;
     @SerializedName("id")
     @Expose
-    public Integer id;
+    public Long id;
     @SerializedName("imdb_id")
     @Expose
     public String imdbId;
@@ -51,10 +51,10 @@ public class MovieOverview {
     public String releaseDate;
     @SerializedName("revenue")
     @Expose
-    public Integer revenue;
+    public Long revenue;
     @SerializedName("runtime")
     @Expose
-    public Integer runtime;
+    public Long runtime;
     @SerializedName("status")
     @Expose
     public String status;
@@ -72,6 +72,6 @@ public class MovieOverview {
     public Double voteAverage;
     @SerializedName("vote_count")
     @Expose
-    public Integer voteCount;
+    public Long voteCount;
 
 }

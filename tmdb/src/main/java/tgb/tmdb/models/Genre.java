@@ -8,7 +8,7 @@ public class Genre {
 
     @SerializedName("id")
     @Expose
-    public Integer id;
+    public Long id;
     @SerializedName("name")
     @Expose
     public String name;

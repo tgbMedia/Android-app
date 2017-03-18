@@ -7,12 +7,11 @@ import com.tgb.media.database.GenreModel;
 import com.tgb.media.database.GenreModelDao;
 import com.tgb.media.database.KeywordModel;
 import com.tgb.media.database.KeywordModelDao;
-import com.tgb.media.database.MovieGenreRelation;
 import com.tgb.media.database.MovieGenreRelationDao;
 import com.tgb.media.database.MovieOverviewModel;
 import com.tgb.media.database.MovieOverviewModelDao;
+import com.tgb.media.helper.MovieObesrvableResult;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -80,45 +79,46 @@ public class VideosLibrary {
         );
     }
 
-    private void addGenre(Genre genre){
-        genreModelDao.insertOrReplace(new GenreModel(genre.id, genre.name));
+    private GenreModel addGenre(Genre genre){
+        GenreModel genreModel = new GenreModel(genre.id, genre.name);
+        genreModelDao.insertOrReplace(genreModel);
+
+        return genreModel;
     }
 
-    private MovieOverviewModel inserMovieToDb(MovieOverview movieOverview) throws Exception{
+    private MovieOverviewModel insertMovieToDb(MovieOverview movieOverview) throws Exception{
 
         //Add genres to db & create list of genre relations
+        /*List<GenreModel> genres = new ArrayList<>();
+
         movieOverview.genres.forEach(genre ->{
-            addGenre(genre);
+            genres.add(addGenre(genre));
 
             movieGenreRelationDao.insertOrReplace(
                     new MovieGenreRelation(genre.id, movieOverview.id)
             );
-        });
+        });*/
 
         //Cast MovieOverview(GSON) to MovieOverviewModel & insert movie to database
+        MovieOverviewModel movieOverviewModel = new MovieOverviewModel(movieOverview);
+
         movieModelDao.insertOrReplace(
-                new MovieOverviewModel(movieOverview)
+                movieOverviewModel
         );
 
         return searchMovieById(movieOverview.id);
     }
 
-    public Observable<MovieOverviewModel> details(final List<String> moviesName){
+    public Observable<MovieObesrvableResult> movieDetails(final int position, final String movieName){
         return Observable.create(emitter -> {
+            try{
+                //Search item by keyword
+                MovieOverviewModel movieOverview = searchMovieByKeyword(movieName);
 
-            MovieOverviewModel movieOverview = null;
-
-            for(String movieName : moviesName){
-                try{
-                    //Search item by keyword
-                    movieOverview = searchMovieByKeyword(movieName);
-
-                    if(movieOverview != null)
-                    {
-                        emitter.onNext(movieOverview);
-                        continue;
-                    }
-
+                if(movieOverview != null)
+                    emitter.onNext(new MovieObesrvableResult(position, movieOverview));
+                else
+                {
                     //Search item in TMDB
                     MovieOverview overview = tmdbAPI.searchMovieByName(movieName);
 
@@ -126,26 +126,23 @@ public class VideosLibrary {
                     {
                         Log.wtf("videoLibraries", "No data for: " + movieName);
                         //emitter.onError(new RuntimeException());
-                        continue;
                     }
+                    else
+                    {
+                        //Insert movie to database
+                        movieOverview = insertMovieToDb(overview);
+                        addKeyword(movieName, movieOverview.id);
 
-                    //Insert movie to database
-                    movieOverview = inserMovieToDb(overview);
-                    addKeyword(movieName, movieOverview.id);
-
-                    emitter.onNext(movieOverview);
-
+                        emitter.onNext(new MovieObesrvableResult(position, movieOverview));
+                    }
                 }
-                catch(Exception e){
-                    e.printStackTrace();
-                    emitter.onError(e);
-                }
-
+            }
+            catch(Exception e){
+                e.printStackTrace();
+                emitter.onError(e);
             }
 
             emitter.onComplete();
-
         });
     }
-
 }

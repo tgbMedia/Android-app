@@ -8,7 +8,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 
 import com.tgb.media.R;
@@ -22,7 +21,6 @@ import com.tgb.media.videos.VideosLibrary;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.inject.Inject;
 
@@ -130,24 +128,24 @@ public class MainActivity extends AppCompatActivity {
         requestedMovies.add("10 Cloverfield Lane");
         requestedMovies.add("Jackie");
 
+        int index = 0;
 
-        final AtomicInteger counter = new AtomicInteger();
+        for(String movieName : requestedMovies)
+        {
+            videosLibrary.movieDetails(index++, movieName)
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnNext(result -> {
+                        movies.add(result.movie);
+                        mAdapter.notifyItemChanged(result.position);
+                    })
+                    .doOnError(throwable -> {
+                        throwable.printStackTrace();
+                    })
+                    .doOnComplete(() -> loadingDialog.hide())
+                    .subscribe();
+        }
 
-        videosLibrary.details(requestedMovies)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(movieModel -> {
-                    movies.add(movieModel);
-                    mAdapter.notifyItemChanged(counter.getAndIncrement());
-                })
-                .doOnError(throwable -> {
-                    Log.e("tmdbError", "Oh no");
-                })
-                .doOnComplete(() -> {
-                    mAdapter.notifyDataSetChanged();
-                    loadingDialog.hide();
-                })
-                .subscribe();
     }
 
 }

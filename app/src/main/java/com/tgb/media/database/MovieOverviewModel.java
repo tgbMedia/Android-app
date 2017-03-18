@@ -3,19 +3,14 @@ package com.tgb.media.database;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.Index;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.greenrobot.greendao.annotation.JoinEntity;
-import org.greenrobot.greendao.annotation.JoinProperty;
-import org.greenrobot.greendao.annotation.ToMany;
-import org.greenrobot.greendao.annotation.ToOne;
-import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.DaoException;
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.JoinEntity;
+import org.greenrobot.greendao.annotation.ToMany;
+
+import java.util.List;
 
 import tgb.tmdb.models.MovieOverview;
 
@@ -41,9 +36,19 @@ public class MovieOverviewModel implements Parcelable {
     public Boolean video;
     public double voteAverage;
     public long voteCount;
-    @ToMany
-    @JoinEntity(entity = MovieGenreRelation.class, sourceProperty = "movieId", targetProperty = "genreId")
-    List<GenreModel> genres = null;
+
+    @ToMany @JoinEntity(
+            entity = MovieGenreRelation.class,
+            sourceProperty = "movieId",
+            targetProperty = "genreId"
+    )
+    List<GenreModel> genres;
+    /** Used to resolve relations */
+    @Generated(hash = 2040040024)
+    private transient DaoSession daoSession;
+    /** Used for active entity operations. */
+    @Generated(hash = 2000367368)
+    private transient MovieOverviewModelDao myDao;
 
     public MovieOverviewModel(MovieOverview movieOverview){
         this.id = movieOverview.id;
@@ -68,17 +73,13 @@ public class MovieOverviewModel implements Parcelable {
         this.voteCount = movieOverview.voteCount;
     }
 
-    /** Used to resolve relations */
-    @Generated(hash = 2040040024)
-    private transient DaoSession daoSession;
-    /** Used for active entity operations. */
-    @Generated(hash = 2000367368)
-    private transient MovieOverviewModelDao myDao;
     @Generated(hash = 384437110)
-    public MovieOverviewModel(long id, boolean adult, String backdropPath, long budget, String homepage,
-            String imdbId, String originalLanguage, String originalTitle, String overview, double popularity,
-            String posterPath, String releaseDate, long revenue, long runtime, String status, String tagline,
-            String title, Boolean video, double voteAverage, long voteCount) {
+    public MovieOverviewModel(long id, boolean adult, String backdropPath,
+            long budget, String homepage, String imdbId, String originalLanguage,
+            String originalTitle, String overview, double popularity,
+            String posterPath, String releaseDate, long revenue, long runtime,
+            String status, String tagline, String title, Boolean video,
+            double voteAverage, long voteCount) {
         this.id = id;
         this.adult = adult;
         this.backdropPath = backdropPath;
@@ -100,129 +101,171 @@ public class MovieOverviewModel implements Parcelable {
         this.voteAverage = voteAverage;
         this.voteCount = voteCount;
     }
+
     @Generated(hash = 1270234590)
     public MovieOverviewModel() {
     }
+
     public long getId() {
         return this.id;
     }
+
     public void setId(long id) {
         this.id = id;
     }
+
     public boolean getAdult() {
         return this.adult;
     }
+
     public void setAdult(boolean adult) {
         this.adult = adult;
     }
+
     public String getBackdropPath() {
         return this.backdropPath;
     }
+
     public void setBackdropPath(String backdropPath) {
         this.backdropPath = backdropPath;
     }
+
     public long getBudget() {
         return this.budget;
     }
+
     public void setBudget(long budget) {
         this.budget = budget;
     }
+
     public String getHomepage() {
         return this.homepage;
     }
+
     public void setHomepage(String homepage) {
         this.homepage = homepage;
     }
+
     public String getImdbId() {
         return this.imdbId;
     }
+
     public void setImdbId(String imdbId) {
         this.imdbId = imdbId;
     }
+
     public String getOriginalLanguage() {
         return this.originalLanguage;
     }
+
     public void setOriginalLanguage(String originalLanguage) {
         this.originalLanguage = originalLanguage;
     }
+
     public String getOriginalTitle() {
         return this.originalTitle;
     }
+
     public void setOriginalTitle(String originalTitle) {
         this.originalTitle = originalTitle;
     }
+
     public String getOverview() {
         return this.overview;
     }
+
     public void setOverview(String overview) {
         this.overview = overview;
     }
+
     public double getPopularity() {
         return this.popularity;
     }
+
     public void setPopularity(double popularity) {
         this.popularity = popularity;
     }
+
     public String getPosterPath() {
         return this.posterPath;
     }
+
     public void setPosterPath(String posterPath) {
         this.posterPath = posterPath;
     }
+
     public String getReleaseDate() {
         return this.releaseDate;
     }
+
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
+
     public long getRevenue() {
         return this.revenue;
     }
+
     public void setRevenue(long revenue) {
         this.revenue = revenue;
     }
+
     public long getRuntime() {
         return this.runtime;
     }
+
     public void setRuntime(long runtime) {
         this.runtime = runtime;
     }
+
     public String getStatus() {
         return this.status;
     }
+
     public void setStatus(String status) {
         this.status = status;
     }
+
     public String getTagline() {
         return this.tagline;
     }
+
     public void setTagline(String tagline) {
         this.tagline = tagline;
     }
+
     public String getTitle() {
         return this.title;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
+
     public Boolean getVideo() {
         return this.video;
     }
+
     public void setVideo(Boolean video) {
         this.video = video;
     }
+
     public double getVoteAverage() {
         return this.voteAverage;
     }
+
     public void setVoteAverage(double voteAverage) {
         this.voteAverage = voteAverage;
     }
+
     public long getVoteCount() {
         return this.voteCount;
     }
+
     public void setVoteCount(long voteCount) {
         this.voteCount = voteCount;
     }
+
     /**
      * To-many relationship, resolved on first access (and after reset).
      * Changes to to-many relations are not persisted, make changes to the target entity.
@@ -235,7 +278,8 @@ public class MovieOverviewModel implements Parcelable {
                 throw new DaoException("Entity is detached from DAO context");
             }
             GenreModelDao targetDao = daoSession.getGenreModelDao();
-            List<GenreModel> genresNew = targetDao._queryMovieOverviewModel_Genres(id);
+            List<GenreModel> genresNew = targetDao
+                    ._queryMovieOverviewModel_Genres(id);
             synchronized (this) {
                 if (genres == null) {
                     genres = genresNew;
@@ -244,11 +288,13 @@ public class MovieOverviewModel implements Parcelable {
         }
         return genres;
     }
+
     /** Resets a to-many relationship, making the next get call to query for a fresh result. */
     @Generated(hash = 1988821389)
     public synchronized void resetGenres() {
         genres = null;
     }
+
     /**
      * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
      * Entity must attached to an entity context.
@@ -260,6 +306,7 @@ public class MovieOverviewModel implements Parcelable {
         }
         myDao.delete(this);
     }
+
     /**
      * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
      * Entity must attached to an entity context.
@@ -271,6 +318,7 @@ public class MovieOverviewModel implements Parcelable {
         }
         myDao.refresh(this);
     }
+
     /**
      * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
      * Entity must attached to an entity context.
@@ -282,6 +330,7 @@ public class MovieOverviewModel implements Parcelable {
         }
         myDao.update(this);
     }
+
     @Override
     public int describeContents() {
         return 0;
@@ -309,14 +358,16 @@ public class MovieOverviewModel implements Parcelable {
         dest.writeValue(this.video);
         dest.writeDouble(this.voteAverage);
         dest.writeLong(this.voteCount);
-        dest.writeList(this.genres);
+        dest.writeTypedList(this.genres);
     }
+
     /** called by internal mechanisms, do not call yourself. */
     @Generated(hash = 719929430)
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getMovieOverviewModelDao() : null;
     }
+
     protected MovieOverviewModel(Parcel in) {
         this.id = in.readLong();
         this.adult = in.readByte() != 0;
@@ -338,8 +389,7 @@ public class MovieOverviewModel implements Parcelable {
         this.video = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.voteAverage = in.readDouble();
         this.voteCount = in.readLong();
-        this.genres = new ArrayList<GenreModel>();
-        in.readList(this.genres, GenreModel.class.getClassLoader());
+        this.genres = in.createTypedArrayList(GenreModel.CREATOR);
     }
 
     public static final Parcelable.Creator<MovieOverviewModel> CREATOR = new Parcelable.Creator<MovieOverviewModel>() {
