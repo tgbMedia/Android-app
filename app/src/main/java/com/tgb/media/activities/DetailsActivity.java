@@ -1,5 +1,6 @@
 package com.tgb.media.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -68,9 +69,21 @@ public class DetailsActivity extends AppCompatActivity {
                 .into(theme);
 
         playButton.setOnClickListener(v -> {
-            Intent i = new Intent(getBaseContext(), PlayerActivity.class);
-            startActivity(i);
+            startActivity(buildIntent(this));
         });
+    }
+
+    public Intent buildIntent(Context context) {
+        Intent intent = new Intent(context, PlayerActivity.class);
+        intent.putExtra(PlayerActivity.URI_LIST_EXTRA, new String[]{"http://www.html5videoplayer.net/videos/toystory.mp4"});
+
+        /*if (drmSchemeUuid != null) {
+            intent.putExtra(PlayerActivity.DRM_SCHEME_UUID_EXTRA, drmSchemeUuid.toString());
+            intent.putExtra(PlayerActivity.DRM_LICENSE_URL, drmLicenseUrl);
+            intent.putExtra(PlayerActivity.DRM_KEY_REQUEST_PROPERTIES, drmKeyRequestProperties);
+        }*/
+
+        return intent;
     }
 
     @Override
@@ -87,4 +100,6 @@ public class DetailsActivity extends AppCompatActivity {
 
         outState.putBoolean(CONFIGURATION_CHANGED, true);
     }
+
+
 }

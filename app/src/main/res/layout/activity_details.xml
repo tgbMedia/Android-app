@@ -13,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/details_app_bar_height"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:layout_behavior="com.tgb.media.helper.CoordinatorFlingBehavior"
         android:fitsSystemWindows="true">
 
         <android.support.design.widget.CollapsingToolbarLayout
