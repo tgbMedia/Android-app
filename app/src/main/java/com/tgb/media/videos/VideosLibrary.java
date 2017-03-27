@@ -7,22 +7,18 @@ import com.tgb.media.database.GenreModel;
 import com.tgb.media.database.GenreModelDao;
 import com.tgb.media.database.KeywordModel;
 import com.tgb.media.database.KeywordModelDao;
+import com.tgb.media.database.MovieGenreRelation;
 import com.tgb.media.database.MovieGenreRelationDao;
 import com.tgb.media.database.MovieOverviewModel;
 import com.tgb.media.database.MovieOverviewModelDao;
 import com.tgb.media.helper.MovieObesrvableResult;
 
-import java.util.List;
-
 import io.reactivex.Observable;
 import tgb.tmdb.TmdbAPI;
-import tgb.tmdb.models.Genre;
 import tgb.tmdb.models.MovieOverview;
 
 public class VideosLibrary {
 
-    //Database
-    private DaoSession daoSession;
 
     //Database models
     private MovieOverviewModelDao movieModelDao;
@@ -34,9 +30,6 @@ public class VideosLibrary {
     private TmdbAPI tmdbAPI;
 
     public VideosLibrary(DaoSession daoSession, TmdbAPI tmdbAPI){
-        //Database
-        this.daoSession = daoSession;
-
         //Database models
         this.movieModelDao = daoSession.getMovieOverviewModelDao();
         this.keywordModelDao = daoSession.getKeywordModelDao();
@@ -47,29 +40,21 @@ public class VideosLibrary {
         this.tmdbAPI = tmdbAPI;
     }
 
-    private MovieOverviewModel searchMovieById(long id){
-        List<MovieOverviewModel> movie = movieModelDao.queryBuilder()
+    public MovieOverviewModel searchMovieById(long id){
+        MovieOverviewModel movie = movieModelDao.queryBuilder()
                 .where(MovieOverviewModelDao.Properties.Id.eq(id))
-                .limit(1)
-                .list();
+                .unique();
 
-        if(movie.size() == 0)
-            return null;
-
-        return movie.get(0);
+        return movie;
     }
 
-    private MovieOverviewModel searchMovieByKeyword(final String searchedKeyword){
-        List<KeywordModel> keyword = keywordModelDao.queryBuilder()
+    private MovieOverviewModel searchMovieByKeyword(final String searchedKeyword) throws Exception{
+        KeywordModel keyword = keywordModelDao.queryBuilder()
                 .where(KeywordModelDao.Properties.Keyword.eq(searchedKeyword))
-                .limit(1)
-                .list();
-
-        if(keyword.size() == 0)
-            return null;
+                .unique();
 
         //Search movie by id
-        return searchMovieById(keyword.get(0).movieId);
+        return keyword == null ? null : keyword.getMovie();
     }
 
     private void addKeyword(String keyword, long movieId) throws Exception
@@ -79,34 +64,34 @@ public class VideosLibrary {
         );
     }
 
-    private GenreModel addGenre(Genre genre){
-        GenreModel genreModel = new GenreModel(genre.id, genre.name);
-        genreModelDao.insertOrReplace(genreModel);
-
-        return genreModel;
-    }
-
     private MovieOverviewModel insertMovieToDb(MovieOverview movieOverview) throws Exception{
 
-        //Add genres to db & create list of genre relations
-        /*List<GenreModel> genres = new ArrayList<>();
-
-        movieOverview.genres.forEach(genre ->{
-            genres.add(addGenre(genre));
-
-            movieGenreRelationDao.insertOrReplace(
-                    new MovieGenreRelation(genre.id, movieOverview.id)
-            );
-        });*/
-
-        //Cast MovieOverview(GSON) to MovieOverviewModel & insert movie to database
+        //Insert the movie to the databse
         MovieOverviewModel movieOverviewModel = new MovieOverviewModel(movieOverview);
 
         movieModelDao.insertOrReplace(
                 movieOverviewModel
         );
 
-        return searchMovieById(movieOverview.id);
+        //Add genres to db
+        movieOverview.genres.forEach(genre -> {
+
+            genreModelDao.insertOrReplace(new GenreModel(
+                    genre.id,
+                    genre.name
+            ));
+
+            //Add relation
+            MovieGenreRelation movieGenreRelation = new MovieGenreRelation();
+
+            movieGenreRelation.setGenreId(genre.id);
+            movieGenreRelation.setMovieId(movieOverview.id);
+
+            movieGenreRelationDao.insertOrReplace(movieGenreRelation);
+        });
+
+
+        return movieOverviewModel;
     }
 
     public Observable<MovieObesrvableResult> movieDetails(final int position, final String movieName){
@@ -131,7 +116,7 @@ public class VideosLibrary {
                     {
                         //Insert movie to database
                         movieOverview = insertMovieToDb(overview);
-                        addKeyword(movieName, movieOverview.id);
+                        addKeyword(movieName, movieOverview.getId());
 
                         emitter.onNext(new MovieObesrvableResult(position, movieOverview));
                     }

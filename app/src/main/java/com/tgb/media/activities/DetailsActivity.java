@@ -14,7 +14,14 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.tgb.media.R;
+import com.tgb.media.TgbApp;
+import com.tgb.media.database.GenreModel;
 import com.tgb.media.database.MovieOverviewModel;
+import com.tgb.media.videos.VideosLibrary;
+
+import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,15 +37,24 @@ public class DetailsActivity extends AppCompatActivity {
     @BindView(R.id.overview) TextView overview;
     @BindView(R.id.play_button) FloatingActionButton playButton;
 
+    //Tmdb API
+    @Inject VideosLibrary videosLibrary;
 
     //Finals
-    public static final String MOVIE = "movie";
+    public static final String MOVIE_ACTION = "com.tgb.media.details.movie";
+    public static final String MOVIE_ID = "movieId";
+
     private static final String CONFIGURATION_CHANGED = "CONFIGURATION_CHANGED";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+
+        //Dagger
+        ((TgbApp) getApplication()).getAppComponent().inject(this);
+
+        //Butterknife
         ButterKnife.bind(this);
 
         if(savedInstanceState != null
@@ -48,40 +64,59 @@ public class DetailsActivity extends AppCompatActivity {
             poster.setTransitionName(null);
         }
 
-        MovieOverviewModel movie = getIntent().getParcelableExtra(MOVIE);
-        //List<GenreModel> genres = movie.getGenres();
-        //Log.i("yoni", "genres: " + genres);
+        initialize();
+    }
 
-        title.setText(movie.title);
-        //subtitle.setText(movie.relaseDate);
-        overview.setText(movie.overview);
+    private void initialize(){
+        Intent intent = getIntent();
 
-        Glide.with(getBaseContext()).load("https://image.tmdb.org/t/p/w640/" + movie.posterPath)
+        if(intent.getAction() == MOVIE_ACTION){
+            MovieOverviewModel movie = videosLibrary.searchMovieById(
+                    intent.getLongExtra(MOVIE_ID, -1)
+            );
+
+            if(movie != null)
+                movieDetails(movie);
+        }
+    }
+
+    private void movieDetails(MovieOverviewModel movie){
+        StringBuilder genres = new StringBuilder();
+
+        List<GenreModel> movieGenres = movie.getGenres();
+
+        movieGenres.forEach(genreModel -> {
+            if(genres.length() > 0)
+                genres.append(", ");
+
+            genres.append(genreModel.getName());
+        });
+
+        title.setText(movie.getTitle());
+        subtitle.setText(genres.toString());
+        overview.setText(movie.getOverview());
+
+        Glide.with(getBaseContext()).load("https://image.tmdb.org/t/p/w640/" + movie.getPosterPath())
                 .thumbnail(1)
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(poster);
 
-        Glide.with(getBaseContext()).load("https://image.tmdb.org/t/p/w1300_and_h730_bestv2/" + movie.backdropPath)
+        Glide.with(getBaseContext()).load("https://image.tmdb.org/t/p/w1300_and_h730_bestv2/" + movie.getBackdropPath())
                 .thumbnail(1)
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(theme);
 
         playButton.setOnClickListener(v -> {
-            startActivity(buildIntent(this));
+            startActivity(buildVideoPlayerIntent(this));
         });
     }
 
-    public Intent buildIntent(Context context) {
+    private Intent buildVideoPlayerIntent(Context context) {
         Intent intent = new Intent(context, PlayerActivity.class);
+        intent.setAction(PlayerActivity.ACTION_VIEW_LIST);
         intent.putExtra(PlayerActivity.URI_LIST_EXTRA, new String[]{"http://www.html5videoplayer.net/videos/toystory.mp4"});
-
-        /*if (drmSchemeUuid != null) {
-            intent.putExtra(PlayerActivity.DRM_SCHEME_UUID_EXTRA, drmSchemeUuid.toString());
-            intent.putExtra(PlayerActivity.DRM_LICENSE_URL, drmLicenseUrl);
-            intent.putExtra(PlayerActivity.DRM_KEY_REQUEST_PROPERTIES, drmKeyRequestProperties);
-        }*/
 
         return intent;
     }

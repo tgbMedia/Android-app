@@ -18,9 +18,14 @@ public class TgbApp extends android.app.Application {
     //Dagger components
     private AppComponent appComponent;
 
+    //Instance
+    private static TgbApp instance;
+
     @Override
     public void onCreate() {
         super.onCreate();
+
+        instance = this;
 
         appComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
@@ -28,6 +33,10 @@ public class TgbApp extends android.app.Application {
                 .build();
         //appComponent = DaggerAppComponent.builder()
         //        .build();
+    }
+
+    public static TgbApp getInstance(){
+        return instance;
     }
 
     public DataSource.Factory buildDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {

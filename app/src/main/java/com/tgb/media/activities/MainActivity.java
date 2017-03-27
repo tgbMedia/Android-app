@@ -70,19 +70,24 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(mAdapter);
 
         recyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(getApplicationContext(), recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
+                new RecyclerItemClickListener(getApplicationContext(), recyclerView ,
+                        new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
 
-                        MovieOverviewModel movieMdel = mAdapter.getItem(position);
+                        MovieOverviewModel movie = mAdapter.getItem(position);
 
-                        Intent detailsActivityIntent = new Intent(
-                                getBaseContext(),
+                        Intent detailsActivityIntent = new Intent(getBaseContext(),
                                 DetailsActivity.class);
 
-                        detailsActivityIntent.putExtra(DetailsActivity.MOVIE, movieMdel);
+                        detailsActivityIntent.setAction(DetailsActivity.MOVIE_ACTION);
+                        detailsActivityIntent.putExtra(DetailsActivity.MOVIE_ID, movie.getId());
 
-                        ActivityOptionsCompat options = ActivityOptionsCompat.
-                                makeSceneTransitionAnimation(MainActivity.this, view.findViewById(R.id.thumbnail), getString(R.string.gallery_transition));
+                        ActivityOptionsCompat options = ActivityOptionsCompat
+                                .makeSceneTransitionAnimation(
+                                        MainActivity.this,
+                                        view.findViewById(R.id.thumbnail),
+                                        getString(R.string.gallery_transition)
+                                );
 
                         startActivity(detailsActivityIntent, options.toBundle());
                     }
@@ -95,6 +100,12 @@ public class MainActivity extends AppCompatActivity {
 
         List<String> requestedMovies = new ArrayList<>();
 
+        requestedMovies.add("Logan");
+        requestedMovies.add("Kong");
+        requestedMovies.add("Beauty and the Beast");
+        requestedMovies.add("Life");
+        requestedMovies.add("John wick 2");
+        requestedMovies.add("Rings");
         requestedMovies.add("Moonlight");
         requestedMovies.add("Zootopia");
         requestedMovies.add("Minions");

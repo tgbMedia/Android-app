@@ -59,13 +59,13 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
     public void onBindViewHolder(MyViewHolder holder, int position) {
         MovieOverviewModel movie = movies.get(position);
 
-        Glide.with(mContext).load("https://image.tmdb.org/t/p/w640/" + movie.posterPath)
+        Glide.with(mContext).load("https://image.tmdb.org/t/p/w640/" + movie.getPosterPath())
                 .thumbnail(1)
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.thumbnail);
 
-        holder.title.setText(movie.title);
+        holder.title.setText(movie.getTitle());
     }
 
     @Override
