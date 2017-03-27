@@ -45,15 +45,11 @@
         android:id="@+id/subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
-        android:layout_marginTop="0dp"
         android:maxLines="2"
         android:textSize="@dimen/details_poster_subtitle_text_size"
-        app:layout_constraintLeft_toLeftOf="@+id/title"
-        app:layout_constraintRight_toRightOf="@+id/title"
         app:layout_constraintStart_toStartOf="@+id/title"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        android:layout_marginEnd="8dp"/>
 
     <TextView
         android:id="@+id/overview"

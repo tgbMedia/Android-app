@@ -15,11 +15,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.tgb.media.R;
 import com.tgb.media.TgbApp;
-import com.tgb.media.database.GenreModel;
 import com.tgb.media.database.MovieOverviewModel;
 import com.tgb.media.videos.VideosLibrary;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -81,33 +78,31 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     private void movieDetails(MovieOverviewModel movie){
-        StringBuilder genres = new StringBuilder();
-
-        List<GenreModel> movieGenres = movie.getGenres();
-
-        movieGenres.forEach(genreModel -> {
-            if(genres.length() > 0)
-                genres.append(", ");
-
-            genres.append(genreModel.getName());
-        });
-
-        title.setText(movie.getTitle());
-        subtitle.setText(genres.toString());
-        overview.setText(movie.getOverview());
-
+        //First all set poster image for the shared element
         Glide.with(getBaseContext()).load("https://image.tmdb.org/t/p/w640/" + movie.getPosterPath())
-                .thumbnail(1)
-                .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(poster);
 
+        //Build genres list
+        movie.getGenres().forEach(genreModel -> {
+            if(subtitle.length() > 0)
+                subtitle.append(", ");
+
+            subtitle.append(genreModel.getName());
+        });
+
+        //Load movie backdrop
         Glide.with(getBaseContext()).load("https://image.tmdb.org/t/p/w1300_and_h730_bestv2/" + movie.getBackdropPath())
                 .thumbnail(1)
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(theme);
 
+        //Set movie details
+        title.setText(movie.getTitle());
+        overview.setText(movie.getOverview());
+
+        //Set play button event(Play movie)
         playButton.setOnClickListener(v -> {
             startActivity(buildVideoPlayerIntent(this));
         });
