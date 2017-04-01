@@ -69,35 +69,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new SpacesItemDecoration(5));
         recyclerView.setAdapter(mAdapter);
 
-        recyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(getApplicationContext(), recyclerView ,
-                        new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override public void onItemClick(View view, int position) {
-
-                        MovieOverviewModel movie = mAdapter.getItem(position);
-
-                        Intent detailsActivityIntent = new Intent(getBaseContext(),
-                                DetailsActivity.class);
-
-                        detailsActivityIntent.setAction(DetailsActivity.MOVIE_ACTION);
-                        detailsActivityIntent.putExtra(DetailsActivity.MOVIE_ID, movie.getId());
-
-                        ActivityOptionsCompat options = ActivityOptionsCompat
-                                .makeSceneTransitionAnimation(
-                                        MainActivity.this,
-                                        view.findViewById(R.id.thumbnail),
-                                        getString(R.string.gallery_transition)
-                                );
-
-                        startActivity(detailsActivityIntent, options.toBundle());
-                    }
-
-                    @Override public void onLongItemClick(View view, int position) {
-                        // do whatever
-                    }
-                })
-        );
-
         List<String> requestedMovies = new ArrayList<>();
 
         requestedMovies.add("Logan");
@@ -153,10 +124,43 @@ public class MainActivity extends AppCompatActivity {
                     .doOnError(throwable -> {
                         throwable.printStackTrace();
                     })
-                    .doOnComplete(() -> loadingDialog.hide())
+                    .doOnComplete(() -> loadingDialog.hide(this::loadingScreenIsGone))
                     .subscribe();
         }
 
+        return;
+
+    }
+
+    private void loadingScreenIsGone(View v){
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getApplicationContext(), recyclerView ,
+                        new RecyclerItemClickListener.OnItemClickListener() {
+                            @Override public void onItemClick(View view, int position) {
+
+                                MovieOverviewModel movie = mAdapter.getItem(position);
+
+                                Intent detailsActivityIntent = new Intent(getBaseContext(),
+                                        DetailsActivity.class);
+
+                                detailsActivityIntent.setAction(DetailsActivity.MOVIE_ACTION);
+                                detailsActivityIntent.putExtra(DetailsActivity.MOVIE_ID, movie.getId());
+
+                                ActivityOptionsCompat options = ActivityOptionsCompat
+                                        .makeSceneTransitionAnimation(
+                                                MainActivity.this,
+                                                view.findViewById(R.id.thumbnail),
+                                                getString(R.string.gallery_transition)
+                                        );
+
+                                startActivity(detailsActivityIntent, options.toBundle());
+                            }
+
+                            @Override public void onLongItemClick(View view, int position) {
+                                // do whatever
+                            }
+                        })
+        );
     }
 
 }

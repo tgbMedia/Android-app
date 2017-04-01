@@ -73,5 +73,8 @@ public class MovieOverview {
     @SerializedName("vote_count")
     @Expose
     public Long voteCount;
+    @SerializedName("videos")
+    @Expose
+    public Trailer trailer;
 
 }

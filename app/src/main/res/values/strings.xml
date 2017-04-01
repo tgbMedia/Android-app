@@ -1,11 +1,13 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">TGB Media</string>
-    <string name="tmdb_api_key">2bdd4d50cfbdb49ef644b25f355a27e1</string>
-    
+
     <!-- Details activity -->
     <string name="play">Play</string>
     <string name="release_date">Release date</string>
     <string name="lorem">A fast-talking mercenary with a morbid sense of humor is subjected to a rogue experiment that leaves him with accelerated healing powers and a quest for revenge.</string>
+
+    <!-- Youtube -->
+    <string name="error_player">There was an error initializing the YouTubePlayer (%1$s)</string>
 
     <!-- Transitions -->
     <string name="gallery_transition">poster</string>

@@ -18,7 +18,7 @@ public interface TmdbService {
     @GET("search/movie")
     Call<Search> search(@Query("query") String moviesName, @Query("page") int page);
 
-    @GET("movie/{id}")
+    @GET("movie/{id}?append_to_response=credits,images,keywords,videos")
     Call<MovieOverview> movie(@Path("id") long movieId);
 
 

@@ -9,6 +9,7 @@ import android.view.animation.Animation;
 import android.widget.RelativeLayout;
 
 import com.tgb.media.R;
+import com.tgb.media.listener.OnLoadingScreenIsGone;
 
 public class LoadingDialog extends RelativeLayout {
     public LoadingDialog(Context context) {
@@ -40,12 +41,26 @@ public class LoadingDialog extends RelativeLayout {
         startAnimation(fadeOut);
     }
 
-    public void hide(){
+    public void hide(OnLoadingScreenIsGone listener){
         Animation fadeOut = new AlphaAnimation(1, 0);
         fadeOut.setInterpolator(new AccelerateInterpolator());
         fadeOut.setStartOffset(500);
         fadeOut.setDuration(1200);
         fadeOut.setFillAfter(true);
+
+        fadeOut.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {}
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if(listener != null)
+                    listener.loadingScreenIsGone(LoadingDialog.this);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
+        });
 
         startAnimation(fadeOut);
     }

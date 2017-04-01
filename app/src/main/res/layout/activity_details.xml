@@ -16,7 +16,7 @@
         android:fitsSystemWindows="true">
 
         <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/main.collapsing"
+            android:id="@+id/main_collapsing"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
@@ -29,6 +29,23 @@
                 android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax" />
+
+            <android.support.percent.PercentFrameLayout
+                android:id="@+id/theme_play_container"
+                android:layout_width="@dimen/details_theme_play_container"
+                android:layout_height="@dimen/details_theme_play_container"
+                android:layout_gravity="center"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/theme_play_button"
+                    app:layout_widthPercent="50%"
+                    app:layout_heightPercent="50%"
+                    android:layout_gravity="center"
+                    android:adjustViewBounds="true"
+                    app:srcCompat="@drawable/ic_theme_play"/>
+
+            </android.support.percent.PercentFrameLayout>
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>

@@ -1,5 +1,8 @@
 package com.tgb.media.database;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
@@ -7,12 +10,13 @@ import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.JoinEntity;
 import org.greenrobot.greendao.annotation.ToMany;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import tgb.tmdb.models.MovieOverview;
 
 @Entity
-public class MovieOverviewModel {
+public class MovieOverviewModel implements Parcelable {
     @Id private Long id;
     private boolean adult;
     private String backdropPath;
@@ -33,6 +37,7 @@ public class MovieOverviewModel {
     private Boolean video;
     private double voteAverage;
     private long voteCount;
+    private String youtubeTrailer;
 
     @ToMany
     @JoinEntity(
@@ -270,11 +275,11 @@ public class MovieOverviewModel {
     public MovieOverviewModel() {
     }
 
-    @Generated(hash = 715094918)
+    @Generated(hash = 137001050)
     public MovieOverviewModel(Long id, boolean adult, String backdropPath, long budget, String homepage, String imdbId,
             String originalLanguage, String originalTitle, String overview, double popularity, String posterPath,
             String releaseDate, long revenue, long runtime, String status, String tagline, String title, Boolean video,
-            double voteAverage, long voteCount) {
+            double voteAverage, long voteCount, String youtubeTrailer) {
         this.id = id;
         this.adult = adult;
         this.backdropPath = backdropPath;
@@ -295,6 +300,7 @@ public class MovieOverviewModel {
         this.video = video;
         this.voteAverage = voteAverage;
         this.voteCount = voteCount;
+        this.youtubeTrailer = youtubeTrailer;
     }
 
     public MovieOverviewModel(MovieOverview movieOverview){
@@ -318,6 +324,7 @@ public class MovieOverviewModel {
         this.video = movieOverview.video;
         this.voteAverage = movieOverview.voteAverage;
         this.voteCount = movieOverview.voteCount;
+        this.youtubeTrailer = movieOverview.trailer == null ? "" : movieOverview.trailer.key;
     }
 
     /** Used to resolve relations */
@@ -327,6 +334,45 @@ public class MovieOverviewModel {
     @Generated(hash = 2000367368)
     private transient MovieOverviewModelDao myDao;
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(this.id);
+        dest.writeByte(this.adult ? (byte) 1 : (byte) 0);
+        dest.writeString(this.backdropPath);
+        dest.writeLong(this.budget);
+        dest.writeString(this.homepage);
+        dest.writeString(this.imdbId);
+        dest.writeString(this.originalLanguage);
+        dest.writeString(this.originalTitle);
+        dest.writeString(this.overview);
+        dest.writeDouble(this.popularity);
+        dest.writeString(this.posterPath);
+        dest.writeString(this.releaseDate);
+        dest.writeLong(this.revenue);
+        dest.writeLong(this.runtime);
+        dest.writeString(this.status);
+        dest.writeString(this.tagline);
+        dest.writeString(this.title);
+        dest.writeValue(this.video);
+        dest.writeDouble(this.voteAverage);
+        dest.writeLong(this.voteCount);
+        dest.writeString(this.youtubeTrailer);
+        dest.writeList(this.genres);
+    }
+
+    public String getYoutubeTrailer() {
+        return this.youtubeTrailer;
+    }
+
+    public void setYoutubeTrailer(String youtubeTrailer) {
+        this.youtubeTrailer = youtubeTrailer;
+    }
+
     /** called by internal mechanisms, do not call yourself. */
     @Generated(hash = 719929430)
     public void __setDaoSession(DaoSession daoSession) {
@@ -334,4 +380,41 @@ public class MovieOverviewModel {
         myDao = daoSession != null ? daoSession.getMovieOverviewModelDao() : null;
     }
 
+    protected MovieOverviewModel(Parcel in) {
+        this.id = (Long) in.readValue(Long.class.getClassLoader());
+        this.adult = in.readByte() != 0;
+        this.backdropPath = in.readString();
+        this.budget = in.readLong();
+        this.homepage = in.readString();
+        this.imdbId = in.readString();
+        this.originalLanguage = in.readString();
+        this.originalTitle = in.readString();
+        this.overview = in.readString();
+        this.popularity = in.readDouble();
+        this.posterPath = in.readString();
+        this.releaseDate = in.readString();
+        this.revenue = in.readLong();
+        this.runtime = in.readLong();
+        this.status = in.readString();
+        this.tagline = in.readString();
+        this.title = in.readString();
+        this.video = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.voteAverage = in.readDouble();
+        this.voteCount = in.readLong();
+        this.youtubeTrailer = in.readString();
+        this.genres = new ArrayList<GenreModel>();
+        in.readList(this.genres, GenreModel.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<MovieOverviewModel> CREATOR = new Parcelable.Creator<MovieOverviewModel>() {
+        @Override
+        public MovieOverviewModel createFromParcel(Parcel source) {
+            return new MovieOverviewModel(source);
+        }
+
+        @Override
+        public MovieOverviewModel[] newArray(int size) {
+            return new MovieOverviewModel[size];
+        }
+    };
 }
