@@ -5,7 +5,9 @@ import android.util.Log;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
-import java.util.List;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
@@ -16,11 +18,12 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import tgb.tmdb.deserialize.ReleaseDateDeserializer;
 import tgb.tmdb.deserialize.TrailerDeserialize;
 import tgb.tmdb.models.MovieOverview;
+import tgb.tmdb.models.ReleaseDate;
 import tgb.tmdb.models.Search;
 import tgb.tmdb.models.Trailer;
-import tgb.tmdb.models.Videos;
 
 public class TmdbAPI {
 
@@ -35,11 +38,17 @@ public class TmdbAPI {
     private String apiKey;
     private String language;
 
+    //Dates
+    private DateFormat releaseDateFormat;
+
     public TmdbAPI(String tmdbApiKey, final String apiLanguage)
     {
         //API Auth
         this.apiKey = tmdbApiKey;
         this.language = apiLanguage.substring(0, 2); //Convert to ISO 639-1(2 letters)
+
+        //Dates
+        this.releaseDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
         //Create new instance of OkHttpClient to add the api_key parameter to every request
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
@@ -76,7 +85,10 @@ public class TmdbAPI {
 
         //GSON
         GsonBuilder gsonBuilder = new GsonBuilder();
+
+        //GSON Adapters
         gsonBuilder.registerTypeAdapter(Trailer.class, new TrailerDeserialize(language));
+        gsonBuilder.registerTypeAdapter(ReleaseDate.class, new ReleaseDateDeserializer(releaseDateFormat));
 
         //Retrofit initialize
         retrofit = new Retrofit.Builder()

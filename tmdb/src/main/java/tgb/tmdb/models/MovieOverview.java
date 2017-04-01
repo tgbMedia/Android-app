@@ -48,7 +48,7 @@ public class MovieOverview {
     public String posterPath;
     @SerializedName("release_date")
     @Expose
-    public String releaseDate;
+    public ReleaseDate releaseDate;
     @SerializedName("revenue")
     @Expose
     public Long revenue;
