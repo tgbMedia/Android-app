@@ -35,7 +35,7 @@ public class LoadingDialog extends RelativeLayout {
         Animation fadeOut = new AlphaAnimation(0, 1);
         fadeOut.setInterpolator(new AccelerateInterpolator());
         fadeOut.setStartOffset(500);
-        fadeOut.setDuration(1200);
+        fadeOut.setDuration(1000);
         fadeOut.setFillAfter(true);
 
         startAnimation(fadeOut);
