@@ -39,6 +39,7 @@ public class MovieOverviewModel implements Parcelable {
     private Double voteAverage;
     private Long voteCount;
     private String youtubeTrailer;
+    private String serverTitle;
 
     @ToMany
     @JoinEntity(
@@ -48,7 +49,7 @@ public class MovieOverviewModel implements Parcelable {
     )
     private List<GenreModel> genres;
 
-    public MovieOverviewModel(MovieOverview movieOverview){
+    public MovieOverviewModel(MovieOverview movieOverview, String serverTitle){
         this.id = movieOverview.id;
         this.adult = movieOverview.adult;
         this.backdropPath = movieOverview.backdropPath;
@@ -70,6 +71,7 @@ public class MovieOverviewModel implements Parcelable {
         this.voteAverage = movieOverview.voteAverage;
         this.voteCount = movieOverview.voteCount;
         this.youtubeTrailer = movieOverview.trailer == null ? "" : movieOverview.trailer.key;
+        this.serverTitle = serverTitle;
     }
 
 
@@ -101,6 +103,7 @@ public class MovieOverviewModel implements Parcelable {
         dest.writeValue(this.voteAverage);
         dest.writeValue(this.voteCount);
         dest.writeString(this.youtubeTrailer);
+        dest.writeString(this.serverTitle);
         dest.writeList(this.genres);
     }
 
@@ -315,6 +318,16 @@ public class MovieOverviewModel implements Parcelable {
     }
 
 
+    public String getServerTitle() {
+        return this.serverTitle;
+    }
+
+
+    public void setServerTitle(String serverTitle) {
+        this.serverTitle = serverTitle;
+    }
+
+
     /**
      * To-many relationship, resolved on first access (and after reset).
      * Changes to to-many relations are not persisted, make changes to the target entity.
@@ -414,17 +427,18 @@ public class MovieOverviewModel implements Parcelable {
         this.voteAverage = (Double) in.readValue(Double.class.getClassLoader());
         this.voteCount = (Long) in.readValue(Long.class.getClassLoader());
         this.youtubeTrailer = in.readString();
+        this.serverTitle = in.readString();
         this.genres = new ArrayList<GenreModel>();
         in.readList(this.genres, GenreModel.class.getClassLoader());
     }
 
 
-    @Generated(hash = 1604981025)
+    @Generated(hash = 1051266377)
     public MovieOverviewModel(Long id, Boolean adult, String backdropPath, Long budget, String homepage,
             String imdbId, String originalLanguage, String originalTitle, String overview,
             Double popularity, String posterPath, Long releaseDate, Long revenue, Long runtime,
             String status, String tagline, String title, Boolean video, Double voteAverage,
-            Long voteCount, String youtubeTrailer) {
+            Long voteCount, String youtubeTrailer, String serverTitle) {
         this.id = id;
         this.adult = adult;
         this.backdropPath = backdropPath;
@@ -446,6 +460,7 @@ public class MovieOverviewModel implements Parcelable {
         this.voteAverage = voteAverage;
         this.voteCount = voteCount;
         this.youtubeTrailer = youtubeTrailer;
+        this.serverTitle = serverTitle;
     }
 
 
@@ -470,4 +485,6 @@ public class MovieOverviewModel implements Parcelable {
     /** Used for active entity operations. */
     @Generated(hash = 2000367368)
     private transient MovieOverviewModelDao myDao;
+
+    
 }

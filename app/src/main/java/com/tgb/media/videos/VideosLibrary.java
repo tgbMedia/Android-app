@@ -64,10 +64,11 @@ public class VideosLibrary {
         );
     }
 
-    private MovieOverviewModel insertMovieToDb(MovieOverview movieOverview) throws Exception{
+    private MovieOverviewModel insertMovieToDb(MovieOverview movieOverview, String serverTitle)
+            throws Exception{
 
         //Insert the movie to the databse
-        MovieOverviewModel movieOverviewModel = new MovieOverviewModel(movieOverview);
+        MovieOverviewModel movieOverviewModel = new MovieOverviewModel(movieOverview, serverTitle);
 
         movieModelDao.insertOrReplace(
                 movieOverviewModel
@@ -115,7 +116,7 @@ public class VideosLibrary {
                     else
                     {
                         //Insert movie to database
-                        movieOverview = insertMovieToDb(overview);
+                        movieOverview = insertMovieToDb(overview, movieName);
                         addKeyword(movieName, movieOverview.getId());
 
                         emitter.onNext(new MovieObesrvableResult(position, movieOverview));

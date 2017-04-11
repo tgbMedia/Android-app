@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         tgbAPI.call().moviesList()
                 .subscribeOn(Schedulers.newThread())
                 .flatMap(response -> Observable.fromArray(response.results))
-                .flatMap(video -> videosLibrary.movieDetails(0, video.title))
+                .flatMap(video -> videosLibrary.movieDetails(mAdapter.getItemCount(), video.title))
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(mAdapter::addItem)
                 .doOnError(Throwable::printStackTrace)

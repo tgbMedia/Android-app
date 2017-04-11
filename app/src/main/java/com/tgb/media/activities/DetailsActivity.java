@@ -150,7 +150,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         //Set play button event(Play movie)
         playButton.setOnClickListener(v -> {
-            startActivity(buildVideoPlayerIntent(this));
+            startActivity(buildVideoPlayerIntent(this, movie.getServerTitle()));
         });
     }
 
@@ -159,10 +159,13 @@ public class DetailsActivity extends AppCompatActivity {
         return resolveInfo != null && !resolveInfo.isEmpty();
     }
 
-    private Intent buildVideoPlayerIntent(Context context) {
+    private Intent buildVideoPlayerIntent(Context context, String videoTitle) {
+
+        Log.i("yoni", "Stream url; " + "http://192.168.1.10:8081/video/" + videoTitle);
+
         Intent intent = new Intent(context, PlayerActivity.class);
         intent.setAction(PlayerActivity.ACTION_VIEW_LIST);
-        intent.putExtra(PlayerActivity.URI_LIST_EXTRA, new String[]{"http://www.html5videoplayer.net/videos/toystory.mp4"});
+        intent.putExtra(PlayerActivity.URI_LIST_EXTRA, new String[]{"http://192.168.1.10:8081/video/" + videoTitle});
 
         return intent;
     }

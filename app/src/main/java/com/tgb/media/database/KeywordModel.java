@@ -15,6 +15,22 @@ public class KeywordModel{
 
     @ToOne(joinProperty = "movieId")
     public MovieOverviewModel movie;
+    /** Used to resolve relations */
+    @Generated(hash = 2040040024)
+    private transient DaoSession daoSession;
+    /** Used for active entity operations. */
+    @Generated(hash = 969768800)
+    private transient KeywordModelDao myDao;
+
+    @Generated(hash = 1543743071)
+    public KeywordModel(String keyword, long movieId) {
+        this.keyword = keyword;
+        this.movieId = movieId;
+    }
+
+    @Generated(hash = 381496246)
+    public KeywordModel() {
+    }
 
     public String getKeyword() {
         return this.keyword;
@@ -31,6 +47,9 @@ public class KeywordModel{
     public void setMovieId(long movieId) {
         this.movieId = movieId;
     }
+
+    @Generated(hash = 708760245)
+    private transient Long movie__resolvedKey;
 
     /** To-one relationship, resolved on first access. */
     @Generated(hash = 1289461985)
@@ -101,28 +120,11 @@ public class KeywordModel{
         myDao.update(this);
     }
 
-    public KeywordModel() {
-    }
-
-    @Generated(hash = 1543743071)
-    public KeywordModel(String keyword, long movieId) {
-        this.keyword = keyword;
-        this.movieId = movieId;
-    }
-
-    /** Used to resolve relations */
-    @Generated(hash = 2040040024)
-    private transient DaoSession daoSession;
-    /** Used for active entity operations. */
-    @Generated(hash = 969768800)
-    private transient KeywordModelDao myDao;
-    @Generated(hash = 708760245)
-    private transient Long movie__resolvedKey;
-
     /** called by internal mechanisms, do not call yourself. */
     @Generated(hash = 552997055)
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getKeywordModelDao() : null;
     }
+
 }
