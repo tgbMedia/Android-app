@@ -131,47 +131,6 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         simpleExoPlayerView.setControllerVisibilityListener(this);
         simpleExoPlayerView.requestFocus();
 
-
-        /*ButterKnife.bind(this);
-
-        // 1. Create a default TrackSelector
-        Handler mainHandler = new Handler();
-
-        DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-
-        TrackSelection.Factory videoTrackSelectionFactory =
-                new AdaptiveTrackSelection.Factory(bandwidthMeter);
-
-        TrackSelector trackSelector =
-                new DefaultTrackSelector(videoTrackSelectionFactory);
-
-        // 2. Create a default LoadControl
-        LoadControl loadControl = new DefaultLoadControl();
-        // 3. Create the player
-        player =
-                ExoPlayerFactory.newSimpleInstance(getBaseContext(), trackSelector, loadControl);
-
-        simpleExoPlayerView.setPlayer(player);
-
-        // Produces DataSource instances through which media data is loaded.
-        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this,
-                Util.getUserAgent(this, "yourApplicationName"), bandwidthMeter);
-
-
-        // Produces Extractor instances for parsing the media data.
-        ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-        // This is the MediaSource representing the media to be played.
-        MediaSource videoSource = new ExtractorMediaSource(Uri.parse("http://www.html5videoplayer.net/videos/toystory.mp4"),
-                dataSourceFactory, extractorsFactory, null, null);
-
-
-        player.setVideoScalingMode(android.media.MediaPlayer
-                .VIDEO_SCALING_MODE_SCALE_TO_FIT);
-
-        // Prepare the player with the source.
-        player.prepare(videoSource);
-        player.setPlayWhenReady(true);*/
-
     }
 
     @Override

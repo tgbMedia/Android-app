@@ -47,6 +47,11 @@ android {
 }
 
 dependencies {
+    ext.googleLibrariesVersion = '25.3.1'
+    ext.daggerVersion = '2.10-rc1'
+    ext.butterknifeVersion = '8.5.1'
+    ext.rxAndroidVersion = '2.0.1'
+
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -54,24 +59,24 @@ dependencies {
     //Unit tests
     testCompile 'junit:junit:4.12'
     //Android support libraries
-    compile 'com.android.support:appcompat-v7:25.2.0'
-    compile 'com.android.support:design:25.2.0'
-    compile 'com.android.support:cardview-v7:25.2.0'
-    compile 'com.android.support:support-core-utils:25.2.0'
-    compile 'com.android.support:percent:25.2.0'
-    compile 'com.android.support:leanback-v17:25.2.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile "com.android.support:appcompat-v7:$googleLibrariesVersion"
+    compile "com.android.support:design:$googleLibrariesVersion"
+    compile "com.android.support:cardview-v7:$googleLibrariesVersion"
+    compile "com.android.support:support-core-utils:$googleLibrariesVersion"
+    compile "com.android.support:percent:$googleLibrariesVersion"
+    compile "com.android.support:leanback-v17:$googleLibrariesVersion"
+    compile "com.android.support.constraint:constraint-layout:1.0.2"
     //GreenDao
-    compile 'org.greenrobot:greendao:3.2.0'
+    compile "org.greenrobot:greendao:3.2.0"
     //Dagger
-    compile 'com.google.dagger:dagger:2.10-rc1'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.10-rc1'
+    compile "com.google.dagger:dagger:$daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
     //Butter knife
-    compile 'com.jakewharton:butterknife:8.5.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+    compile "com.jakewharton:butterknife:$butterknifeVersion"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
     //RxJava
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile 'io.reactivex.rxjava2:rxjava:2.0.1'
+    compile "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
+    compile "io.reactivex.rxjava2:rxjava:$rxAndroidVersion"
     //Glide
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile project(':tmdb')

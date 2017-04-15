@@ -11,7 +11,10 @@ import android.widget.RelativeLayout;
 import com.tgb.media.R;
 import com.tgb.media.listener.OnLoadingScreenIsGone;
 
+import butterknife.ButterKnife;
+
 public class LoadingDialog extends RelativeLayout {
+
     public LoadingDialog(Context context) {
         super(context);
         init();
@@ -29,23 +32,41 @@ public class LoadingDialog extends RelativeLayout {
 
     private void init() {
         inflate(getContext(), R.layout.overlay_loading_gallery, this);
+        ButterKnife.bind(this);
     }
 
-    public void show(){
-        Animation fadeOut = new AlphaAnimation(0, 1);
-        fadeOut.setInterpolator(new AccelerateInterpolator());
-        fadeOut.setStartOffset(500);
-        fadeOut.setDuration(1000);
-        fadeOut.setFillAfter(true);
+    public void show(OnLoadingScreenIsGone listener){
+        clearAnimation();
+        setVisibility(VISIBLE);
 
-        startAnimation(fadeOut);
+        Animation fadeIn = new AlphaAnimation(0, 1);
+
+        fadeIn.setInterpolator(new AccelerateInterpolator());
+        fadeIn.setDuration(500);
+        fadeIn.setFillAfter(true);
+
+        fadeIn.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {}
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if(listener != null)
+                    listener.onAnimationFinish(LoadingDialog.this);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
+        });
+
+        startAnimation(fadeIn);
     }
 
     public void hide(OnLoadingScreenIsGone listener){
         Animation fadeOut = new AlphaAnimation(1, 0);
+
         fadeOut.setInterpolator(new AccelerateInterpolator());
-        fadeOut.setStartOffset(500);
-        fadeOut.setDuration(1200);
+        fadeOut.setDuration(500);
         fadeOut.setFillAfter(true);
 
         fadeOut.setAnimationListener(new Animation.AnimationListener() {
@@ -55,7 +76,7 @@ public class LoadingDialog extends RelativeLayout {
             @Override
             public void onAnimationEnd(Animation animation) {
                 if(listener != null)
-                    listener.loadingScreenIsGone(LoadingDialog.this);
+                    listener.onAnimationFinish(LoadingDialog.this);
             }
 
             @Override

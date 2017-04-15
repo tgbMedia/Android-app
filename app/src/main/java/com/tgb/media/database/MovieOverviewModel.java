@@ -9,7 +9,6 @@ import org.greenrobot.greendao.annotation.JoinEntity;
 import org.greenrobot.greendao.annotation.ToMany;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import tgb.tmdb.models.MovieOverview;

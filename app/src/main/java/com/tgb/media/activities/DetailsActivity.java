@@ -26,7 +26,6 @@ import com.tgb.media.TgbApp;
 import com.tgb.media.database.MovieOverviewModel;
 import com.tgb.media.videos.VideosLibrary;
 
-import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;

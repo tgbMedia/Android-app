@@ -6,6 +6,9 @@
     <string name="release_date">Release date</string>
     <string name="lorem">A fast-talking mercenary with a morbid sense of humor is subjected to a rogue experiment that leaves him with accelerated healing powers and a quest for revenge.</string>
 
+    <!-- Server error -->
+    <string name="no_online_servers">No servers found!</string>
+
     <!-- Youtube -->
     <string name="error_player">There was an error initializing the YouTubePlayer (%1$s)</string>
 

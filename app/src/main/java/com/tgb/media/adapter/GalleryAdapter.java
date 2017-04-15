@@ -44,6 +44,13 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
         this.movies = new LinkedList<>();
     }
 
+    public void clear() {
+        int size = movies.size();
+        movies.clear();
+
+        notifyDataSetChanged();
+    }
+
     public void addItem(MovieObesrvableResult movieObesrvableResult){
         movies.add(movieObesrvableResult.movie);
         notifyItemChanged(movieObesrvableResult.position);

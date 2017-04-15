@@ -7,6 +7,9 @@
     <dimen name="thumb_elevation">3dp</dimen>
     <dimen name="thumb_title_padding">4dp</dimen>
 
+    <!-- Titles -->
+    <dimen name="high_title">18sp</dimen>
+
     <!-- Details -->
     <dimen name="details_app_bar_height">300dp</dimen>
     <dimen name="details_content_top_margin">-60dp</dimen>
@@ -26,6 +29,9 @@
     <dimen name="details_poster_small_text_size">12sp</dimen>
     <dimen name="details_poster_subtitle_text_size">18sp</dimen>
     <dimen name="details_overview_text_size">22sp</dimen>
+
+    <!-- Overlay message -->
+    <dimen name="overlay_message_margin">24dp</dimen>
 
 
 </resources>

@@ -10,12 +10,26 @@
     tools:context=".activities.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swiperefresh"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="vertical"
-        android:focusable="true"/>
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            android:focusable="true"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <com.tgb.media.helper.OverlayMessageView
+        android:id="@+id/overlay_message"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 
     <com.tgb.media.helper.LoadingDialog
         android:id="@+id/loading_dialog"
