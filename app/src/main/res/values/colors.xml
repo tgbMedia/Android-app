@@ -13,5 +13,6 @@
 
     <!-- Information page -->
     <color name="title_color">#eee</color>
+    <color name="button_color">#e6d134</color>
 
 </resources>

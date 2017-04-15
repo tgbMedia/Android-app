@@ -23,12 +23,21 @@
     <dimen name="details_poster_title_top_margin">92dp</dimen>  <!-- poster_height / 2 -->
     <dimen name="details_poster_title_start_margin">16dp</dimen>
     <dimen name="details_overview_margin">24dp</dimen>
+    <dimen name="details_time_block_height">20dp</dimen>
+    <dimen name="details_time_block_icon_width">17dp</dimen>
+    <dimen name="details_icons_height">30dp</dimen>
+    <dimen name="details_icons_block_top_margin">32dp</dimen>
+    <dimen name="details_icons_start_margin">20dp</dimen>
+    <dimen name="details_overview_top_margin">24dp</dimen>
+    <dimen name="details_read_more_top_margin">16dp</dimen>
 
     <!-- Overview titles text sizes -->
     <dimen name="details_poster_title_text_size">28sp</dimen>
     <dimen name="details_poster_small_text_size">12sp</dimen>
     <dimen name="details_poster_subtitle_text_size">18sp</dimen>
     <dimen name="details_overview_text_size">22sp</dimen>
+    <dimen name="details_overview_time_block_text_size">14sp</dimen>
+    <dimen name="details_overview_read_more_text_size">14sp</dimen>
 
     <!-- Overlay message -->
     <dimen name="overlay_message_margin">24dp</dimen>

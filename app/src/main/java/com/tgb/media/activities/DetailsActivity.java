@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +25,7 @@ import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.tgb.media.R;
 import com.tgb.media.TgbApp;
 import com.tgb.media.database.MovieOverviewModel;
+import com.tgb.media.helper.ExpandableTextView;
 import com.tgb.media.videos.VideosLibrary;
 
 import java.util.Calendar;
@@ -42,8 +44,10 @@ public class DetailsActivity extends AppCompatActivity {
     @BindView(R.id.theme_poster) ImageView theme;
     @BindView(R.id.title) TextView title;
     @BindView(R.id.subtitle) TextView subtitle;
+    @BindView(R.id.runtime) TextView runtime;
     @BindView(R.id.poster) ImageView poster;
-    @BindView(R.id.overview) TextView overview;
+    @BindView(R.id.overview) ExpandableTextView overview;
+    @BindView(R.id.read_more) TextView readMore;
     @BindView(R.id.theme_play_container) View themePlayButtonContainer;
     @BindView(R.id.play_button) FloatingActionButton playButton;
 
@@ -123,11 +127,22 @@ public class DetailsActivity extends AppCompatActivity {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(theme);
 
-        Log.i("yoni", "Movie trailer " + movie.getYoutubeTrailer() + ", id: " + movie.getId());
-
         //Set movie details
         title.setText(movie.getTitle());
+
         overview.setText(movie.getOverview());
+        overview.setInterpolator(new OvershootInterpolator());
+
+        readMore.setOnClickListener(v -> {
+            overview.toggle();
+
+            readMore.setText(overview.isExpanded()
+                    ? getString(R.string.read_more)
+                    : getString(R.string.collapse));
+        });
+
+        runtime.setText(getString(R.string.runtime, (int)(movie.getRuntime() / 60),
+                (int)(movie.getRuntime() % 60)));
 
         if(!TextUtils.isEmpty(movie.getYoutubeTrailer())){
             themePlayButtonContainer.setVisibility(View.VISIBLE);
