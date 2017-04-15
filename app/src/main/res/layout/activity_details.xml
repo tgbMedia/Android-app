@@ -62,15 +62,13 @@
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/nested_scroll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/details_content_top_margin"
         android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <include
-            layout="@layout/overview_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            layout="@layout/overview_layout" />
 
 
     </android.support.v4.widget.NestedScrollView>

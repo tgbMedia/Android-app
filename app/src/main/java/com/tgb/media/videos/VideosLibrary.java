@@ -15,6 +15,7 @@ import com.tgb.media.helper.MovieObesrvableResult;
 
 import io.reactivex.Observable;
 import tgb.tmdb.TmdbAPI;
+import tgb.tmdb.models.Genre;
 import tgb.tmdb.models.MovieOverview;
 
 public class VideosLibrary {
@@ -75,7 +76,7 @@ public class VideosLibrary {
         );
 
         //Add genres to db
-        movieOverview.genres.forEach(genre -> {
+        for(Genre genre : movieOverview.genres) {
 
             genreModelDao.insertOrReplace(new GenreModel(
                     genre.id,
@@ -89,7 +90,7 @@ public class VideosLibrary {
             movieGenreRelation.setMovieId(movieOverview.id);
 
             movieGenreRelationDao.insertOrReplace(movieGenreRelation);
-        });
+        };
 
 
         return movieOverviewModel;

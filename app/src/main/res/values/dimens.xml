@@ -11,7 +11,7 @@
     <dimen name="high_title">18sp</dimen>
 
     <!-- Details -->
-    <dimen name="details_app_bar_height">300dp</dimen>
+    <dimen name="details_app_bar_height">250dp</dimen>
     <dimen name="details_content_top_margin">-60dp</dimen>
     <dimen name="details_theme_play_container">100dp</dimen>
 

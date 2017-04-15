@@ -26,6 +26,7 @@ import com.tgb.media.TgbApp;
 import com.tgb.media.database.MovieOverviewModel;
 import com.tgb.media.videos.VideosLibrary;
 
+import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -100,17 +101,17 @@ public class DetailsActivity extends AppCompatActivity {
                 .into(poster);
 
         //Build genres list
-        movie.getGenres().forEach(genreModel -> {
+        /*movie.getGenres().forEach(genreModel -> {
             if(subtitle.length() > 0)
                 subtitle.append(", ");
 
             subtitle.append(genreModel.getName());
-        });
+        });*/
 
-        /*Calendar releaseDate = Calendar.getInstance();
-        releaseDate.setTime(movie.getReleaseDate());
+        Calendar releaseDate = Calendar.getInstance();
+        releaseDate.setTimeInMillis(movie.getReleaseDate());
 
-        subtitle.setText(releaseDate.get(Calendar.YEAR));*/
+        subtitle.setText(releaseDate.get(Calendar.YEAR) + "");
 
         //subtitle.append(movie.getGenres().get(0).getName());
 

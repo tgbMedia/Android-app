@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(mAdapter);
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
+            swipeRefreshLayout.setEnabled(false);
             swipeRefreshLayout.setRefreshing(false);
             loadingDialog.show(view -> refresh());
         });
@@ -90,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void refresh(){
-        swipeRefreshLayout.setEnabled(false);
         lastServerError = null;
 
         overlayMessageView.hide();
