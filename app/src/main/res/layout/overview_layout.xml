@@ -103,17 +103,22 @@
             android:layout_marginStart="@dimen/details_icons_start_margin"/>
 
         <ImageView
-            android:layout_height="match_parent"
+            android:id="@+id/imageView"
             android:layout_width="@dimen/details_icons_height"
-            app:srcCompat="@drawable/ic_consulting_message"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/details_icons_start_margin"
             android:adjustViewBounds="true"
-            android:layout_marginStart="@dimen/details_icons_start_margin"/>
+            app:srcCompat="@drawable/ic_consulting_message" />
 
-        <ImageView
+        <com.sackcentury.shinebuttonlib.ShineButton
+            android:id="@+id/like_button"
             android:layout_height="match_parent"
             android:layout_width="@dimen/details_icons_height"
-            app:srcCompat="@drawable/ic_like"
             android:adjustViewBounds="true"
+            app:btn_color="@color/no_clicked_button_color"
+            app:btn_fill_color="@color/button_color"
+            android:elevation="10dp"
+            app:siShape="@raw/heart"
             android:layout_marginStart="@dimen/details_icons_start_margin"/>
 
     </LinearLayout>
@@ -128,7 +133,7 @@
         app:layout_constraintRight_toLeftOf="@+id/right_guideline"
         app:layout_constraintTop_toBottomOf="@+id/icons_container"
         android:textSize="@dimen/details_overview_text_size"
-        android:maxLines="3"
+        android:maxLines="5"
         android:ellipsize="end"/>
 
     <FrameLayout

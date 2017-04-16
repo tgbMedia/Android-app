@@ -39,6 +39,7 @@ public class MovieOverviewModel implements Parcelable {
     private Long voteCount;
     private String youtubeTrailer;
     private String serverTitle;
+    private Boolean like;
 
     @ToMany
     @JoinEntity(
@@ -71,8 +72,8 @@ public class MovieOverviewModel implements Parcelable {
         this.voteCount = movieOverview.voteCount;
         this.youtubeTrailer = movieOverview.trailer == null ? "" : movieOverview.trailer.key;
         this.serverTitle = serverTitle;
+        this.like = false;
     }
-
 
     @Override
     public int describeContents() {
@@ -103,229 +104,193 @@ public class MovieOverviewModel implements Parcelable {
         dest.writeValue(this.voteCount);
         dest.writeString(this.youtubeTrailer);
         dest.writeString(this.serverTitle);
+        dest.writeValue(this.like);
         dest.writeList(this.genres);
     }
-
 
     public Long getId() {
         return this.id;
     }
 
-
     public void setId(Long id) {
         this.id = id;
     }
-
 
     public Boolean getAdult() {
         return this.adult;
     }
 
-
     public void setAdult(Boolean adult) {
         this.adult = adult;
     }
-
 
     public String getBackdropPath() {
         return this.backdropPath;
     }
 
-
     public void setBackdropPath(String backdropPath) {
         this.backdropPath = backdropPath;
     }
-
 
     public Long getBudget() {
         return this.budget;
     }
 
-
     public void setBudget(Long budget) {
         this.budget = budget;
     }
-
 
     public String getHomepage() {
         return this.homepage;
     }
 
-
     public void setHomepage(String homepage) {
         this.homepage = homepage;
     }
-
 
     public String getImdbId() {
         return this.imdbId;
     }
 
-
     public void setImdbId(String imdbId) {
         this.imdbId = imdbId;
     }
-
 
     public String getOriginalLanguage() {
         return this.originalLanguage;
     }
 
-
     public void setOriginalLanguage(String originalLanguage) {
         this.originalLanguage = originalLanguage;
     }
-
 
     public String getOriginalTitle() {
         return this.originalTitle;
     }
 
-
     public void setOriginalTitle(String originalTitle) {
         this.originalTitle = originalTitle;
     }
-
 
     public String getOverview() {
         return this.overview;
     }
 
-
     public void setOverview(String overview) {
         this.overview = overview;
     }
-
 
     public Double getPopularity() {
         return this.popularity;
     }
 
-
     public void setPopularity(Double popularity) {
         this.popularity = popularity;
     }
-
 
     public String getPosterPath() {
         return this.posterPath;
     }
 
-
     public void setPosterPath(String posterPath) {
         this.posterPath = posterPath;
     }
-
 
     public Long getReleaseDate() {
         return this.releaseDate;
     }
 
-
     public void setReleaseDate(Long releaseDate) {
         this.releaseDate = releaseDate;
     }
-
 
     public Long getRevenue() {
         return this.revenue;
     }
 
-
     public void setRevenue(Long revenue) {
         this.revenue = revenue;
     }
-
 
     public Long getRuntime() {
         return this.runtime;
     }
 
-
     public void setRuntime(Long runtime) {
         this.runtime = runtime;
     }
-
 
     public String getStatus() {
         return this.status;
     }
 
-
     public void setStatus(String status) {
         this.status = status;
     }
-
 
     public String getTagline() {
         return this.tagline;
     }
 
-
     public void setTagline(String tagline) {
         this.tagline = tagline;
     }
-
 
     public String getTitle() {
         return this.title;
     }
 
-
     public void setTitle(String title) {
         this.title = title;
     }
-
 
     public Boolean getVideo() {
         return this.video;
     }
 
-
     public void setVideo(Boolean video) {
         this.video = video;
     }
-
 
     public Double getVoteAverage() {
         return this.voteAverage;
     }
 
-
     public void setVoteAverage(Double voteAverage) {
         this.voteAverage = voteAverage;
     }
-
 
     public Long getVoteCount() {
         return this.voteCount;
     }
 
-
     public void setVoteCount(Long voteCount) {
         this.voteCount = voteCount;
     }
-
 
     public String getYoutubeTrailer() {
         return this.youtubeTrailer;
     }
 
-
     public void setYoutubeTrailer(String youtubeTrailer) {
         this.youtubeTrailer = youtubeTrailer;
     }
-
 
     public String getServerTitle() {
         return this.serverTitle;
     }
 
-
     public void setServerTitle(String serverTitle) {
         this.serverTitle = serverTitle;
     }
 
+    public Boolean getLike() {
+        return this.like;
+    }
+
+    public void setLike(Boolean like) {
+        this.like = like;
+    }
 
     /**
      * To-many relationship, resolved on first access (and after reset).
@@ -349,13 +314,11 @@ public class MovieOverviewModel implements Parcelable {
         return genres;
     }
 
-
     /** Resets a to-many relationship, making the next get call to query for a fresh result. */
     @Generated(hash = 1988821389)
     public synchronized void resetGenres() {
         genres = null;
     }
-
 
     /**
      * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
@@ -369,7 +332,6 @@ public class MovieOverviewModel implements Parcelable {
         myDao.delete(this);
     }
 
-
     /**
      * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
      * Entity must attached to an entity context.
@@ -381,7 +343,6 @@ public class MovieOverviewModel implements Parcelable {
         }
         myDao.refresh(this);
     }
-
 
     /**
      * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
@@ -395,14 +356,12 @@ public class MovieOverviewModel implements Parcelable {
         myDao.update(this);
     }
 
-
     /** called by internal mechanisms, do not call yourself. */
     @Generated(hash = 719929430)
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getMovieOverviewModelDao() : null;
     }
-
 
     protected MovieOverviewModel(Parcel in) {
         this.id = (Long) in.readValue(Long.class.getClassLoader());
@@ -427,17 +386,17 @@ public class MovieOverviewModel implements Parcelable {
         this.voteCount = (Long) in.readValue(Long.class.getClassLoader());
         this.youtubeTrailer = in.readString();
         this.serverTitle = in.readString();
+        this.like = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.genres = new ArrayList<GenreModel>();
         in.readList(this.genres, GenreModel.class.getClassLoader());
     }
 
-
-    @Generated(hash = 1051266377)
+    @Generated(hash = 1288958677)
     public MovieOverviewModel(Long id, Boolean adult, String backdropPath, Long budget, String homepage,
             String imdbId, String originalLanguage, String originalTitle, String overview,
             Double popularity, String posterPath, Long releaseDate, Long revenue, Long runtime,
             String status, String tagline, String title, Boolean video, Double voteAverage,
-            Long voteCount, String youtubeTrailer, String serverTitle) {
+            Long voteCount, String youtubeTrailer, String serverTitle, Boolean like) {
         this.id = id;
         this.adult = adult;
         this.backdropPath = backdropPath;
@@ -460,8 +419,8 @@ public class MovieOverviewModel implements Parcelable {
         this.voteCount = voteCount;
         this.youtubeTrailer = youtubeTrailer;
         this.serverTitle = serverTitle;
+        this.like = like;
     }
-
 
     @Generated(hash = 1270234590)
     public MovieOverviewModel() {
@@ -484,6 +443,4 @@ public class MovieOverviewModel implements Parcelable {
     /** Used for active entity operations. */
     @Generated(hash = 2000367368)
     private transient MovieOverviewModelDao myDao;
-
-    
 }

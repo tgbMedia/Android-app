@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -22,6 +23,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
+import com.sackcentury.shinebuttonlib.ShineButton;
 import com.tgb.media.R;
 import com.tgb.media.TgbApp;
 import com.tgb.media.database.MovieOverviewModel;
@@ -48,6 +50,7 @@ public class DetailsActivity extends AppCompatActivity {
     @BindView(R.id.poster) ImageView poster;
     @BindView(R.id.overview) ExpandableTextView overview;
     @BindView(R.id.read_more) TextView readMore;
+    @BindView(R.id.like_button) ShineButton likeButton;
     @BindView(R.id.theme_play_container) View themePlayButtonContainer;
     @BindView(R.id.play_button) FloatingActionButton playButton;
 
@@ -139,6 +142,13 @@ public class DetailsActivity extends AppCompatActivity {
             readMore.setText(overview.isExpanded()
                     ? getString(R.string.read_more)
                     : getString(R.string.collapse));
+        });
+
+        likeButton.setChecked(movie.getLike());
+
+        likeButton.setOnClickListener(v -> {
+            movie.setLike(likeButton.isChecked());
+            movie.update();
         });
 
         runtime.setText(getString(R.string.runtime, (int)(movie.getRuntime() / 60),
