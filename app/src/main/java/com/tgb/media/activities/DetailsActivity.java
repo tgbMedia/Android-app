@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -32,6 +31,7 @@ import com.tgb.media.videos.VideosLibrary;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -46,8 +46,9 @@ public class DetailsActivity extends AppCompatActivity {
     @BindView(R.id.theme_poster) ImageView theme;
     @BindView(R.id.title) TextView title;
     @BindView(R.id.subtitle) TextView subtitle;
-    @BindView(R.id.runtime) TextView runtime;
     @BindView(R.id.poster) ImageView poster;
+    @BindView(R.id.runtime) TextView runtime;
+    @BindView(R.id.rating) TextView rating;
     @BindView(R.id.overview) ExpandableTextView overview;
     @BindView(R.id.read_more) TextView readMore;
     @BindView(R.id.like_button) ShineButton likeButton;
@@ -130,11 +131,12 @@ public class DetailsActivity extends AppCompatActivity {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(theme);
 
-        //Set movie details
-        title.setText(movie.getTitle());
+        //Runtime
+        runtime.setText(getString(R.string.runtime, (int)(movie.getRuntime() / 60),
+                (int)(movie.getRuntime() % 60)));
 
-        overview.setText(movie.getOverview());
-        overview.setInterpolator(new OvershootInterpolator());
+        //Rating
+        rating.setText(String.format(Locale.ROOT, "%.1f", movie.getVoteAverage()));
 
         readMore.setOnClickListener(v -> {
             overview.toggle();
@@ -144,6 +146,7 @@ public class DetailsActivity extends AppCompatActivity {
                     : getString(R.string.collapse));
         });
 
+        //Like button
         likeButton.setChecked(movie.getLike());
 
         likeButton.setOnClickListener(v -> {
@@ -151,8 +154,11 @@ public class DetailsActivity extends AppCompatActivity {
             movie.update();
         });
 
-        runtime.setText(getString(R.string.runtime, (int)(movie.getRuntime() / 60),
-                (int)(movie.getRuntime() % 60)));
+        //Set movie details
+        title.setText(movie.getTitle());
+
+        overview.setText(movie.getOverview());
+        overview.setInterpolator(new OvershootInterpolator());
 
         if(!TextUtils.isEmpty(movie.getYoutubeTrailer())){
             themePlayButtonContainer.setVisibility(View.VISIBLE);

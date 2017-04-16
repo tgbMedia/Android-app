@@ -71,7 +71,7 @@
             android:layout_below="@+id/title"
             android:ellipsize="end"
             android:maxLines="2"
-            android:textSize="@dimen/details_poster_subtitle_text_size" />
+            android:textSize="@dimen/details_poster_subtitle_text_size"/>
 
     </android.support.percent.PercentRelativeLayout>
 
@@ -79,7 +79,7 @@
     <LinearLayout
         android:id="@+id/icons_container"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/details_icons_height"
+        android:layout_height="@dimen/details_icons_size"
         android:layout_marginTop="@dimen/details_icons_block_top_margin"
         app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
         app:layout_constraintTop_toBottomOf="@+id/time_block"
@@ -91,29 +91,54 @@
 
         <ImageView
             android:layout_height="match_parent"
-            android:layout_width="@dimen/details_icons_height"
+            android:layout_width="@dimen/details_icons_size"
             app:srcCompat="@drawable/ic_multimedia"
             android:adjustViewBounds="true"/>
 
         <ImageView
             android:layout_height="match_parent"
-            android:layout_width="@dimen/details_icons_height"
+            android:layout_width="@dimen/details_icons_big_size"
             app:srcCompat="@drawable/ic_eye"
-            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
             android:layout_marginStart="@dimen/details_icons_start_margin"/>
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="@dimen/details_icons_height"
+        <!-- <ImageView
             android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/details_icons_start_margin"
+            android:layout_width="@dimen/details_icons_size"
+            app:srcCompat="@drawable/ic_consulting_message"
             android:adjustViewBounds="true"
-            app:srcCompat="@drawable/ic_consulting_message" />
+            android:layout_marginStart="@dimen/details_icons_start_margin"/> -->
+
+        <android.support.percent.PercentRelativeLayout
+            android:orientation="horizontal"
+            android:layout_height="match_parent"
+            android:layout_width="@dimen/details_icons_huge_size"
+            android:layout_marginStart="@dimen/details_icons_start_margin">
+
+            <TextView
+                android:id="@+id/rating"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="bottom"
+                android:textSize="@dimen/details_icons_size"
+                android:text="8.7"/>
+
+            <ImageView
+                android:layout_width="@dimen/details_rating_star_size"
+                android:layout_height="@dimen/details_rating_star_size"
+                app:srcCompat="@drawable/ic_star_rating"
+                android:adjustViewBounds="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="-4dp"
+                android:layout_marginBottom="5dp"
+                android:layout_toRightOf="@id/rating"/>
+
+        </android.support.percent.PercentRelativeLayout>
 
         <com.sackcentury.shinebuttonlib.ShineButton
             android:id="@+id/like_button"
             android:layout_height="match_parent"
-            android:layout_width="@dimen/details_icons_height"
+            android:layout_width="@dimen/details_icons_size"
             android:adjustViewBounds="true"
             app:btn_color="@color/no_clicked_button_color"
             app:btn_fill_color="@color/button_color"
@@ -133,6 +158,7 @@
         app:layout_constraintRight_toLeftOf="@+id/right_guideline"
         app:layout_constraintTop_toBottomOf="@+id/icons_container"
         android:textSize="@dimen/details_overview_text_size"
+        android:textColor="@color/overview_text_color"
         android:maxLines="5"
         android:ellipsize="end"/>
 

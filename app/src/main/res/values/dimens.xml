@@ -25,11 +25,16 @@
     <dimen name="details_overview_margin">24dp</dimen>
     <dimen name="details_time_block_height">20dp</dimen>
     <dimen name="details_time_block_icon_width">17dp</dimen>
-    <dimen name="details_icons_height">30dp</dimen>
+
+    <!-- Overview icons block -->
+    <dimen name="details_icons_size">30dp</dimen>
+    <dimen name="details_icons_big_size">40dp</dimen>
+    <dimen name="details_icons_huge_size">55dp</dimen> <!-- Rating -->
     <dimen name="details_icons_block_top_margin">32dp</dimen>
     <dimen name="details_icons_start_margin">20dp</dimen>
     <dimen name="details_overview_top_margin">24dp</dimen>
     <dimen name="details_read_more_top_margin">16dp</dimen>
+    <dimen name="details_rating_star_size">13dp</dimen>
 
     <!-- Overview titles text sizes -->
     <dimen name="details_poster_title_text_size">28sp</dimen>
