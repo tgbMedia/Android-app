@@ -25,10 +25,15 @@ import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.sackcentury.shinebuttonlib.ShineButton;
 import com.tgb.media.R;
 import com.tgb.media.TgbApp;
+import com.tgb.media.database.CastRelationModel;
+import com.tgb.media.database.CrewRelationModel;
+import com.tgb.media.database.GenreModel;
 import com.tgb.media.database.MovieOverviewModel;
 import com.tgb.media.helper.ExpandableTextView;
 import com.tgb.media.videos.VideosLibrary;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -49,6 +54,9 @@ public class DetailsActivity extends AppCompatActivity {
     @BindView(R.id.poster) ImageView poster;
     @BindView(R.id.runtime) TextView runtime;
     @BindView(R.id.rating) TextView rating;
+    @BindView(R.id.genes) TextView genres;
+    @BindView(R.id.release_date) TextView releaseDate;
+    @BindView(R.id.director) TextView director;
     @BindView(R.id.overview) ExpandableTextView overview;
     @BindView(R.id.read_more) TextView readMore;
     @BindView(R.id.like_button) ShineButton likeButton;
@@ -108,21 +116,6 @@ public class DetailsActivity extends AppCompatActivity {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(poster);
 
-        //Build genres list
-        /*movie.getGenres().forEach(genreModel -> {
-            if(subtitle.length() > 0)
-                subtitle.append(", ");
-
-            subtitle.append(genreModel.getName());
-        });*/
-
-        Calendar releaseDate = Calendar.getInstance();
-        releaseDate.setTimeInMillis(movie.getReleaseDate());
-
-        subtitle.setText(releaseDate.get(Calendar.YEAR) + "");
-
-        //subtitle.append(movie.getGenres().get(0).getName());
-
         //Load movie backdrop
         Glide.with(getBaseContext()).load(
                 "https://image.tmdb.org/t/p/w1300_and_h730_bestv2/" + movie.getBackdropPath())
@@ -131,20 +124,26 @@ public class DetailsActivity extends AppCompatActivity {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(theme);
 
+        //Cast
+        /*List<CastRelationModel> cast = movie.getCast();
+
+        for(CastRelationModel castRelation : cast){
+            Log.i("yoni", castRelation.getCharacter() + " is " + castRelation.getPerson().getName());
+        }*/
+
+        //Crew
+        /*List<CrewRelationModel> crew = movie.getCrew();
+
+        for(CrewRelationModel crewRelation : crew){
+            Log.i("yoni", crewRelation.getPerson().getName() + " - " + crewRelation.getJob());
+        }*/
+
         //Runtime
         runtime.setText(getString(R.string.runtime, (int)(movie.getRuntime() / 60),
                 (int)(movie.getRuntime() % 60)));
 
         //Rating
         rating.setText(String.format(Locale.ROOT, "%.1f", movie.getVoteAverage()));
-
-        readMore.setOnClickListener(v -> {
-            overview.toggle();
-
-            readMore.setText(overview.isExpanded()
-                    ? getString(R.string.read_more)
-                    : getString(R.string.collapse));
-        });
 
         //Like button
         likeButton.setChecked(movie.getLike());
@@ -153,6 +152,48 @@ public class DetailsActivity extends AppCompatActivity {
             movie.setLike(likeButton.isChecked());
             movie.update();
         });
+
+        //Genres
+        int totalGenres = 0;
+
+        for(GenreModel genreModel : movie.getGenres()){
+            if(genres.length() > 0)
+                genres.append(", ");
+
+            genres.append(genreModel.getName());
+
+            if(++totalGenres > 3)
+                break;
+        }
+
+        //Release date
+        Calendar movieReleaseDate = Calendar.getInstance();
+        movieReleaseDate.setTimeInMillis(movie.getReleaseDate());
+
+        subtitle.setText(movieReleaseDate.get(Calendar.YEAR) + "");
+        releaseDate.setText(getFormattedDate(movieReleaseDate));
+
+        //Director/s
+        List<CrewRelationModel> movieDirectors =
+                videosLibrary.searchPersonByJob(movie.getId(), VideosLibrary.DIRECTOR);
+
+        for(CrewRelationModel crewRelationModel: movieDirectors){
+            if(director.length() > 0)
+                director.append(", ");
+
+            director.append(crewRelationModel.getPerson().getName());
+        }
+
+        //Overview
+        readMore.setOnClickListener(v -> {
+            overview.toggle();
+
+            readMore.setText(overview.isExpanded()
+                    ? getString(R.string.read_more)
+                    : getString(R.string.collapse));
+        });
+
+
 
         //Set movie details
         title.setText(movie.getTitle());
@@ -183,6 +224,11 @@ public class DetailsActivity extends AppCompatActivity {
         playButton.setOnClickListener(v -> {
             startActivity(buildVideoPlayerIntent(this, movie.getServerTitle()));
         });
+    }
+
+    private String getFormattedDate(Calendar c) {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        return df.format(c.getTime());
     }
 
     private boolean canResolveIntent(Intent intent) {

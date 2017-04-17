@@ -75,6 +75,43 @@
 
     </android.support.percent.PercentRelativeLayout>
 
+    <!-- Time block -->
+    <FrameLayout
+        android:id="@+id/time_block"
+        android:layout_width="@dimen/details_poster_width"
+        android:layout_height="@dimen/details_time_block_height"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
+        app:layout_constraintLeft_toRightOf="@+id/right_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/poster_block"
+        app:layout_constraintRight_toRightOf="@+id/overview"
+        app:layout_constraintHorizontal_bias="0.0">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center">
+
+            <ImageView
+                android:layout_width="@dimen/details_time_block_icon_width"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                app:srcCompat="@drawable/ic_alarm_clock" />
+
+            <TextView
+                android:id="@+id/runtime"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:gravity="start|center"
+                android:textColor="@color/title_color"
+                android:textSize="@dimen/details_overview_time_block_text_size" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
     <!-- The icons order is very important, do not change direction of this layout! -->
     <LinearLayout
         android:id="@+id/icons_container"
@@ -129,8 +166,8 @@
                 app:srcCompat="@drawable/ic_star_rating"
                 android:adjustViewBounds="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginLeft="-4dp"
-                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="-3dp"
+                android:layout_marginBottom="6dp"
                 android:layout_toRightOf="@id/rating"/>
 
         </android.support.percent.PercentRelativeLayout>
@@ -148,6 +185,19 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/overview_title"
+        app:layout_constraintTop_toBottomOf="@+id/generic_details"
+        app:layout_constraintRight_toRightOf="@+id/right_guideline"
+        app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
+        android:layout_marginTop="24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/details_overview_title_text_size"
+        android:textColor="@color/title_color"
+        android:text="@string/overview"
+        app:layout_constraintHorizontal_bias="0.0" />
+
     <com.tgb.media.helper.ExpandableTextView
         android:id="@+id/overview"
         android:layout_width="0dp"
@@ -156,47 +206,11 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
         app:layout_constraintRight_toLeftOf="@+id/right_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/icons_container"
+        app:layout_constraintTop_toBottomOf="@+id/overview_title"
         android:textSize="@dimen/details_overview_text_size"
         android:textColor="@color/overview_text_color"
         android:maxLines="5"
         android:ellipsize="end"/>
-
-    <FrameLayout
-        android:id="@+id/time_block"
-        android:layout_width="@dimen/details_poster_width"
-        android:layout_height="@dimen/details_time_block_height"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
-        app:layout_constraintLeft_toRightOf="@+id/right_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/poster_block"
-        app:layout_constraintRight_toRightOf="@+id/overview"
-        app:layout_constraintHorizontal_bias="0.0">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center">
-
-            <ImageView
-                android:layout_width="@dimen/details_time_block_icon_width"
-                android:layout_height="match_parent"
-                android:adjustViewBounds="true"
-                app:srcCompat="@drawable/ic_alarm_clock" />
-
-            <TextView
-                android:id="@+id/runtime"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:gravity="start|center"
-                android:textColor="@color/title_color"
-                android:textSize="@dimen/details_overview_time_block_text_size" />
-
-        </LinearLayout>
-
-    </FrameLayout>
 
     <TextView
         android:id="@+id/read_more"
@@ -209,6 +223,116 @@
         android:textSize="@dimen/details_overview_read_more_text_size"
         android:textColor="@color/button_color"
         android:text="@string/read_more"/>
+
+    <LinearLayout
+        android:id="@+id/generic_details"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:orientation="vertical"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
+        app:layout_constraintRight_toLeftOf="@+id/right_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/icons_container">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="3dp"
+                android:text="@string/genres"
+                android:textColor="@color/title_color"
+                android:textSize="@dimen/details_generic_info_title_size" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="3dp"
+                android:text="@string/details_generic_info_separate_text"
+                android:textColor="@color/title_color"
+                android:textSize="@dimen/details_generic_info_title_size" />
+
+            <TextView
+                android:id="@+id/genes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/overview_text_color"
+                android:textSize="@dimen/details_generic_info_title_size" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="3dp"
+                android:text="@string/release_date"
+                android:textColor="@color/title_color"
+                android:textSize="@dimen/details_generic_info_title_size" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="3dp"
+                android:text="@string/details_generic_info_separate_text"
+                android:textColor="@color/title_color"
+                android:textSize="@dimen/details_generic_info_title_size" />
+
+            <TextView
+                android:id="@+id/release_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/overview_text_color"
+                android:textSize="@dimen/details_generic_info_title_size" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="3dp"
+                android:text="@string/director"
+                android:textColor="@color/title_color"
+                android:textSize="@dimen/details_generic_info_title_size" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="3dp"
+                android:text="@string/details_generic_info_separate_text"
+                android:textColor="@color/title_color"
+                android:textSize="@dimen/details_generic_info_title_size" />
+
+            <TextView
+                android:id="@+id/director"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/overview_text_color"
+                android:textSize="@dimen/details_generic_info_title_size" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 
 </android.support.constraint.ConstraintLayout>

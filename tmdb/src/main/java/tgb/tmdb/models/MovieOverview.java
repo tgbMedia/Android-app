@@ -76,5 +76,8 @@ public class MovieOverview {
     @SerializedName("videos")
     @Expose
     public Trailer trailer;
+    @SerializedName("credits")
+    @Expose
+    public Credits credits;
 
 }

@@ -2,6 +2,10 @@ package com.tgb.media.videos;
 
 import android.util.Log;
 
+import com.tgb.media.database.CastRelationModel;
+import com.tgb.media.database.CastRelationModelDao;
+import com.tgb.media.database.CrewRelationModel;
+import com.tgb.media.database.CrewRelationModelDao;
 import com.tgb.media.database.DaoSession;
 import com.tgb.media.database.GenreModel;
 import com.tgb.media.database.GenreModelDao;
@@ -11,10 +15,16 @@ import com.tgb.media.database.MovieGenreRelation;
 import com.tgb.media.database.MovieGenreRelationDao;
 import com.tgb.media.database.MovieOverviewModel;
 import com.tgb.media.database.MovieOverviewModelDao;
+import com.tgb.media.database.PersonModel;
+import com.tgb.media.database.PersonModelDao;
 import com.tgb.media.helper.MovieObesrvableResult;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 import tgb.tmdb.TmdbAPI;
+import tgb.tmdb.models.CastPerson;
+import tgb.tmdb.models.CrewPerson;
 import tgb.tmdb.models.Genre;
 import tgb.tmdb.models.MovieOverview;
 
@@ -26,9 +36,15 @@ public class VideosLibrary {
     private KeywordModelDao keywordModelDao;
     private GenreModelDao genreModelDao;
     private MovieGenreRelationDao movieGenreRelationDao;
+    private PersonModelDao personModelDao;
+    private CastRelationModelDao castRelationModelDao;
+    private CrewRelationModelDao crewRelationModelDao;
 
     //TMDB
     private TmdbAPI tmdbAPI;
+
+    //Jobs
+    public static final String DIRECTOR = "director";
 
     public VideosLibrary(DaoSession daoSession, TmdbAPI tmdbAPI){
         //Database models
@@ -36,6 +52,9 @@ public class VideosLibrary {
         this.keywordModelDao = daoSession.getKeywordModelDao();
         this.genreModelDao = daoSession.getGenreModelDao();
         this.movieGenreRelationDao = daoSession.getMovieGenreRelationDao();
+        this.personModelDao = daoSession.getPersonModelDao();
+        this.castRelationModelDao = daoSession.getCastRelationModelDao();
+        this.crewRelationModelDao = daoSession.getCrewRelationModelDao();
 
         //TMDB
         this.tmdbAPI = tmdbAPI;
@@ -58,6 +77,14 @@ public class VideosLibrary {
         return keyword == null ? null : keyword.getMovie();
     }
 
+    public List<CrewRelationModel> searchPersonByJob(long movieId, String job){
+        return crewRelationModelDao.queryBuilder()
+                .where(
+                        CrewRelationModelDao.Properties.MovieId.eq(movieId),
+                        CrewRelationModelDao.Properties.Job.like(job))
+                .list();
+    }
+
     private void addKeyword(String keyword, long movieId) throws Exception
     {
         keywordModelDao.insertOrReplace(
@@ -68,12 +95,46 @@ public class VideosLibrary {
     private MovieOverviewModel insertMovieToDb(MovieOverview movieOverview, String serverTitle)
             throws Exception{
 
-        //Insert the movie to the databse
+        //Insert the movie to the database
         MovieOverviewModel movieOverviewModel = new MovieOverviewModel(movieOverview, serverTitle);
 
         movieModelDao.insertOrReplace(
                 movieOverviewModel
         );
+
+        //Cast
+        for(CastPerson cast : movieOverview.credits.cast){
+            //Create or update person
+            PersonModel person = new PersonModel(cast.id, cast.profilePath, cast.name);
+            personModelDao.insertOrReplace(person);
+
+            //Create relation
+            CastRelationModel castRelation = new CastRelationModel(
+                    movieOverview.id,
+                    cast.id,
+                    cast.character,
+                    cast.order
+            );
+
+            castRelationModelDao.insertOrReplace(castRelation);
+        }
+
+        //Crew
+        for(CrewPerson crew : movieOverview.credits.crew){
+            //Create or update person
+            PersonModel person = new PersonModel(crew.id, crew.profilePath, crew.name);
+            personModelDao.insertOrReplace(person);
+
+            //Create relation
+            CrewRelationModel crewRelation = new CrewRelationModel(
+                    movieOverview.id,
+                    crew.id,
+                    crew.department,
+                    crew.job.toLowerCase()
+            );
+
+            crewRelationModelDao.insertOrReplace(crewRelation);
+        }
 
         //Add genres to db
         for(Genre genre : movieOverview.genres) {

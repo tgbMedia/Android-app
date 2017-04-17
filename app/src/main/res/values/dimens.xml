@@ -32,14 +32,16 @@
     <dimen name="details_icons_huge_size">55dp</dimen> <!-- Rating -->
     <dimen name="details_icons_block_top_margin">32dp</dimen>
     <dimen name="details_icons_start_margin">20dp</dimen>
-    <dimen name="details_overview_top_margin">24dp</dimen>
-    <dimen name="details_read_more_top_margin">16dp</dimen>
+    <dimen name="details_overview_top_margin">10dp</dimen>
+    <dimen name="details_read_more_top_margin">12dp</dimen>
     <dimen name="details_rating_star_size">13dp</dimen>
 
     <!-- Overview titles text sizes -->
     <dimen name="details_poster_title_text_size">28sp</dimen>
     <dimen name="details_poster_small_text_size">12sp</dimen>
     <dimen name="details_poster_subtitle_text_size">18sp</dimen>
+    <dimen name="details_generic_info_title_size">14dp</dimen>
+    <dimen name="details_overview_title_text_size">16sp</dimen>
     <dimen name="details_overview_text_size">22sp</dimen>
     <dimen name="details_overview_time_block_text_size">14sp</dimen>
     <dimen name="details_overview_read_more_text_size">16sp</dimen>

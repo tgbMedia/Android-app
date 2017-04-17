@@ -3,9 +3,13 @@
 
     <!-- Details activity -->
     <string name="play">Play</string>
-    <string name="release_date">Release date</string>
     <string name="runtime"><xliff:g id="hours">%d</xliff:g>h <xliff:g id="minutes">%d</xliff:g>m </string>
+    <string name="genres">Genres</string>
+    <string name="release_date">Release date</string>
+    <string name="director">Director</string>
+    <string name="details_generic_info_separate_text">:</string>
     <string name="read_more">Read more</string>
+    <string name="overview">Overview</string>
     <string name="collapse">Collapse</string>
 
     <!-- Server error -->
