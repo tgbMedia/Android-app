@@ -35,6 +35,10 @@
     <dimen name="details_overview_top_margin">10dp</dimen>
     <dimen name="details_read_more_top_margin">12dp</dimen>
     <dimen name="details_rating_star_size">13dp</dimen>
+    <dimen name="details_footer_height">175dp</dimen>
+    <dimen name="details_cast_list_height">155dp</dimen> <!-- Related to details_footer_height -->
+    <dimen name="details_cast_thumb_width">100dp</dimen>
+    <dimen name="details_cast_thumb_margin_end">15dp</dimen>
 
     <!-- Overview titles text sizes -->
     <dimen name="details_poster_title_text_size">28sp</dimen>
@@ -45,6 +49,7 @@
     <dimen name="details_overview_text_size">22sp</dimen>
     <dimen name="details_overview_time_block_text_size">14sp</dimen>
     <dimen name="details_overview_read_more_text_size">16sp</dimen>
+    <dimen name="details_footer_title_text_size">18sp</dimen>
 
     <!-- Overlay message -->
     <dimen name="overlay_message_margin">24dp</dimen>

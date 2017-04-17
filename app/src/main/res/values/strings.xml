@@ -11,6 +11,7 @@
     <string name="read_more">Read more</string>
     <string name="overview">Overview</string>
     <string name="collapse">Collapse</string>
+    <string name="cast">Cast</string>
 
     <!-- Server error -->
     <string name="no_online_servers">No servers found!</string>

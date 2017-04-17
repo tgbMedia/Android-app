@@ -10,6 +10,9 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -25,16 +28,20 @@ import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.sackcentury.shinebuttonlib.ShineButton;
 import com.tgb.media.R;
 import com.tgb.media.TgbApp;
+import com.tgb.media.adapter.CastAdapter;
 import com.tgb.media.database.CastRelationModel;
 import com.tgb.media.database.CrewRelationModel;
 import com.tgb.media.database.GenreModel;
 import com.tgb.media.database.MovieOverviewModel;
+import com.tgb.media.database.PersonModel;
 import com.tgb.media.helper.ExpandableTextView;
+import com.tgb.media.helper.SpacesItemDecoration;
 import com.tgb.media.videos.VideosLibrary;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
@@ -62,6 +69,7 @@ public class DetailsActivity extends AppCompatActivity {
     @BindView(R.id.like_button) ShineButton likeButton;
     @BindView(R.id.theme_play_container) View themePlayButtonContainer;
     @BindView(R.id.play_button) FloatingActionButton playButton;
+    @BindView(R.id.cast_list) RecyclerView castList;
 
     //Tmdb API
     @Inject VideosLibrary videosLibrary;
@@ -219,6 +227,22 @@ public class DetailsActivity extends AppCompatActivity {
                 }
             });
         }
+
+        //Cast
+        List<PersonModel> cast = new LinkedList<>();
+
+        for(CastRelationModel castRelation : movie.getCast()){
+            Log.i("yoni", castRelation.getCharacter() + " is " + castRelation.getPerson().getName());
+            cast.add(castRelation.getPerson());
+        }
+
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+
+        castList.setLayoutManager(layoutManager);
+
+        CastAdapter castAdapter = new CastAdapter(DetailsActivity.this, cast);
+        castList.setAdapter(castAdapter);
 
         //Set play button event(Play movie)
         playButton.setOnClickListener(v -> {

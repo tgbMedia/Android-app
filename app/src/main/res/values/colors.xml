@@ -16,5 +16,10 @@
     <color name="overview_text_color">#b1b1b1</color>
     <color name="no_clicked_button_color">#eee</color>
     <color name="button_color">#e6d134</color>
+    <color name="overview_footer_background">#292929</color>
+
+    <!-- Cast -->
+    <color name="cast_thumbnail_background">#1c1c1c</color>
+
 
 </resources>

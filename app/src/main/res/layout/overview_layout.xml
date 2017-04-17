@@ -14,7 +14,7 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.04"
         tools:layout_editor_absoluteY="0dp"
-        tools:layout_editor_absoluteX="16dp" />
+        tools:layout_editor_absoluteX="17dp" />
 
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
@@ -22,7 +22,8 @@
         android:id="@+id/right_guideline"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.96"
-        tools:layout_editor_absoluteY="0dp" />
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="395dp" />
 
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
@@ -30,7 +31,8 @@
         android:id="@+id/poster_bottom_guideline"
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="@dimen/details_poster_height"
-        tools:layout_editor_absoluteX="0dp" />
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="207dp" />
 
     <android.support.percent.PercentRelativeLayout
         android:layout_width="0dp"
@@ -78,12 +80,10 @@
     <!-- Time block -->
     <FrameLayout
         android:id="@+id/time_block"
-        android:layout_width="@dimen/details_poster_width"
-        android:layout_height="@dimen/details_time_block_height"
-        android:layout_marginLeft="0dp"
+        android:layout_width="125dp"
+        android:layout_height="20dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
-        app:layout_constraintLeft_toRightOf="@+id/right_guideline"
+        app:layout_constraintLeft_toLeftOf="@+id/right_guideline"
         app:layout_constraintTop_toBottomOf="@+id/poster_block"
         app:layout_constraintRight_toRightOf="@+id/overview"
         app:layout_constraintHorizontal_bias="0.0">
@@ -116,7 +116,7 @@
     <LinearLayout
         android:id="@+id/icons_container"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/details_icons_size"
+        android:layout_height="30dp"
         android:layout_marginTop="@dimen/details_icons_block_top_margin"
         app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
         app:layout_constraintTop_toBottomOf="@+id/time_block"
@@ -124,7 +124,9 @@
         android:layoutDirection="ltr"
         android:layout_marginLeft="8dp"
         app:layout_constraintRight_toLeftOf="@+id/right_guideline"
-        android:layout_marginRight="8dp">
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp">
 
         <ImageView
             android:layout_height="match_parent"
@@ -188,15 +190,15 @@
     <TextView
         android:id="@+id/overview_title"
         app:layout_constraintTop_toBottomOf="@+id/generic_details"
-        app:layout_constraintRight_toRightOf="@+id/right_guideline"
         app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="36dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/details_overview_title_text_size"
         android:textColor="@color/title_color"
         android:text="@string/overview"
-        app:layout_constraintHorizontal_bias="0.0" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintRight_toLeftOf="@+id/right_guideline" />
 
     <com.tgb.media.helper.ExpandableTextView
         android:id="@+id/overview"
@@ -333,6 +335,41 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/footer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/read_more"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintVertical_bias="1.0"
+        android:layout_marginTop="60dp"
+        android:background="@color/overview_footer_background">
+
+        <TextView
+            android:id="@+id/cast_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:textSize="@dimen/details_footer_title_text_size"
+            android:textColor="@color/title_color"
+            android:text="@string/cast"
+            android:fontFamily="sans-serif-light"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/cast_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cast_title"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"></android.support.v7.widget.RecyclerView>
+
+
+    </RelativeLayout>
 
 
 </android.support.constraint.ConstraintLayout>
