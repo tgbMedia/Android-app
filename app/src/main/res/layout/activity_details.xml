@@ -62,13 +62,53 @@
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/nested_scroll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="@dimen/details_content_top_margin"
         android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <include
-            layout="@layout/overview_layout" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include
+                android:id="@+id/overview_layout"
+                layout="@layout/overview_layout" />
+
+            <RelativeLayout
+                android:id="@+id/footer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/overview_layout"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="60dp"
+                android:background="@color/overview_footer_background">
+
+                <TextView
+                    android:id="@+id/cast_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:textSize="@dimen/details_footer_title_text_size"
+                    android:textColor="@color/title_color"
+                    android:text="@string/cast"
+                    android:fontFamily="sans-serif-light"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/cast_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/cast_title"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp" />
+
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
 
 
     </android.support.v4.widget.NestedScrollView>
