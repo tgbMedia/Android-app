@@ -1,8 +1,6 @@
 package com.tgb.media.adapter;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +11,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.tgb.media.R;
-import com.tgb.media.activities.DetailsActivity;
-import com.tgb.media.database.MovieOverviewModel;
 import com.tgb.media.database.PersonModel;
-import com.tgb.media.helper.MovieObesrvableResult;
 
-import java.util.LinkedList;
 import java.util.List;
 
 

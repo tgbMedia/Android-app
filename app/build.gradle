@@ -68,6 +68,9 @@ dependencies {
     compile "com.android.support:leanback-v17:$googleLibrariesVersion"
     compile "com.android.support.constraint:constraint-layout:1.0.2"
 
+    compile "me.henrytao:smooth-app-bar-layout:25.2.0.0"
+    compile "me.henrytao:mdcore:3.3.10"
+
     //GreenDao
     compile "org.greenrobot:greendao:3.2.0"
 

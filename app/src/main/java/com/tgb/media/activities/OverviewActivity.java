@@ -3,21 +3,20 @@ package com.tgb.media.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
-import android.os.Build;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,7 +34,6 @@ import com.tgb.media.database.GenreModel;
 import com.tgb.media.database.MovieOverviewModel;
 import com.tgb.media.database.PersonModel;
 import com.tgb.media.helper.ExpandableTextView;
-import com.tgb.media.helper.SpacesItemDecoration;
 import com.tgb.media.videos.VideosLibrary;
 
 import java.text.DateFormat;
@@ -50,35 +48,35 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DetailsActivity extends AppCompatActivity {
-
-    //Views
-    @BindView(R.id.coordinator) CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.main_collapsing) CollapsingToolbarLayout mainCollapsing;
-    @BindView(R.id.theme_poster) ImageView theme;
-    @BindView(R.id.title) TextView title;
-    @BindView(R.id.subtitle) TextView subtitle;
-    @BindView(R.id.poster) ImageView poster;
-    @BindView(R.id.runtime) TextView runtime;
-    @BindView(R.id.rating) TextView rating;
-    @BindView(R.id.genes) TextView genres;
-    @BindView(R.id.release_date) TextView releaseDate;
-    @BindView(R.id.director) TextView director;
-    @BindView(R.id.overview) ExpandableTextView overview;
-    @BindView(R.id.read_more) TextView readMore;
-    @BindView(R.id.like_button) ShineButton likeButton;
-    @BindView(R.id.theme_play_container) View themePlayButtonContainer;
-    @BindView(R.id.play_button) FloatingActionButton playButton;
-    @BindView(R.id.cast_list) RecyclerView castList;
+public class OverviewActivity extends AppCompatActivity {
 
     //Tmdb API
     @Inject VideosLibrary videosLibrary;
 
+    //Elements
+    @BindView(R.id.theme_poster) ImageView theme;
+    @BindView(R.id.theme_play_container) View themePlayButtonContainer;
+    @BindView(R.id.poster) ImageView poster;
+    @BindView(R.id.title) TextView title;
+    @BindView(R.id.subtitle) TextView subtitle;
+    @BindView(R.id.runtime) TextView runtime;
+    @BindView(R.id.rating) TextView rating;
+    @BindView(R.id.like_button) ShineButton likeButton;
+    @BindView(R.id.genes) TextView genres;
+    @BindView(R.id.release_date) TextView releaseDate;
+    @BindView(R.id.director) TextView director;
+    @BindView(R.id.overview_content) ExpandableTextView overviewContent;
+    @BindView(R.id.read_more) TextView readMore;
+    @BindView(R.id.cast_list) RecyclerView castList;
+    @BindView(R.id.play_button) FloatingActionButton playButton;
+    @BindView(R.id.container) LinearLayout container;
+
+    //Properties
+    private boolean alreadyPushedDown = false;
+
     //Finals
     public static final String MOVIE_ACTION = "com.tgb.media.details.movie";
     public static final String MOVIE_ID = "movieId";
-
-    private static final String CONFIGURATION_CHANGED = "CONFIGURATION_CHANGED";
 
     //Youtube
     private static final int REQ_START_STANDALONE_PLAYER = 1;
@@ -87,7 +85,8 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_details);
+
+        setContentView(R.layout.overview_activity);
 
         //Dagger
         ((TgbApp) getApplication()).getAppComponent().inject(this);
@@ -95,14 +94,8 @@ public class DetailsActivity extends AppCompatActivity {
         //Butterknife
         ButterKnife.bind(this);
 
-        if(savedInstanceState != null
-                && savedInstanceState.getBoolean(CONFIGURATION_CHANGED, false)
-                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            //Bug fix, remove poster transition if configuration changed...
-            poster.setTransitionName(null);
-        }
-
         initialize();
+
     }
 
     private void initialize(){
@@ -119,12 +112,12 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     private void movieDetails(MovieOverviewModel movie){
-        //First all set poster image for the shared element
+        //Movie poster
         Glide.with(getBaseContext()).load("https://image.tmdb.org/t/p/w640/" + movie.getPosterPath())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(poster);
 
-        //Load movie backdrop
+        //Movie backdrop poster
         Glide.with(getBaseContext()).load(
                 "https://image.tmdb.org/t/p/w1300_and_h730_bestv2/" + movie.getBackdropPath())
                 .thumbnail(1)
@@ -132,19 +125,39 @@ public class DetailsActivity extends AppCompatActivity {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(theme);
 
-        //Cast
-        /*List<CastRelationModel> cast = movie.getCast();
+        //Movie trailer
+        if(!TextUtils.isEmpty(movie.getYoutubeTrailer())){
+            themePlayButtonContainer.setVisibility(View.VISIBLE);
 
-        for(CastRelationModel castRelation : cast){
-            Log.i("yoni", castRelation.getCharacter() + " is " + castRelation.getPerson().getName());
-        }*/
+            themePlayButtonContainer.setOnClickListener(view -> {
 
-        //Crew
-        /*List<CrewRelationModel> crew = movie.getCrew();
+                Intent intent = YouTubeStandalonePlayer.createVideoIntent(
+                        this, getString(R.string.google_api_key),
+                        movie.getYoutubeTrailer(), 0, true, false);
 
-        for(CrewRelationModel crewRelation : crew){
-            Log.i("yoni", crewRelation.getPerson().getName() + " - " + crewRelation.getJob());
-        }*/
+                if (canResolveIntent(intent)) {
+                    startActivityForResult(intent, REQ_START_STANDALONE_PLAYER);
+                } else {
+                    // Could not resolve the intent - must need to install or update the YouTube API service.
+                    YouTubeInitializationResult.SERVICE_MISSING
+                            .getErrorDialog(this, REQ_RESOLVE_SERVICE_MISSING).show();
+                }
+            });
+        }
+
+        //Play button
+        playButton.setOnClickListener(v -> {
+            startActivity(buildVideoPlayerIntent(this, movie.getServerTitle()));
+        });
+
+        //Movie title
+        title.setText(movie.getTitle());
+
+        //Release year
+        Calendar movieReleaseDate = Calendar.getInstance();
+        movieReleaseDate.setTimeInMillis(movie.getReleaseDate());
+
+        subtitle.setText(movieReleaseDate.get(Calendar.YEAR) + "");
 
         //Runtime
         runtime.setText(getString(R.string.runtime, (int)(movie.getRuntime() / 60),
@@ -175,10 +188,6 @@ public class DetailsActivity extends AppCompatActivity {
         }
 
         //Release date
-        Calendar movieReleaseDate = Calendar.getInstance();
-        movieReleaseDate.setTimeInMillis(movie.getReleaseDate());
-
-        subtitle.setText(movieReleaseDate.get(Calendar.YEAR) + "");
         releaseDate.setText(getFormattedDate(movieReleaseDate));
 
         //Director/s
@@ -192,41 +201,17 @@ public class DetailsActivity extends AppCompatActivity {
             director.append(crewRelationModel.getPerson().getName());
         }
 
-        //Overview
-        readMore.setOnClickListener(v -> {
-            overview.toggle();
+        //Movie overview
+        overviewContent.setText(movie.getOverview());
+        overviewContent.setInterpolator(new OvershootInterpolator());
 
-            readMore.setText(overview.isExpanded()
+        readMore.setOnClickListener(v -> {
+            overviewContent.toggle();
+
+            readMore.setText(overviewContent.isExpanded()
                     ? getString(R.string.read_more)
                     : getString(R.string.collapse));
         });
-
-
-
-        //Set movie details
-        title.setText(movie.getTitle());
-
-        overview.setText(movie.getOverview());
-        overview.setInterpolator(new OvershootInterpolator());
-
-        if(!TextUtils.isEmpty(movie.getYoutubeTrailer())){
-            themePlayButtonContainer.setVisibility(View.VISIBLE);
-
-            themePlayButtonContainer.setOnClickListener(view -> {
-
-                Intent intent = YouTubeStandalonePlayer.createVideoIntent(
-                        this, getString(R.string.google_api_key),
-                        movie.getYoutubeTrailer(), 0, true, false);
-
-                if (canResolveIntent(intent)) {
-                    startActivityForResult(intent, REQ_START_STANDALONE_PLAYER);
-                } else {
-                    // Could not resolve the intent - must need to install or update the YouTube API service.
-                    YouTubeInitializationResult.SERVICE_MISSING
-                            .getErrorDialog(this, REQ_RESOLVE_SERVICE_MISSING).show();
-                }
-            });
-        }
 
         //Cast
         List<PersonModel> cast = new LinkedList<>();
@@ -239,25 +224,38 @@ public class DetailsActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
 
+        castList.setNestedScrollingEnabled(false);
         castList.setLayoutManager(layoutManager);
 
-        CastAdapter castAdapter = new CastAdapter(DetailsActivity.this, cast);
+        CastAdapter castAdapter = new CastAdapter(OverviewActivity.this, cast);
+
         castList.setAdapter(castAdapter);
 
-        //Set play button event(Play movie)
-        playButton.setOnClickListener(v -> {
-            startActivity(buildVideoPlayerIntent(this, movie.getServerTitle()));
+        container.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+            if(alreadyPushedDown)
+                return;
+
+            Display display = getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+
+            //int width = size.x;
+
+            LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams)
+                    findViewById(R.id.cast_container).getLayoutParams();
+
+            int screenHeight = size.y - lp.topMargin;
+
+
+            int containerHeight = container.getHeight();
+
+            int topMargin = screenHeight - containerHeight - 50;
+
+            ((LinearLayout.LayoutParams) findViewById(R.id.cast_container).getLayoutParams())
+                    .setMargins(0, topMargin < 60 ? 60 : topMargin, 0, 0);
+
+            alreadyPushedDown = true;
         });
-    }
-
-    private String getFormattedDate(Calendar c) {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        return df.format(c.getTime());
-    }
-
-    private boolean canResolveIntent(Intent intent) {
-        List<ResolveInfo> resolveInfo = getPackageManager().queryIntentActivities(intent, 0);
-        return resolveInfo != null && !resolveInfo.isEmpty();
     }
 
     private Intent buildVideoPlayerIntent(Context context, String videoTitle) {
@@ -269,6 +267,16 @@ public class DetailsActivity extends AppCompatActivity {
         intent.putExtra(PlayerActivity.URI_LIST_EXTRA, new String[]{"http://192.168.1.10:8081/video/" + videoTitle});
 
         return intent;
+    }
+
+    private boolean canResolveIntent(Intent intent) {
+        List<ResolveInfo> resolveInfo = getPackageManager().queryIntentActivities(intent, 0);
+        return resolveInfo != null && !resolveInfo.isEmpty();
+    }
+
+    private String getFormattedDate(Calendar c) {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        return df.format(c.getTime());
     }
 
     @Override
@@ -286,21 +294,4 @@ public class DetailsActivity extends AppCompatActivity {
             }
         }
     }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-
-        //Bug fix, fab blink after back button is pressed - WTF?
-        coordinatorLayout.removeView(playButton);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        outState.putBoolean(CONFIGURATION_CHANGED, true);
-    }
-
-
 }

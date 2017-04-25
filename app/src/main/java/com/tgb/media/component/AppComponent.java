@@ -1,7 +1,7 @@
 package com.tgb.media.component;
 
-import com.tgb.media.activities.DetailsActivity;
 import com.tgb.media.activities.MainActivity;
+import com.tgb.media.activities.OverviewActivity;
 import com.tgb.media.module.AppModule;
 import com.tgb.media.module.MoviesModule;
 import com.tgb.media.module.NetModule;
@@ -19,7 +19,7 @@ import dagger.Component;
 
 public interface AppComponent {
     void inject(MainActivity activity);
-    void inject(DetailsActivity activity);
+    void inject(OverviewActivity activity);
 
     //AppModule appModule();
     //CommunicationModule communication();

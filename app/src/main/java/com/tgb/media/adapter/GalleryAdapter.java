@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.tgb.media.R;
-import com.tgb.media.activities.DetailsActivity;
+import com.tgb.media.activities.OverviewActivity;
 import com.tgb.media.database.MovieOverviewModel;
 import com.tgb.media.helper.MovieObesrvableResult;
 
@@ -81,10 +81,10 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
         holder.title.setText(movie.getTitle());
 
         holder.container.setOnClickListener(v -> {
-            Intent detailsActivityIntent = new Intent(mContext, DetailsActivity.class);
+            Intent detailsActivityIntent = new Intent(mContext, OverviewActivity.class);
 
-            detailsActivityIntent.setAction(DetailsActivity.MOVIE_ACTION);
-            detailsActivityIntent.putExtra(DetailsActivity.MOVIE_ID, movie.getId());
+            detailsActivityIntent.setAction(OverviewActivity.MOVIE_ACTION);
+            detailsActivityIntent.putExtra(OverviewActivity.MOVIE_ID, movie.getId());
 
             ActivityOptionsCompat options = ActivityOptionsCompat
                     .makeSceneTransitionAnimation(

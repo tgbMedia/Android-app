@@ -24,6 +24,9 @@
             android:name=".activities.DetailsActivity" />
 
         <activity
+            android:name=".activities.OverviewActivity" />
+
+        <activity
             android:theme="@style/PlayerTheme"
             android:screenOrientation="sensorLandscape"
             android:name=".activities.PlayerActivity" />

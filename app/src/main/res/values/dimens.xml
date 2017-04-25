@@ -44,7 +44,7 @@
     <dimen name="details_poster_title_text_size">28sp</dimen>
     <dimen name="details_poster_small_text_size">12sp</dimen>
     <dimen name="details_poster_subtitle_text_size">18sp</dimen>
-    <dimen name="details_generic_info_title_size">14dp</dimen>
+    <dimen name="details_generic_info_title_size">14sp</dimen>
     <dimen name="details_overview_title_text_size">16sp</dimen>
     <dimen name="details_overview_text_size">22sp</dimen>
     <dimen name="details_overview_time_block_text_size">14sp</dimen>
@@ -54,5 +54,17 @@
     <!-- Overlay message -->
     <dimen name="overlay_message_margin">24dp</dimen>
 
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="app_bar_height">256dp</dimen>
+    <dimen name="details_overview_top_padding">206dp</dimen>
+    <dimen name="app_bar_height_with_fit_system_windows">256dp</dimen>
+
+    <!-- statusbar size is around 24dp. For complex view, you can handle header view height programmatically -->
+    <dimen name="google_play_cover">192dp</dimen>
+    <dimen name="google_play_cover_fitsSystemWindows">192dp</dimen>
+
+    <dimen name="view_pager_parallax_drawer_layout">256dp</dimen>
+    <dimen name="view_pager_parallax_drawer_layout_fitsSystemWindows">256dp</dimen>
 
 </resources>
