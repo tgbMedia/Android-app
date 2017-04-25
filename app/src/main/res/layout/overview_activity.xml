@@ -393,7 +393,7 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/cast_list"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/details_cast_list_height"
                     android:layout_below="@id/cast_title"
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="16dp"

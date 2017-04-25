@@ -2,34 +2,32 @@ package com.tgb.media.adapter;
 
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.tgb.media.R;
 import com.tgb.media.database.PersonModel;
+import com.tgb.media.helper.PersonView;
 
 import java.util.List;
 
 
 
-public class CastAdapter extends RecyclerView.Adapter<CastAdapter.MyViewHolder> {
+public class CastAdapter extends RecyclerView.Adapter<CastAdapter.ViewHolder> {
     private List<PersonModel> personsList;
     private Activity mContext;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public ImageView profilePhoto;
-        public TextView name;
+    public class ViewHolder extends RecyclerView.ViewHolder{
 
-        public MyViewHolder(View view) {
-            super(view);
+        private PersonView personView;
 
-            profilePhoto = (ImageView) view.findViewById(R.id.profile_photo);
-            name = (TextView) view.findViewById(R.id.name);
+        public ViewHolder(View itemView) {
+            super(itemView);
+
+            this.personView = (PersonView) itemView;
+        }
+
+        public PersonView getPersonView(){
+            return personView;
         }
     }
 
@@ -39,24 +37,18 @@ public class CastAdapter extends RecyclerView.Adapter<CastAdapter.MyViewHolder> 
     }
 
     @Override
-    public CastAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.cast_thumbnail, parent, false);
-
-        return new CastAdapter.MyViewHolder(itemView);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new ViewHolder(
+                new PersonView(mContext)
+        );
     }
 
     @Override
-    public void onBindViewHolder(CastAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         final PersonModel person = personsList.get(position);
 
-        Glide.with(mContext).load("https://image.tmdb.org/t/p/w640/" + person.getPhoto())
-                .thumbnail(1)
-                .crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(holder.profilePhoto);
-
-        holder.name.setText(person.getName());
+        holder.getPersonView().setProfilePhoto(person.getPhoto());
+        holder.getPersonView().setName(person.getName());
     }
 
     @Override
