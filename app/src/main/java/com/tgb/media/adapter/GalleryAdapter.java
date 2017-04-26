@@ -1,13 +1,19 @@
 package com.tgb.media.adapter;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.Point;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -25,6 +31,8 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
     private List<MovieOverviewModel> movies;
     private Activity mContext;
 
+    private int columnHeight;
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private View container;
         public ImageView thumbnail;
@@ -39,9 +47,14 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
         }
     }
 
-    public GalleryAdapter(Activity context) {
+    public GalleryAdapter(Activity context, Point screenDimen, int orientation) {
         this.mContext = context;
         this.movies = new LinkedList<>();
+
+        if(orientation == Configuration.ORIENTATION_PORTRAIT)
+            columnHeight = (int)(screenDimen.y * 0.3);
+        else
+            columnHeight = (int)(screenDimen.y * 0.5);
     }
 
     public void clear() {
@@ -95,6 +108,17 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
 
             mContext.startActivity(detailsActivityIntent, options.toBundle());
         });
+
+        WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+
+        Point size = new Point();
+        display.getSize(size);
+
+        TableRow.LayoutParams params = new TableRow.LayoutParams(
+                TableRow.LayoutParams.MATCH_PARENT, columnHeight);
+
+        holder.container.setLayoutParams(params);
     }
 
     @Override

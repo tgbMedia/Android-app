@@ -2,6 +2,6 @@
 <resources>
 
     <!-- Gallery thumb -->
-    <integer name="gallery_columns">4</integer>
+    <integer name="gallery_columns">5</integer>
 
 </resources>

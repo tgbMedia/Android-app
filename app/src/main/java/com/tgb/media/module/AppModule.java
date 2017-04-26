@@ -1,6 +1,10 @@
 package com.tgb.media.module;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Point;
+import android.view.Display;
+import android.view.WindowManager;
 
 import com.tgb.media.TgbApp;
 import com.tgb.media.database.DaoMaster;
@@ -19,6 +23,16 @@ public class AppModule {
     public AppModule(TgbApp app){
         this.app = app;
     }
+
+    /*public Point getScreenDimensions(){
+        WindowManager wm = (WindowManager) app.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+
+        Point size = new Point();
+        display.getSize(size);
+
+        return size;
+    }*/
 
     @Provides @Singleton TgbApp providesApplication(){
         return app;

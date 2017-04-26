@@ -20,8 +20,11 @@
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
             android:scrollbars="vertical"
-            android:focusable="true"/>
+            android:focusable="true"
+            android:layoutDirection="ltr"/>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

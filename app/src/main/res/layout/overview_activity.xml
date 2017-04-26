@@ -74,7 +74,7 @@
                     android:id="@id/content_container"
                     app:layout_widthPercent="92%"
                     android:layout_height="wrap_content"
-                    app:layout_marginLeftPercent="4%">
+                    app:layout_marginStartPercent="4%">
 
                     <android.support.design.widget.FloatingActionButton
                         android:id="@+id/play_button"
@@ -377,7 +377,8 @@
                 android:id="@+id/cast_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/overview_footer_background">
+                android:background="@color/overview_footer_background"
+                android:layoutDirection="ltr">
 
                 <TextView
                     android:id="@+id/cast_title"

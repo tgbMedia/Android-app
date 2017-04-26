@@ -1,5 +1,7 @@
 package com.tgb.media.activities;
 
+import android.content.Context;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -8,6 +10,8 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Display;
+import android.view.WindowManager;
 
 import com.tgb.media.R;
 import com.tgb.media.TgbApp;
@@ -39,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Params
     private AppBarLayout.LayoutParams appbarParams;
+    private Point screenDimensions;
 
     //Adapters
     private GalleryAdapter mAdapter;
@@ -69,7 +74,17 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //Gallery adapter
-        mAdapter = new GalleryAdapter(this);
+        WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+
+        screenDimensions = new Point();
+        display.getSize(screenDimensions);
+
+        mAdapter = new GalleryAdapter(
+                this,
+                screenDimensions,
+                getResources().getConfiguration().orientation
+        );
 
         //Recycler view grid
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(),
