@@ -260,11 +260,12 @@ public class OverviewActivity extends AppCompatActivity {
 
     private Intent buildVideoPlayerIntent(Context context, String videoTitle) {
 
-        Log.i("yoni", "Stream url; " + "http://192.168.1.10:8081/video/" + videoTitle);
+        Log.i("yoni", "Stream url; " + "http://192.168.1.10:8081/video/" + videoTitle + ".m3u8");
 
         Intent intent = new Intent(context, PlayerActivity.class);
         intent.setAction(PlayerActivity.ACTION_VIEW_LIST);
-        intent.putExtra(PlayerActivity.URI_LIST_EXTRA, new String[]{"http://192.168.1.10:8081/video/" + videoTitle});
+        intent.putExtra(PlayerActivity.URI_LIST_EXTRA, new String[]{"http://192.168.1.10:8081/video/" + videoTitle + ".m3u8"});
+        //intent.putExtra(PlayerActivity.URI_LIST_EXTRA, new String[]{"http://192.168.1.10:8081/static/adwd.m3u8"});
 
         return intent;
     }

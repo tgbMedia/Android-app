@@ -57,6 +57,8 @@ import com.tgb.media.R;
 import com.tgb.media.TgbApp;
 import com.tgb.media.helper.PlayerEventLogger;
 import com.tgb.media.helper.TrackSelectionHelper;
+import com.tgb.media.server.TgbAPI;
+import com.tgb.media.server.models.Response;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -65,9 +67,13 @@ import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 public class PlayerActivity extends AppCompatActivity implements View.OnClickListener, ExoPlayer.EventListener,
         PlaybackControlView.VisibilityListener {
+
+    private TgbAPI tgbAPI;
 
     public static final String DRM_SCHEME_UUID_EXTRA = "drm_scheme_uuid";
     public static final String DRM_LICENSE_URL = "drm_license_url";
@@ -113,6 +119,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
+
+        tgbAPI = new TgbAPI("http://192.168.1.10:8081/", "");
 
         shouldAutoPlay = true;
         clearResumePosition();
@@ -184,6 +192,18 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         if (Util.SDK_INT > 23) {
             releasePlayer();
         }
+
+        tgbAPI.call().kilLastProcess().enqueue(new Callback<Response<Object>>() {
+            @Override
+            public void onResponse(Call<Response<Object>> call, retrofit2.Response<Response<Object>> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<Response<Object>> call, Throwable t) {
+
+            }
+        });
     }
 
     @Override

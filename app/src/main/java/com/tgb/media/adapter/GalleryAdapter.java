@@ -52,7 +52,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
         this.movies = new LinkedList<>();
 
         if(orientation == Configuration.ORIENTATION_PORTRAIT)
-            columnHeight = (int)(screenDimen.y * 0.3);
+            columnHeight = (int)(screenDimen.y * 0.27);
         else
             columnHeight = (int)(screenDimen.y * 0.5);
     }
