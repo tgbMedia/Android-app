@@ -3,8 +3,6 @@ package com.tgb.media.server;
 import android.util.Log;
 
 import com.google.gson.GsonBuilder;
-import com.tgb.media.server.deserialize.ResponseDeserializer;
-import com.tgb.media.server.models.MovieFile;
 
 import java.io.IOException;
 
@@ -32,7 +30,7 @@ public class TgbAPI {
     private String apiKey;
 
 
-    public TgbAPI(String tgbBaseUrl, String tgbApiKey)
+    public TgbAPI(String tgbBaseUrl, final String userIdentifier, String tgbApiKey)
     {
         //API Auth
         this.baseUrl = tgbBaseUrl;
@@ -46,13 +44,18 @@ public class TgbAPI {
             public Response intercept(Chain chain) throws IOException {
                 Request request = chain.request();
 
+
+                    //Util.getUserAgent(this, getString(R.string.app_name))
                 HttpUrl url = request
                         .url()
                         .newBuilder()
                         .addQueryParameter("api_key", apiKey)
                         .build();
 
-                request = request.newBuilder().url(url).build();
+                request = request.newBuilder()
+                        .url(url)
+                        .header("User-Agent", userIdentifier)
+                        .build();
                 return chain.proceed(request);
             }
         });
@@ -85,6 +88,10 @@ public class TgbAPI {
                 .build();
 
         service = retrofit.create(TgbService.class);
+    }
+
+    public String getM3u8Url(String videoId){
+        return baseUrl + "stream/video/" + videoId + ".m3u8";
     }
 
     public TgbService call(){

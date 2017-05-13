@@ -18,6 +18,7 @@ import com.tgb.media.database.MovieOverviewModelDao;
 import com.tgb.media.database.PersonModel;
 import com.tgb.media.database.PersonModelDao;
 import com.tgb.media.helper.MovieObesrvableResult;
+import com.tgb.media.server.models.MovieFile;
 
 import java.util.List;
 
@@ -92,11 +93,11 @@ public class VideosLibrary {
         );
     }
 
-    private MovieOverviewModel insertMovieToDb(MovieOverview movieOverview, String serverTitle)
+    private MovieOverviewModel insertMovieToDb(MovieOverview movieOverview, MovieFile movie)
             throws Exception{
 
         //Insert the movie to the database
-        MovieOverviewModel movieOverviewModel = new MovieOverviewModel(movieOverview, serverTitle);
+        MovieOverviewModel movieOverviewModel = new MovieOverviewModel(movieOverview, movie);
 
         movieModelDao.insertOrReplace(
                 movieOverviewModel
@@ -157,29 +158,29 @@ public class VideosLibrary {
         return movieOverviewModel;
     }
 
-    public Observable<MovieObesrvableResult> movieDetails(final int position, final String movieName){
+    public Observable<MovieObesrvableResult> movieDetails(final int position, final MovieFile movie){
         return Observable.create(emitter -> {
             try{
                 //Search item by keyword
-                MovieOverviewModel movieOverview = searchMovieByKeyword(movieName);
+                MovieOverviewModel movieOverview = searchMovieByKeyword(movie.title);
 
                 if(movieOverview != null)
                     emitter.onNext(new MovieObesrvableResult(position, movieOverview));
                 else
                 {
                     //Search item in TMDB
-                    MovieOverview overview = tmdbAPI.searchMovieByName(movieName);
+                    MovieOverview overview = tmdbAPI.searchMovieByName(movie.title, movie.year);
 
                     if(overview == null)
                     {
-                        Log.wtf("videoLibraries", "No data for: " + movieName);
+                        Log.wtf("videoLibraries", "No data for: " + movie.title);
                         //emitter.onError(new RuntimeException());
                     }
                     else
                     {
                         //Insert movie to database
-                        movieOverview = insertMovieToDb(overview, movieName);
-                        addKeyword(movieName, movieOverview.getId());
+                        movieOverview = insertMovieToDb(overview, movie);
+                        addKeyword(movie.title, movieOverview.getId());
 
                         emitter.onNext(new MovieObesrvableResult(position, movieOverview));
                     }

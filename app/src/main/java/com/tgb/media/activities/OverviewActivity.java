@@ -34,6 +34,7 @@ import com.tgb.media.database.GenreModel;
 import com.tgb.media.database.MovieOverviewModel;
 import com.tgb.media.database.PersonModel;
 import com.tgb.media.helper.ExpandableTextView;
+import com.tgb.media.server.TgbAPI;
 import com.tgb.media.videos.VideosLibrary;
 
 import java.text.DateFormat;
@@ -52,6 +53,7 @@ public class OverviewActivity extends AppCompatActivity {
 
     //Tmdb API
     @Inject VideosLibrary videosLibrary;
+    @Inject TgbAPI tgbAPI;
 
     //Elements
     @BindView(R.id.theme_poster) ImageView theme;
@@ -117,6 +119,8 @@ public class OverviewActivity extends AppCompatActivity {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(poster);
 
+        Log.i("yoni", "Title: " + movie.getTitle() + ", server id: " + movie.getServerId());
+
         //Movie backdrop poster
         Glide.with(getBaseContext()).load(
                 "https://image.tmdb.org/t/p/w1300_and_h730_bestv2/" + movie.getBackdropPath())
@@ -147,7 +151,7 @@ public class OverviewActivity extends AppCompatActivity {
 
         //Play button
         playButton.setOnClickListener(v -> {
-            startActivity(buildVideoPlayerIntent(this, movie.getServerTitle()));
+            startActivity(buildVideoPlayerIntent(this, movie.getServerId()));
         });
 
         //Movie title
@@ -216,10 +220,8 @@ public class OverviewActivity extends AppCompatActivity {
         //Cast
         List<PersonModel> cast = new LinkedList<>();
 
-        for(CastRelationModel castRelation : movie.getCast()){
-            Log.i("yoni", castRelation.getCharacter() + " is " + castRelation.getPerson().getName());
+        for(CastRelationModel castRelation : movie.getCast())
             cast.add(castRelation.getPerson());
-        }
 
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -258,14 +260,12 @@ public class OverviewActivity extends AppCompatActivity {
         });
     }
 
-    private Intent buildVideoPlayerIntent(Context context, String videoTitle) {
+    private Intent buildVideoPlayerIntent(Context context, String videoId) {
 
-        Log.i("yoni", "Stream url; " + "http://192.168.1.10:8081/video/" + videoTitle + ".m3u8");
 
         Intent intent = new Intent(context, PlayerActivity.class);
         intent.setAction(PlayerActivity.ACTION_VIEW_LIST);
-        intent.putExtra(PlayerActivity.URI_LIST_EXTRA, new String[]{"http://192.168.1.10:8081/video/" + videoTitle + ".m3u8"});
-        //intent.putExtra(PlayerActivity.URI_LIST_EXTRA, new String[]{"http://192.168.1.10:8081/static/adwd.m3u8"});
+        intent.putExtra(PlayerActivity.URI_LIST_EXTRA, new String[]{tgbAPI.getM3u8Url(videoId)});
 
         return intent;
     }

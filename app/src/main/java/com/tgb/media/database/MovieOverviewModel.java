@@ -3,6 +3,8 @@ package com.tgb.media.database;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.tgb.media.server.models.MovieFile;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.JoinEntity;
@@ -40,6 +42,7 @@ public class MovieOverviewModel implements Parcelable {
     private Long voteCount;
     private String youtubeTrailer;
     private String serverTitle;
+    private String serverId;
     private Boolean like;
 
     @ToMany
@@ -57,7 +60,7 @@ public class MovieOverviewModel implements Parcelable {
     @ToMany(referencedJoinProperty = "movieId")
     private List<CrewRelationModel> crew;
 
-    public MovieOverviewModel(MovieOverview movieOverview, String serverTitle){
+    public MovieOverviewModel(MovieOverview movieOverview, MovieFile movie){
         this.id = movieOverview.id;
         this.adult = movieOverview.adult;
         this.backdropPath = movieOverview.backdropPath;
@@ -79,7 +82,8 @@ public class MovieOverviewModel implements Parcelable {
         this.voteAverage = movieOverview.voteAverage;
         this.voteCount = movieOverview.voteCount;
         this.youtubeTrailer = movieOverview.trailer == null ? "" : movieOverview.trailer.key;
-        this.serverTitle = serverTitle;
+        this.serverTitle = movie.title;
+        this.serverId = movie.id;
         this.like = false;
     }
 
@@ -113,6 +117,7 @@ public class MovieOverviewModel implements Parcelable {
         dest.writeValue(this.voteCount);
         dest.writeString(this.youtubeTrailer);
         dest.writeString(this.serverTitle);
+        dest.writeString(this.serverId);
         dest.writeValue(this.like);
         dest.writeList(this.genres);
         dest.writeList(this.cast);
@@ -340,6 +345,16 @@ public class MovieOverviewModel implements Parcelable {
     }
 
 
+    public String getServerId() {
+        return this.serverId;
+    }
+
+
+    public void setServerId(String serverId) {
+        this.serverId = serverId;
+    }
+
+
     public Boolean getLike() {
         return this.like;
     }
@@ -510,6 +525,7 @@ public class MovieOverviewModel implements Parcelable {
         this.voteCount = (Long) in.readValue(Long.class.getClassLoader());
         this.youtubeTrailer = in.readString();
         this.serverTitle = in.readString();
+        this.serverId = in.readString();
         this.like = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.genres = new ArrayList<GenreModel>();
         in.readList(this.genres, GenreModel.class.getClassLoader());
@@ -520,12 +536,12 @@ public class MovieOverviewModel implements Parcelable {
     }
 
 
-    @Generated(hash = 1288958677)
+    @Generated(hash = 199339405)
     public MovieOverviewModel(Long id, Boolean adult, String backdropPath, Long budget, String homepage,
             String imdbId, String originalLanguage, String originalTitle, String overview,
             Double popularity, String posterPath, Long releaseDate, Long revenue, Long runtime,
             String status, String tagline, String title, Boolean video, Double voteAverage,
-            Long voteCount, String youtubeTrailer, String serverTitle, Boolean like) {
+            Long voteCount, String youtubeTrailer, String serverTitle, String serverId, Boolean like) {
         this.id = id;
         this.adult = adult;
         this.backdropPath = backdropPath;
@@ -548,6 +564,7 @@ public class MovieOverviewModel implements Parcelable {
         this.voteCount = voteCount;
         this.youtubeTrailer = youtubeTrailer;
         this.serverTitle = serverTitle;
+        this.serverId = serverId;
         this.like = like;
     }
 
@@ -573,4 +590,6 @@ public class MovieOverviewModel implements Parcelable {
     /** Used for active entity operations. */
     @Generated(hash = 2000367368)
     private transient MovieOverviewModelDao myDao;
+
+    
 }

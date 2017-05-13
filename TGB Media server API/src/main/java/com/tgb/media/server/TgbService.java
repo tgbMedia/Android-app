@@ -12,7 +12,7 @@ public interface TgbService {
     @GET("movies_list")
     Observable<Response<MovieFile>> moviesList();
 
-    @GET("kilLastProcess")
-    Call<Response<Object>> kilLastProcess();
+    @GET("stream/killLastProcess")
+    Call<Response<Object>> killLastProcess();
 
 }

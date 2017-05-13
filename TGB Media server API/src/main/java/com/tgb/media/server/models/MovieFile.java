@@ -5,32 +5,16 @@ import com.google.gson.annotations.SerializedName;
 
 public class MovieFile {
 
-    @SerializedName("year")
+    @SerializedName("id")
     @Expose
-    public Long year;
-
-    @SerializedName("resolution")
-    @Expose
-    public String resolution;
-
-    @SerializedName("quality")
-    @Expose
-    public String quality;
-
-    @SerializedName("codec")
-    @Expose
-    public String codec;
-
-    @SerializedName("group")
-    @Expose
-    public String group;
-
-    @SerializedName("container")
-    @Expose
-    public String container;
+    public String id;
 
     @SerializedName("title")
     @Expose
     public String title;
+
+    @SerializedName("year")
+    @Expose
+    public Integer year;
 
 }

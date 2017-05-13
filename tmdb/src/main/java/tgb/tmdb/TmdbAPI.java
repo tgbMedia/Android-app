@@ -7,6 +7,8 @@ import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Locale;
 
 import okhttp3.HttpUrl;
@@ -20,6 +22,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import tgb.tmdb.deserialize.ReleaseDateDeserializer;
 import tgb.tmdb.deserialize.TrailerDeserialize;
+import tgb.tmdb.models.Movie;
 import tgb.tmdb.models.MovieOverview;
 import tgb.tmdb.models.ReleaseDate;
 import tgb.tmdb.models.Search;
@@ -101,7 +104,7 @@ public class TmdbAPI {
         service = retrofit.create(TmdbService.class);
     }
 
-    public MovieOverview searchMovieByName(final String movieName) throws Exception{
+    public MovieOverview searchMovieByName(final String movieName, final int releaseYear) throws Exception{
         //Search
         retrofit2.Response<Search> searchResponse = call()
                         .search(movieName, 1)
@@ -109,6 +112,25 @@ public class TmdbAPI {
 
         if(!searchResponse.isSuccessful() || searchResponse.body().results.size() < 1)
             return null;
+
+        /*Collections.sort(searchResponse.body().results, new Comparator<Movie>() {
+            @Override
+            public int compare(Movie left, Movie right) {
+                boolean leftIsSameName = left.title.equals(movieName);
+                boolean rightIsSameName = right.title.equals(movieName);
+
+                if(leftIsSameName && rightIsSameName)
+                {
+                    //Same title, compare by release date
+                    Boolean leftIsSameYear = left.relaseDate.getYear() == releaseYear;
+                    Boolean rightIsSameYear = right.relaseDate.getYear() == releaseYear;
+
+                    return leftIsSameYear.compareTo(rightIsSameYear);
+                }
+
+                return leftIsSameName ? -1 : 1;
+            }
+        });*/
 
         //Movie overview
         retrofit2.Response<MovieOverview> movieDiscoverResponse = call()

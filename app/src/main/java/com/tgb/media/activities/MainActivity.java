@@ -20,7 +20,6 @@ import com.tgb.media.helper.LoadingDialog;
 import com.tgb.media.helper.OverlayMessageView;
 import com.tgb.media.helper.SpacesItemDecoration;
 import com.tgb.media.server.TgbAPI;
-import com.tgb.media.server.models.MovieFile;
 import com.tgb.media.server.models.Response;
 import com.tgb.media.videos.VideosLibrary;
 
@@ -49,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private GalleryAdapter mAdapter;
 
     //TGB Api
-    private TgbAPI tgbAPI;
+    @Inject TgbAPI tgbAPI;
     private Throwable lastServerError;
 
     //Tmdb API
@@ -66,9 +65,6 @@ public class MainActivity extends AppCompatActivity {
 
         //Butter knife
         ButterKnife.bind(this);
-
-        //TGB Api
-        tgbAPI = new TgbAPI("http://192.168.1.10:8081/", "");
 
         //Toolbar
         setSupportActionBar(toolbar);
@@ -106,20 +102,6 @@ public class MainActivity extends AppCompatActivity {
         refresh();
     }
 
-    private MovieFile[] dummyList(){
-        String[] titles = {"American Sniper", "Ant-Man", "Arrival", "Central Intelligence", "Deadpool", "Doctor Strange", "Fury", "Hacksaw Ridge", "Harry Potter and the Chamber of Secrets", "Harry Potter and the Deathly Hallows Part 1", "Harry Potter and the Goblet of Fire", "Harry Potter and the Order of the Phoenix", "Harry Potter and the Philosopher's Stone", "Harry Potter and the Prisoner of Azkaban", "Ice Age Continental Drift", "Mad Max Fury Road", "Now You See Me 2", "Sausage Party", "Suicide Squad", "Sully", "ted 2", "Ted", "Teenage Mutant Ninja Turtles", "Teenage Mutant Ninja Turtles Out of the Shadows", "The Accountant", "The Jungle Book", "The Legend of Tarzan", "The Magnificent Seven", "The Wolf of Wall Street", "transformers age of extinction", "Zootopia"};
-        MovieFile[] movies = new MovieFile[titles.length];
-
-        int i = 0;
-        for(; i < movies.length; i++)
-        {
-            movies[i] = new MovieFile();
-            movies[i].title = titles[i];
-        }
-
-        return movies;
-    }
-
     private void refresh(){
         lastServerError = null;
 
@@ -135,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 .flatMap(response -> response.results == null
                         ? Observable.empty()
                         : Observable.fromArray(response.results))
-                .flatMap(video -> videosLibrary.movieDetails(mAdapter.getItemCount(), video.title))
+                .flatMap(video -> videosLibrary.movieDetails(mAdapter.getItemCount(), video))
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(mAdapter::addItem)
                 .doOnError(Throwable::printStackTrace)

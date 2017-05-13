@@ -65,6 +65,8 @@ import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.util.UUID;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
@@ -73,7 +75,7 @@ import retrofit2.Callback;
 public class PlayerActivity extends AppCompatActivity implements View.OnClickListener, ExoPlayer.EventListener,
         PlaybackControlView.VisibilityListener {
 
-    private TgbAPI tgbAPI;
+    @Inject TgbAPI tgbAPI;
 
     public static final String DRM_SCHEME_UUID_EXTRA = "drm_scheme_uuid";
     public static final String DRM_LICENSE_URL = "drm_license_url";
@@ -120,7 +122,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
 
-        tgbAPI = new TgbAPI("http://192.168.1.10:8081/", "");
+        //Dagger
+        ((TgbApp) getApplication()).getAppComponent().inject(this);
 
         shouldAutoPlay = true;
         clearResumePosition();
@@ -193,7 +196,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             releasePlayer();
         }
 
-        tgbAPI.call().kilLastProcess().enqueue(new Callback<Response<Object>>() {
+        tgbAPI.call().killLastProcess().enqueue(new Callback<Response<Object>>() {
             @Override
             public void onResponse(Call<Response<Object>> call, retrofit2.Response<Response<Object>> response) {
 
@@ -391,6 +394,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
         return ((TgbApp) getApplication())
                 .buildDataSourceFactory(useBandwidthMeter ? BANDWIDTH_METER : null);
+
+
     }
 
     /**

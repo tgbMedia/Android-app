@@ -14,7 +14,7 @@ public class Movie {
     public @SerializedName("original_language") String originalLanguage;
     public String title;
     public @SerializedName("backdrop_path") String backdropPath;
-    public @SerializedName("release_date") String relaseDate;
+    public @SerializedName("release_date") ReleaseDate relaseDate;
     public float popularity;
     public @SerializedName("vote_count") int voteCount;
     public boolean video;
