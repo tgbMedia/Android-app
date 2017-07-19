@@ -23,6 +23,8 @@ import com.tgb.media.server.TgbAPI;
 import com.tgb.media.server.models.Response;
 import com.tgb.media.videos.VideosLibrary;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -53,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
 
     //Tmdb API
     @Inject VideosLibrary videosLibrary;
+
+    //Finals
+    private static final int REQUEST_TIMEOUT = 5; //Seconds
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,34 +115,39 @@ public class MainActivity extends AppCompatActivity {
 
         mAdapter.clear();
 
-        tgbAPI.call().moviesList()
-                .subscribeOn(Schedulers.newThread())
-                .doOnError(t -> lastServerError = t)
-                .onErrorReturn(throwable -> new Response<>())
-                .flatMap(response -> response.results == null
-                        ? Observable.empty()
-                        : Observable.fromArray(response.results))
-                .flatMap(video -> videosLibrary.movieDetails(mAdapter.getItemCount(), video))
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(mAdapter::addItem)
-                .doOnError(Throwable::printStackTrace)
-                .doOnComplete(() -> {
-                    loadingDialog.hide(null);
+        tgbAPI.call()
+            .moviesList()
+            .subscribeOn(Schedulers.newThread())
+            .timeout(REQUEST_TIMEOUT, TimeUnit.SECONDS)
+            .doOnError(t -> lastServerError = t)
+            .onErrorReturn(throwable -> new Response<>())
+            .flatMap(response ->
+                Observable.range(0, response.results == null ? 0 : response.results.length)
+                    .flatMap(position -> Observable.just(position)
+                    .subscribeOn(Schedulers.computation())
+                    .map(i -> videosLibrary.videoDetails(i, response.results[i])))
 
-                    if(lastServerError == null){
-                        //Successfully refresh
-                        appbarParams.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
-                                | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
-                    }
-                    else
-                    {
-                        overlayMessageView.setMessage(getString(R.string.no_online_servers));
-                        overlayMessageView.show();
-                    }
-
-                    swipeRefreshLayout.setEnabled(true);
-                })
-                .subscribe();
+            )
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnNext(mAdapter::addItem)
+            .doOnComplete(this::onCompleted)
+            .subscribe();
     }
 
+    private void onCompleted(){
+        loadingDialog.hide(null);
+
+        if(lastServerError == null){
+            //Successfully refresh
+            appbarParams.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
+                    | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
+        }
+        else
+        {
+            overlayMessageView.setMessage(getString(R.string.no_online_servers));
+            overlayMessageView.show();
+        }
+
+        swipeRefreshLayout.setEnabled(true);
+    }
 }

@@ -66,6 +66,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
 
     public void addItem(MovieObesrvableResult movieObesrvableResult){
         movies.add(movieObesrvableResult.movie);
+        //notifyDataSetChanged();
         notifyItemChanged(movieObesrvableResult.position);
     }
 

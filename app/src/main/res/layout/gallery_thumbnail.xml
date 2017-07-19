@@ -28,7 +28,8 @@
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
-                android:transitionName="@string/gallery_transition"/>
+                android:transitionName="@string/gallery_transition"
+                android:background="?selectableItemBackground"/>
 
             <TextView
                 android:id="@+id/title"

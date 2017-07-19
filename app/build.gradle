@@ -13,13 +13,13 @@ assert propFile.canRead()
 assert props.containsKey('TMDB_API_KEY') && props.containsKey('GOOGLE_API_KEY')
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.0"
 
     defaultConfig {
         applicationId "com.tgb.media"
         minSdkVersion 17
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -28,9 +28,6 @@ android {
         resValue "string", "tmdb_api_key", props['TMDB_API_KEY']
         resValue "string", "google_api_key", props['GOOGLE_API_KEY']
 
-        jackOptions {
-            enabled true
-        }
     }
 
     buildTypes {
@@ -40,39 +37,61 @@ android {
         }
     }
 
+    flavorDimensions("dev", "prod")
+
+    productFlavors {
+        dev {
+            dimension "dev"
+            versionNameSuffix "-dev"
+            applicationIdSuffix '.dev'
+            minSdkVersion 21
+        }
+
+        prod {
+            dimension "prod"
+        }
+    }
+
+    dexOptions {
+        preDexLibraries true
+        maxProcessCount 8
+        javaMaxHeapSize "2048m"
+    }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
     }
 }
 
+
+
 dependencies {
-    ext.googleLibrariesVersion = '25.3.1'
+    ext.googleLibrariesVersion = '26.+'
+    ext.appcompatVersion = '26.0.0-beta1'
     ext.daggerVersion = '2.10-rc1'
     ext.butterknifeVersion = '8.5.1'
     ext.rxAndroidVersion = '2.0.1'
-
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+
     //Unit tests
     testCompile 'junit:junit:4.12'
 
     //Android support libraries
-    compile "com.android.support:appcompat-v7:$googleLibrariesVersion"
+    compile "com.android.support:appcompat-v7:26.0.0-beta1"
     compile "com.android.support:design:$googleLibrariesVersion"
     compile "com.android.support:cardview-v7:$googleLibrariesVersion"
     compile "com.android.support:support-core-utils:$googleLibrariesVersion"
     compile "com.android.support:percent:$googleLibrariesVersion"
     compile "com.android.support:leanback-v17:$googleLibrariesVersion"
-    compile "com.android.support.constraint:constraint-layout:1.0.2"
-
-    compile "me.henrytao:smooth-app-bar-layout:25.2.0.0"
-    compile "me.henrytao:mdcore:3.3.10"
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'me.henrytao:smooth-app-bar-layout:25.2.0.0'
+    compile 'me.henrytao:mdcore:3.3.10'
 
     //GreenDao
-    compile "org.greenrobot:greendao:3.2.0"
+    compile 'org.greenrobot:greendao:3.2.0'
 
     //Dagger
     compile "com.google.dagger:dagger:$daggerVersion"
@@ -101,6 +120,4 @@ dependencies {
 
     //TGB Server(client PC) Api
     compile project(':TGB Media server API')
-
-
 }

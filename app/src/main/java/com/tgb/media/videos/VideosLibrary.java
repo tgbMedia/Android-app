@@ -165,11 +165,24 @@ public class VideosLibrary {
                 MovieOverviewModel movieOverview = searchMovieByKeyword(movie.title);
 
                 if(movieOverview != null)
+                {
+                    if(!movieOverview.getServerId().equals(movie.id))
+                    {
+                        movieOverview.setServerId(movie.id);
+                        movieOverview.update();
+
+                        Log.wtf("videoLibraries", "Movie id is updated "
+                                + movie.title + ", to " + movie.id);
+                    }
+
                     emitter.onNext(new MovieObesrvableResult(position, movieOverview));
+                }
                 else
                 {
                     //Search item in TMDB
-                    MovieOverview overview = tmdbAPI.searchMovieByName(movie.title, movie.year);
+                    int movieYear = (movie.year == null) ? 0 : movie.year;
+
+                    MovieOverview overview = tmdbAPI.searchMovieByName(movie.title, movieYear);
 
                     if(overview == null)
                     {
@@ -193,5 +206,53 @@ public class VideosLibrary {
 
             emitter.onComplete();
         });
+    }
+
+    public MovieObesrvableResult videoDetails(final int position, final MovieFile movie){
+        try{
+            //Search item by keyword
+            MovieOverviewModel movieOverview = searchMovieByKeyword(movie.title);
+
+            if(movieOverview != null)
+            {
+                if(!movieOverview.getServerId().equals(movie.id))
+                {
+                    movieOverview.setServerId(movie.id);
+                    movieOverview.update();
+
+                    Log.wtf("videoLibraries", "Movie id is updated "
+                            + movie.title + ", to " + movie.id);
+                }
+
+                return new MovieObesrvableResult(position, movieOverview);
+            }
+            else
+            {
+                //Search item in TMDB
+                int movieYear = (movie.year == null) ? 0 : movie.year;
+
+                MovieOverview overview = tmdbAPI.searchMovieByName(movie.title, movieYear);
+
+                if(overview == null)
+                {
+                    Log.wtf("videoLibraries", "No data for: " + movie.title);
+                    //emitter.onError(new RuntimeException());
+                }
+                else
+                {
+                    //Insert movie to database
+                    movieOverview = insertMovieToDb(overview, movie);
+                    addKeyword(movie.title, movieOverview.getId());
+
+                    return new MovieObesrvableResult(position, movieOverview);
+                }
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+        Log.wtf("videoLibraries", "Returns null for: " + movie.title);
+        return null;
     }
 }

@@ -262,10 +262,11 @@ public class OverviewActivity extends AppCompatActivity {
 
     private Intent buildVideoPlayerIntent(Context context, String videoId) {
 
+        String url = tgbAPI.getM3u8Url(videoId);
 
         Intent intent = new Intent(context, PlayerActivity.class);
         intent.setAction(PlayerActivity.ACTION_VIEW_LIST);
-        intent.putExtra(PlayerActivity.URI_LIST_EXTRA, new String[]{tgbAPI.getM3u8Url(videoId)});
+        intent.putExtra(PlayerActivity.URI_LIST_EXTRA, new String[]{url});
 
         return intent;
     }
