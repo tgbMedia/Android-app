@@ -88,43 +88,6 @@ public class MovieOverviewModel implements Parcelable {
     }
 
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(this.id);
-        dest.writeValue(this.adult);
-        dest.writeString(this.backdropPath);
-        dest.writeValue(this.budget);
-        dest.writeString(this.homepage);
-        dest.writeString(this.imdbId);
-        dest.writeString(this.originalLanguage);
-        dest.writeString(this.originalTitle);
-        dest.writeString(this.overview);
-        dest.writeValue(this.popularity);
-        dest.writeString(this.posterPath);
-        dest.writeValue(this.releaseDate);
-        dest.writeValue(this.revenue);
-        dest.writeValue(this.runtime);
-        dest.writeString(this.status);
-        dest.writeString(this.tagline);
-        dest.writeString(this.title);
-        dest.writeValue(this.video);
-        dest.writeValue(this.voteAverage);
-        dest.writeValue(this.voteCount);
-        dest.writeString(this.youtubeTrailer);
-        dest.writeString(this.serverTitle);
-        dest.writeString(this.serverId);
-        dest.writeValue(this.like);
-        dest.writeList(this.genres);
-        dest.writeList(this.cast);
-        dest.writeList(this.crew);
-    }
-
-
     public Long getId() {
         return this.id;
     }
@@ -494,48 +457,6 @@ public class MovieOverviewModel implements Parcelable {
     }
 
 
-    /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 719929430)
-    public void __setDaoSession(DaoSession daoSession) {
-        this.daoSession = daoSession;
-        myDao = daoSession != null ? daoSession.getMovieOverviewModelDao() : null;
-    }
-
-
-    protected MovieOverviewModel(Parcel in) {
-        this.id = (Long) in.readValue(Long.class.getClassLoader());
-        this.adult = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.backdropPath = in.readString();
-        this.budget = (Long) in.readValue(Long.class.getClassLoader());
-        this.homepage = in.readString();
-        this.imdbId = in.readString();
-        this.originalLanguage = in.readString();
-        this.originalTitle = in.readString();
-        this.overview = in.readString();
-        this.popularity = (Double) in.readValue(Double.class.getClassLoader());
-        this.posterPath = in.readString();
-        this.releaseDate = (Long) in.readValue(Long.class.getClassLoader());
-        this.revenue = (Long) in.readValue(Long.class.getClassLoader());
-        this.runtime = (Long) in.readValue(Long.class.getClassLoader());
-        this.status = in.readString();
-        this.tagline = in.readString();
-        this.title = in.readString();
-        this.video = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.voteAverage = (Double) in.readValue(Double.class.getClassLoader());
-        this.voteCount = (Long) in.readValue(Long.class.getClassLoader());
-        this.youtubeTrailer = in.readString();
-        this.serverTitle = in.readString();
-        this.serverId = in.readString();
-        this.like = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.genres = new ArrayList<GenreModel>();
-        in.readList(this.genres, GenreModel.class.getClassLoader());
-        this.cast = new ArrayList<CastRelationModel>();
-        in.readList(this.cast, CastRelationModel.class.getClassLoader());
-        this.crew = new ArrayList<CrewRelationModel>();
-        in.readList(this.crew, CrewRelationModel.class.getClassLoader());
-    }
-
-
     @Generated(hash = 199339405)
     public MovieOverviewModel(Long id, Boolean adult, String backdropPath, Long budget, String homepage,
             String imdbId, String originalLanguage, String originalTitle, String overview,
@@ -573,6 +494,91 @@ public class MovieOverviewModel implements Parcelable {
     public MovieOverviewModel() {
     }
 
+    /** Used to resolve relations */
+    @Generated(hash = 2040040024)
+    private transient DaoSession daoSession;
+    /** Used for active entity operations. */
+    @Generated(hash = 2000367368)
+    private transient MovieOverviewModelDao myDao;
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(this.id);
+        dest.writeValue(this.adult);
+        dest.writeString(this.backdropPath);
+        dest.writeValue(this.budget);
+        dest.writeString(this.homepage);
+        dest.writeString(this.imdbId);
+        dest.writeString(this.originalLanguage);
+        dest.writeString(this.originalTitle);
+        dest.writeString(this.overview);
+        dest.writeValue(this.popularity);
+        dest.writeString(this.posterPath);
+        dest.writeValue(this.releaseDate);
+        dest.writeValue(this.revenue);
+        dest.writeValue(this.runtime);
+        dest.writeString(this.status);
+        dest.writeString(this.tagline);
+        dest.writeString(this.title);
+        dest.writeValue(this.video);
+        dest.writeValue(this.voteAverage);
+        dest.writeValue(this.voteCount);
+        dest.writeString(this.youtubeTrailer);
+        dest.writeString(this.serverTitle);
+        dest.writeString(this.serverId);
+        dest.writeValue(this.like);
+        dest.writeTypedList(this.genres);
+        dest.writeList(this.cast);
+        dest.writeList(this.crew);
+    }
+
+
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 719929430)
+    public void __setDaoSession(DaoSession daoSession) {
+        this.daoSession = daoSession;
+        myDao = daoSession != null ? daoSession.getMovieOverviewModelDao() : null;
+    }
+
+
+    protected MovieOverviewModel(Parcel in) {
+        this.id = (Long) in.readValue(Long.class.getClassLoader());
+        this.adult = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.backdropPath = in.readString();
+        this.budget = (Long) in.readValue(Long.class.getClassLoader());
+        this.homepage = in.readString();
+        this.imdbId = in.readString();
+        this.originalLanguage = in.readString();
+        this.originalTitle = in.readString();
+        this.overview = in.readString();
+        this.popularity = (Double) in.readValue(Double.class.getClassLoader());
+        this.posterPath = in.readString();
+        this.releaseDate = (Long) in.readValue(Long.class.getClassLoader());
+        this.revenue = (Long) in.readValue(Long.class.getClassLoader());
+        this.runtime = (Long) in.readValue(Long.class.getClassLoader());
+        this.status = in.readString();
+        this.tagline = in.readString();
+        this.title = in.readString();
+        this.video = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.voteAverage = (Double) in.readValue(Double.class.getClassLoader());
+        this.voteCount = (Long) in.readValue(Long.class.getClassLoader());
+        this.youtubeTrailer = in.readString();
+        this.serverTitle = in.readString();
+        this.serverId = in.readString();
+        this.like = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.genres = in.createTypedArrayList(GenreModel.CREATOR);
+        this.cast = new ArrayList<CastRelationModel>();
+        in.readList(this.cast, CastRelationModel.class.getClassLoader());
+        this.crew = new ArrayList<CrewRelationModel>();
+        in.readList(this.crew, CrewRelationModel.class.getClassLoader());
+    }
+
     public static final Creator<MovieOverviewModel> CREATOR = new Creator<MovieOverviewModel>() {
         @Override
         public MovieOverviewModel createFromParcel(Parcel source) {
@@ -584,12 +590,4 @@ public class MovieOverviewModel implements Parcelable {
             return new MovieOverviewModel[size];
         }
     };
-    /** Used to resolve relations */
-    @Generated(hash = 2040040024)
-    private transient DaoSession daoSession;
-    /** Used for active entity operations. */
-    @Generated(hash = 2000367368)
-    private transient MovieOverviewModelDao myDao;
-
-    
 }

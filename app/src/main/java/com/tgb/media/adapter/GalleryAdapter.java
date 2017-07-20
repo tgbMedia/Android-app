@@ -21,7 +21,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.tgb.media.R;
 import com.tgb.media.activities.OverviewActivity;
 import com.tgb.media.database.MovieOverviewModel;
-import com.tgb.media.helper.MovieObesrvableResult;
+import com.tgb.media.helper.MovieObservableResult;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -58,16 +58,14 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
     }
 
     public void clear() {
-        int size = movies.size();
         movies.clear();
-
         notifyDataSetChanged();
     }
 
-    public void addItem(MovieObesrvableResult movieObesrvableResult){
-        movies.add(movieObesrvableResult.movie);
+    public void addItem(MovieObservableResult movieObservableResult){
+        movies.add(movieObservableResult.movie);
         //notifyDataSetChanged();
-        notifyItemChanged(movieObesrvableResult.position);
+        notifyItemChanged(movieObservableResult.position);
     }
 
     public MovieOverviewModel getItem(int position){

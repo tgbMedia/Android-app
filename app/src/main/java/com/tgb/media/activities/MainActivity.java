@@ -17,6 +17,7 @@ import com.tgb.media.R;
 import com.tgb.media.TgbApp;
 import com.tgb.media.adapter.GalleryAdapter;
 import com.tgb.media.helper.LoadingDialog;
+import com.tgb.media.helper.MovieObservableResult;
 import com.tgb.media.helper.OverlayMessageView;
 import com.tgb.media.helper.SpacesItemDecoration;
 import com.tgb.media.server.TgbAPI;
@@ -24,6 +25,7 @@ import com.tgb.media.server.models.Response;
 import com.tgb.media.videos.VideosLibrary;
 
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.inject.Inject;
 
@@ -52,18 +54,23 @@ public class MainActivity extends AppCompatActivity {
     //TGB Api
     @Inject TgbAPI tgbAPI;
     private Throwable lastServerError;
+    private MovieObservableResult[] videos;
 
     //Tmdb API
     @Inject VideosLibrary videosLibrary;
 
     //Finals
     private static final int REQUEST_TIMEOUT = 5; //Seconds
+    private static final String VIDEOS_KEY = "videos";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+
+        if(savedInstanceState != null)
+            videos = (MovieObservableResult[]) savedInstanceState.getParcelableArray(VIDEOS_KEY);
 
         //Dagger
         ((TgbApp) getApplication()).getAppComponent().inject(this);
@@ -99,8 +106,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(mAdapter);
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            swipeRefreshLayout.setEnabled(false);
-            swipeRefreshLayout.setRefreshing(false);
+            videos = null;
             loadingDialog.show(view -> refresh());
         });
 
@@ -108,30 +114,95 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void refresh(){
-        lastServerError = null;
+        //Disable refresh
+        swipeRefreshLayout.setEnabled(false);
+        swipeRefreshLayout.setRefreshing(false);
 
+        //GUI Actions
         overlayMessageView.hide();
         appbarParams.setScrollFlags(0);
 
+        //Restart values
+        lastServerError = null;
+        final AtomicInteger currentPosition = new AtomicInteger();
+
+        //Adapters actions
         mAdapter.clear();
 
-        tgbAPI.call()
+        Observable<MovieObservableResult> observable = (videos == null)
+                ? loadFromServer(currentPosition)
+                : loadLocalList();
+
+        observable
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnNext(item -> {
+                videos[item.position] = item;
+
+                if(currentPosition.get() == item.position){
+                    mAdapter.addItem(videos[currentPosition.get()]);
+
+                    while(currentPosition.incrementAndGet() < videos.length && videos[currentPosition.get()] != null)
+                        mAdapter.addItem(videos[currentPosition.get()]);
+                }
+            })
+            .doOnComplete(this::onCompleted)
+            .subscribe();
+
+//        tgbAPI.call()
+//            .moviesList()
+//            .subscribeOn(Schedulers.newThread())
+//            .timeout(REQUEST_TIMEOUT, TimeUnit.SECONDS)
+//            .doOnError(t -> lastServerError = t)
+//            .onErrorReturn(throwable -> new Response<>())
+//            .flatMap(response -> {
+//                currentPosition.set(response.results == null ? 0 : response.results.length);
+//                videos = new MovieObservableResult[currentPosition.get()];
+//
+//                return Observable.range(0, currentPosition.getAndSet(0))
+//                        .flatMap(position -> Observable.just(position)
+//                            .subscribeOn(Schedulers.computation())
+//                            .map(i -> videosLibrary.videoDetails(i, response.results[i])));
+//            })
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .doOnNext(item -> {
+//                videos[item.position] = item;
+//
+//                if(currentPosition.get() == item.position){
+//                    mAdapter.addItem(videos[currentPosition.get()]);
+//
+//                    while(currentPosition.incrementAndGet() < videos.length && videos[currentPosition.get()] != null)
+//                        mAdapter.addItem(videos[currentPosition.get()]);
+//                }
+//            })
+//            .doOnComplete(this::onCompleted)
+//            .subscribe();
+    }
+
+    private Observable<MovieObservableResult> loadFromServer(AtomicInteger currentPosition){
+        return tgbAPI.call()
             .moviesList()
             .subscribeOn(Schedulers.newThread())
             .timeout(REQUEST_TIMEOUT, TimeUnit.SECONDS)
             .doOnError(t -> lastServerError = t)
             .onErrorReturn(throwable -> new Response<>())
-            .flatMap(response ->
-                Observable.range(0, response.results == null ? 0 : response.results.length)
-                    .flatMap(position -> Observable.just(position)
-                    .subscribeOn(Schedulers.computation())
-                    .map(i -> videosLibrary.videoDetails(i, response.results[i])))
+            .flatMap(response -> {
+                currentPosition.set(response.results == null ? 0 : response.results.length);
+                videos = new MovieObservableResult[currentPosition.get()];
 
-            )
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnNext(mAdapter::addItem)
-            .doOnComplete(this::onCompleted)
-            .subscribe();
+                return Observable.range(0, currentPosition.getAndSet(0))
+                        .flatMap(position -> Observable.just(position)
+                                .subscribeOn(Schedulers.computation())
+                                .map(i -> videosLibrary.videoDetails(i, response.results[i])));
+            });
+    }
+
+    private Observable<MovieObservableResult> loadLocalList(){
+        return Observable.range(0, videos.length)
+            .flatMap(position ->
+                Observable.just(position)
+                    .subscribeOn(Schedulers.computation())
+                    .map(i -> videos[i])
+            );
     }
 
     private void onCompleted(){
@@ -149,5 +220,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         swipeRefreshLayout.setEnabled(true);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putParcelableArray(VIDEOS_KEY, videos);
     }
 }

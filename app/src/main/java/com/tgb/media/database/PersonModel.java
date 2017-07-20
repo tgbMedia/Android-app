@@ -1,11 +1,14 @@
 package com.tgb.media.database;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
 
 @Entity
-public class PersonModel {
+public class PersonModel implements Parcelable {
 
     @Id private Long id;
     private String photo;
@@ -38,4 +41,33 @@ public class PersonModel {
         this.name = name;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(this.id);
+        dest.writeString(this.photo);
+        dest.writeString(this.name);
+    }
+
+    protected PersonModel(Parcel in) {
+        this.id = (Long) in.readValue(Long.class.getClassLoader());
+        this.photo = in.readString();
+        this.name = in.readString();
+    }
+
+    public static final Parcelable.Creator<PersonModel> CREATOR = new Parcelable.Creator<PersonModel>() {
+        @Override
+        public PersonModel createFromParcel(Parcel source) {
+            return new PersonModel(source);
+        }
+
+        @Override
+        public PersonModel[] newArray(int size) {
+            return new PersonModel[size];
+        }
+    };
 }

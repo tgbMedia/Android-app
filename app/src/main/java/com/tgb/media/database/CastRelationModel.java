@@ -1,12 +1,15 @@
 package com.tgb.media.database;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.ToOne;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.DaoException;
 
 @Entity
-public class CastRelationModel {
+public class CastRelationModel implements Parcelable {
 
     private Long movieId;
     private Long personId;
@@ -116,11 +119,42 @@ public class CastRelationModel {
         }
         myDao.update(this);
     }
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(this.movieId);
+        dest.writeValue(this.personId);
+        dest.writeString(this.character);
+        dest.writeValue(this.order);
+        dest.writeParcelable(this.person, flags);
+    }
     /** called by internal mechanisms, do not call yourself. */
     @Generated(hash = 477181027)
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getCastRelationModelDao() : null;
     }
+    protected CastRelationModel(Parcel in) {
+        this.movieId = (Long) in.readValue(Long.class.getClassLoader());
+        this.personId = (Long) in.readValue(Long.class.getClassLoader());
+        this.character = in.readString();
+        this.order = (Long) in.readValue(Long.class.getClassLoader());
+        this.person = in.readParcelable(PersonModel.class.getClassLoader());
+    }
 
+    public static final Creator<CastRelationModel> CREATOR = new Creator<CastRelationModel>() {
+        @Override
+        public CastRelationModel createFromParcel(Parcel source) {
+            return new CastRelationModel(source);
+        }
+
+        @Override
+        public CastRelationModel[] newArray(int size) {
+            return new CastRelationModel[size];
+        }
+    };
 }

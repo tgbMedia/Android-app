@@ -17,7 +17,7 @@ import com.tgb.media.database.MovieOverviewModel;
 import com.tgb.media.database.MovieOverviewModelDao;
 import com.tgb.media.database.PersonModel;
 import com.tgb.media.database.PersonModelDao;
-import com.tgb.media.helper.MovieObesrvableResult;
+import com.tgb.media.helper.MovieObservableResult;
 import com.tgb.media.server.models.MovieFile;
 
 import java.util.List;
@@ -158,7 +158,7 @@ public class VideosLibrary {
         return movieOverviewModel;
     }
 
-    public Observable<MovieObesrvableResult> movieDetails(final int position, final MovieFile movie){
+    public Observable<MovieObservableResult> movieDetails(final int position, final MovieFile movie){
         return Observable.create(emitter -> {
             try{
                 //Search item by keyword
@@ -175,7 +175,7 @@ public class VideosLibrary {
                                 + movie.title + ", to " + movie.id);
                     }
 
-                    emitter.onNext(new MovieObesrvableResult(position, movieOverview));
+                    emitter.onNext(new MovieObservableResult(position, movieOverview));
                 }
                 else
                 {
@@ -195,7 +195,7 @@ public class VideosLibrary {
                         movieOverview = insertMovieToDb(overview, movie);
                         addKeyword(movie.title, movieOverview.getId());
 
-                        emitter.onNext(new MovieObesrvableResult(position, movieOverview));
+                        emitter.onNext(new MovieObservableResult(position, movieOverview));
                     }
                 }
             }
@@ -208,7 +208,7 @@ public class VideosLibrary {
         });
     }
 
-    public MovieObesrvableResult videoDetails(final int position, final MovieFile movie){
+    public MovieObservableResult videoDetails(final int position, final MovieFile movie){
         try{
             //Search item by keyword
             MovieOverviewModel movieOverview = searchMovieByKeyword(movie.title);
@@ -224,7 +224,7 @@ public class VideosLibrary {
                             + movie.title + ", to " + movie.id);
                 }
 
-                return new MovieObesrvableResult(position, movieOverview);
+                return new MovieObservableResult(position, movieOverview);
             }
             else
             {
@@ -244,7 +244,7 @@ public class VideosLibrary {
                     movieOverview = insertMovieToDb(overview, movie);
                     addKeyword(movie.title, movieOverview.getId());
 
-                    return new MovieObesrvableResult(position, movieOverview);
+                    return new MovieObservableResult(position, movieOverview);
                 }
             }
         }
@@ -253,6 +253,7 @@ public class VideosLibrary {
         }
 
         Log.wtf("videoLibraries", "Returns null for: " + movie.title);
-        return null;
+
+        return new MovieObservableResult(position, null);
     }
 }
