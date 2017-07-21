@@ -212,6 +212,8 @@ public class MainActivity extends AppCompatActivity {
             //Successfully refresh
             appbarParams.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
                     | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
+
+            toolbar.setLayoutParams(appbarParams);
         }
         else
         {
