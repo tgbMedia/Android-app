@@ -117,6 +117,7 @@ dependencies {
 
     //GUI
     compile 'com.sackcentury:shinebutton:0.1.7'
+    compile 'com.github.crosswall:Android-Coverflow:release-v1.0.4'
 
     //TGB Server(client PC) Api
     compile project(':TGB Media server API')

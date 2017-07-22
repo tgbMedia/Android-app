@@ -1,5 +1,6 @@
 package com.tgb.media.component;
 
+import com.tgb.media.activities.DiscoverActivity;
 import com.tgb.media.activities.MainActivity;
 import com.tgb.media.activities.OverviewActivity;
 import com.tgb.media.activities.PlayerActivity;
@@ -20,6 +21,7 @@ import dagger.Component;
 
 public interface AppComponent {
     void inject(MainActivity activity);
+    void inject(DiscoverActivity activity);
     void inject(OverviewActivity activity);
     void inject(PlayerActivity activity);
 

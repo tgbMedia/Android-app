@@ -26,19 +26,20 @@ import com.tgb.media.helper.MovieObservableResult;
 import java.util.LinkedList;
 import java.util.List;
 
-public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHolder> {
+public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ThumbHolder> {
 
     private List<MovieOverviewModel> movies;
     private Activity mContext;
 
     private int columnHeight;
+    private int lastClickedItem = -1;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        private View container;
+    public class ThumbHolder extends RecyclerView.ViewHolder {
+        public View container;
         public ImageView thumbnail;
         public TextView title;
 
-        public MyViewHolder(View view) {
+        public ThumbHolder(View view) {
             super(view);
 
             container = view.findViewById(R.id.container);
@@ -73,15 +74,15 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ThumbHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.gallery_thumbnail, parent, false);
 
-        return new MyViewHolder(itemView);
+        return new ThumbHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(ThumbHolder holder, int position) {
         final MovieOverviewModel movie = movies.get(position);
 
         Glide.with(mContext).load("https://image.tmdb.org/t/p/w640/" + movie.getPosterPath())
@@ -93,6 +94,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
         holder.title.setText(movie.getTitle());
 
         holder.container.setOnClickListener(v -> {
+            lastClickedItem = position;
             Intent detailsActivityIntent = new Intent(mContext, OverviewActivity.class);
 
             detailsActivityIntent.setAction(OverviewActivity.MOVIE_ACTION);
@@ -118,6 +120,10 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
                 TableRow.LayoutParams.MATCH_PARENT, columnHeight);
 
         holder.container.setLayoutParams(params);
+    }
+
+    public int getLastClickedItem() {
+        return lastClickedItem;
     }
 
     @Override

@@ -7,6 +7,9 @@
     <!-- Overlay loading -->
     <color name="overlay_loading_background">#80000000</color>
 
+    <!--Carousel item -->
+    <color name="carousel_item_background">#272728</color>
+
     <!-- Gallery thumb -->
     <color name="gallery_thumb_text_background">#80000000</color>
     <color name="gallery_thumb_text_color">#eee</color>

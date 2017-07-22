@@ -3,6 +3,7 @@ package com.tgb.media.helper;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -71,7 +72,9 @@ public class LoadingDialog extends RelativeLayout {
 
         fadeOut.setAnimationListener(new Animation.AnimationListener() {
             @Override
-            public void onAnimationStart(Animation animation) {}
+            public void onAnimationStart(Animation animation) {
+                Log.i("Fdgdf", "dfgdfgdf");
+            }
 
             @Override
             public void onAnimationEnd(Animation animation) {
