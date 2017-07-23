@@ -23,6 +23,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
         android:textSize="14sp"
+        android:textColor="@color/carousel_item_title"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.011"

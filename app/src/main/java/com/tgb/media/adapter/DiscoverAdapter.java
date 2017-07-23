@@ -3,6 +3,7 @@ package com.tgb.media.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Point;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -14,6 +15,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.merhold.extensiblepageindicator.ExtensiblePageIndicator;
@@ -74,7 +76,9 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 itemView = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.carousel_row, parent, false);
 
-                holder = new CarouselHolder(context, itemView);
+                /*(Activity context, int orientation,
+                              Point screenDimensions, View view)*/
+                holder = new CarouselHolder(context, orientation, screenDimensions, itemView);
 
                 break;
 
@@ -98,20 +102,36 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     class CarouselHolder extends RecyclerView.ViewHolder implements IHolder{
 
         private Context context;
+        private Point screenDimensions;
+        private int orientation;
 
         @BindView(R.id.videos_carousel) PagerContainer videosCarousel;
+        @BindView(R.id.overlap_pager) ViewPager pager;
         @BindView(R.id.indicator) ExtensiblePageIndicator indicator;
 
-        public CarouselHolder(Context context, View view) {
+        public CarouselHolder(Activity context, int orientation,
+                              Point screenDimensions, View view){
             super(view);
             ButterKnife.bind(this, view);
 
             this.context = context;
+            this.screenDimensions = screenDimensions;
+            this.orientation = orientation;
         }
 
         @Override
         public void onBind(DiscoverModel model) {
             CarouselAdapter adapter = new CarouselAdapter(context, model.getList());
+
+            //Dimensions
+            final int carouselHeight = orientation == Configuration.ORIENTATION_PORTRAIT
+                    ? (int)(screenDimensions.y * 0.33)
+                    : (int)(screenDimensions.y * 0.61);
+
+            FrameLayout.LayoutParams carouselParams = new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, carouselHeight);
+
+            pager.setLayoutParams(carouselParams);
 
             //Carousel pager
             ViewPager pager =  videosCarousel.getViewPager();

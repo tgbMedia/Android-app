@@ -14,8 +14,8 @@
 
         <android.support.v4.view.ViewPager
             android:id="@+id/overlap_pager"
-            android:layout_width="315dp"
-            android:layout_height="215dp"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
             android:layout_gravity="center"/>
 
     </me.crosswall.lib.coverflow.core.PagerContainer>
