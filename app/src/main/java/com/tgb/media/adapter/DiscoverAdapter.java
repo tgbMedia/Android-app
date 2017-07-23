@@ -1,16 +1,22 @@
 package com.tgb.media.adapter;
 
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Point;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.merhold.extensiblepageindicator.ExtensiblePageIndicator;
 import com.tgb.media.R;
 import com.tgb.media.adapter.model.DiscoverModel;
+import com.tgb.media.helper.SpacesItemDecoration;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -22,12 +28,16 @@ import me.crosswall.lib.coverflow.core.PagerContainer;
 
 public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private Context context;
-    public List<DiscoverModel> list;
+    private Activity context;
+    private List<DiscoverModel> list;
+    private int orientation;
+    private Point screenDimensions;
 
-    public DiscoverAdapter(Context context){
+    public DiscoverAdapter(Activity context, int orientation, Point screenDimensions){
         this.context = context;
         this.list = new LinkedList<>();
+        this.orientation = orientation;
+        this.screenDimensions = screenDimensions;
     }
 
     public void clear() {
@@ -54,13 +64,22 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         RecyclerView.ViewHolder holder= null;
+        View itemView;
 
         switch(viewType){
             case DiscoverModel.CAROUSEL:
-                View itemView = LayoutInflater.from(parent.getContext())
+                itemView = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.carousel_row, parent, false);
 
                 holder = new CarouselHolder(context, itemView);
+
+                break;
+
+            case DiscoverModel.LIST:
+                itemView = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.videos_list_row, parent, false);
+
+                holder = new VideosListHolder(context, orientation, screenDimensions, itemView);
 
                 break;
         }
@@ -107,6 +126,46 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     .build();
 
             indicator.initViewPager(pager);
+        }
+    }
+
+    class VideosListHolder extends RecyclerView.ViewHolder implements IHolder{
+
+        private Activity context;
+        private int orientation;
+        private Point screenDimensions;
+
+        @BindView(R.id.title) TextView title;
+        @BindView(R.id.videos) RecyclerView videosList;
+
+        public VideosListHolder(Activity context, int orientation,
+                                Point screenDimensions, View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+
+            this.context = context;
+            this.orientation = orientation;
+            this.screenDimensions = screenDimensions;
+
+            LinearLayoutManager layoutManager
+                    = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+
+            videosList.setLayoutManager(layoutManager);
+        }
+
+        @Override
+        public void onBind(DiscoverModel model) {
+            DiscoverListAdapter adapter =  new DiscoverListAdapter(
+                    this.context,
+                    this.screenDimensions,
+                    this.orientation
+            );
+
+            adapter.setList(model.getList());
+
+            videosList.setItemAnimator(new DefaultItemAnimator());
+            videosList.addItemDecoration(new SpacesItemDecoration(5));
+            videosList.setAdapter(adapter);
         }
     }
 

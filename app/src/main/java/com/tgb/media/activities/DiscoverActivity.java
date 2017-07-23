@@ -1,15 +1,18 @@
 package com.tgb.media.activities;
 
+import android.content.Context;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Display;
+import android.view.WindowManager;
 
 import com.tgb.media.R;
 import com.tgb.media.TgbApp;
@@ -47,6 +50,7 @@ public class DiscoverActivity extends AppCompatActivity {
 
     //Params
     private AppBarLayout.LayoutParams appbarParams;
+    private Point screenDimensions;
 
     //Adapters
     private DiscoverAdapter mAdapter;
@@ -83,11 +87,26 @@ public class DiscoverActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //Adapters
-        mAdapter = new DiscoverAdapter(getBaseContext());
+        WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+
+        screenDimensions = new Point();
+        display.getSize(screenDimensions);
+
+        mAdapter = new DiscoverAdapter(
+                this,
+                getResources().getConfiguration().orientation,
+                screenDimensions
+        );
+
         discoverModels = new LinkedList<>();
 
         discoverModels.add(
                 new DiscoverModel(DiscoverModel.CAROUSEL)
+        );
+
+        discoverModels.add(
+                new DiscoverModel(DiscoverModel.LIST)
         );
 
         //Recycler view grid
@@ -137,6 +156,9 @@ public class DiscoverActivity extends AppCompatActivity {
 
                     if(item.position > 25 && item.position % 4 == 0 && currentPosition.incrementAndGet() < 4)
                         discoverModels.get(0).getList().add(item.getMovie());
+
+                    if(currentPosition.get() < 10)
+                        discoverModels.get(1).getList().add(item.getMovie());
                 })
                 .doOnComplete(this::onCompleted)
                 .subscribe();
@@ -180,6 +202,10 @@ public class DiscoverActivity extends AppCompatActivity {
             toolbar.setLayoutParams(appbarParams);
 
             mAdapter.addItem(discoverModels.get(0));
+            mAdapter.addItem(discoverModels.get(1));
+            mAdapter.addItem(discoverModels.get(1));
+            mAdapter.addItem(discoverModels.get(1));
+            mAdapter.addItem(discoverModels.get(1));
         }
         else
         {
