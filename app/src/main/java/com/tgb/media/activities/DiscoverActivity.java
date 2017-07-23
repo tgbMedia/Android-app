@@ -106,7 +106,7 @@ public class DiscoverActivity extends AppCompatActivity {
         );
 
         discoverModels.add(
-                new DiscoverModel(DiscoverModel.LIST)
+                new DiscoverModel(DiscoverModel.LIST, "Most recent")
         );
 
         //Recycler view grid
@@ -154,10 +154,10 @@ public class DiscoverActivity extends AppCompatActivity {
                 .doOnNext(item -> {
                     videos[item.position] = item;
 
-                    if(item.position > 25 && item.position % 4 == 0 && currentPosition.incrementAndGet() < 4)
+                    if(item.position > 18 && currentPosition.incrementAndGet() < 4)
                         discoverModels.get(0).getList().add(item.getMovie());
 
-                    if(currentPosition.get() < 10)
+                    if(item.position > 8 && currentPosition.get() < 10)
                         discoverModels.get(1).getList().add(item.getMovie());
                 })
                 .doOnComplete(this::onCompleted)

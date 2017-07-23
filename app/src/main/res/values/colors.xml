@@ -7,6 +7,9 @@
     <!-- Overlay loading -->
     <color name="overlay_loading_background">#80000000</color>
 
+    <!-- Discover activity -->
+    <color name="discover_list_title">#c1c1c1</color>
+
     <!--Carousel item -->
     <color name="carousel_item_background">#272728</color>
 

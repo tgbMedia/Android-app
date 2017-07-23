@@ -10,8 +10,7 @@
         android:id="@+id/videos_carousel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="15dp">
+        android:layout_marginTop="@dimen/carousel_top_margin">
 
         <android.support.v4.view.ViewPager
             android:id="@+id/overlap_pager"
@@ -19,16 +18,15 @@
             android:layout_height="215dp"
             android:layout_gravity="center"/>
 
-
     </me.crosswall.lib.coverflow.core.PagerContainer>
-
 
     <com.merhold.extensiblepageindicator.ExtensiblePageIndicator
         android:id="@+id/indicator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:indicatorRadius="3dp"
-        android:layout_marginBottom="80dp"
-        android:layout_gravity="bottom" />
+        app:indicatorRadius="@dimen/indicator_size"
+        android:layout_marginTop="@dimen/carousel_indicator_top_margin"
+        android:layout_marginBottom="@dimen/carousel_indicator_bottom_margin"
+        android:layout_gravity="bottom|center" />
 
 </LinearLayout>

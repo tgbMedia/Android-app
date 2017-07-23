@@ -7,7 +7,10 @@ import android.graphics.Point;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -151,6 +154,9 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
 
             videosList.setLayoutManager(layoutManager);
+
+            SnapHelper snapHelper = new LinearSnapHelper();
+            snapHelper.attachToRecyclerView(videosList);
         }
 
         @Override
@@ -166,6 +172,9 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             videosList.setItemAnimator(new DefaultItemAnimator());
             videosList.addItemDecoration(new SpacesItemDecoration(5));
             videosList.setAdapter(adapter);
+
+            if(!TextUtils.isEmpty(model.getTitle()))
+                title.setText(model.getTitle());
         }
     }
 

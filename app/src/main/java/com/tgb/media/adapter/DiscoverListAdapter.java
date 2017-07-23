@@ -1,17 +1,14 @@
 package com.tgb.media.adapter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -113,12 +110,6 @@ public class DiscoverListAdapter extends RecyclerView.Adapter<DiscoverListAdapte
 
             mContext.startActivity(detailsActivityIntent, options.toBundle());
         });
-
-        WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-
-        Point size = new Point();
-        display.getSize(size);
 
         TableRow.LayoutParams params = new TableRow.LayoutParams(
                 (int)(columnHeight * 0.66), columnHeight);

@@ -7,6 +7,12 @@
     <dimen name="thumb_elevation">3dp</dimen>
     <dimen name="thumb_title_padding">4dp</dimen>
 
+    <!-- Discover activity -->
+    <dimen name="carousel_top_margin">15dp</dimen>
+    <dimen name="carousel_indicator_top_margin">10dp</dimen>
+    <dimen name="carousel_indicator_bottom_margin">17dp</dimen>
+    <dimen name="indicator_size">3dp</dimen>
+
     <!-- Titles -->
     <dimen name="high_title">18sp</dimen>
 
