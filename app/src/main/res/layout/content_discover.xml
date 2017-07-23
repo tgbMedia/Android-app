@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:fillViewport="true"
-    tools:context=".activities.DiscoverActivity"
+    tools:context=".activities.MainActivity"
     tools:showIn="@layout/activity_main">
 
     <android.support.v4.widget.SwipeRefreshLayout
@@ -15,33 +15,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:orientation="vertical"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <me.crosswall.lib.coverflow.core.PagerContainer
-                android:id="@+id/videos_carousel"
-                android:layout_width="match_parent"
-                android:layout_height="244dp">
-
-                <android.support.v4.view.ViewPager
-                    android:id="@+id/overlap_pager"
-                    android:layout_width="340dp"
-                    android:layout_height="234dp"
-                    android:layout_gravity="center" />
-
-
-            </me.crosswall.lib.coverflow.core.PagerContainer>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="sdf0sd5"/>
-
-        </LinearLayout>
-
-
+            android:layout_height="wrap_content"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:scrollbars="vertical"
+            android:focusable="true"
+            android:layoutDirection="ltr"/>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

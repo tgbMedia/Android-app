@@ -3,24 +3,28 @@ package com.tgb.media.activities;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.widget.Toast;
 
 import com.tgb.media.R;
 import com.tgb.media.TgbApp;
-import com.tgb.media.adapter.CarouselAdapter;
+import com.tgb.media.adapter.DiscoverAdapter;
+import com.tgb.media.adapter.model.DiscoverModel;
 import com.tgb.media.helper.LoadingDialog;
 import com.tgb.media.helper.MovieObservableResult;
 import com.tgb.media.helper.OverlayMessageView;
+import com.tgb.media.helper.SpacesItemDecoration;
 import com.tgb.media.server.TgbAPI;
 import com.tgb.media.server.models.Response;
 import com.tgb.media.videos.VideosLibrary;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -31,8 +35,6 @@ import butterknife.ButterKnife;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import me.crosswall.lib.coverflow.CoverFlow;
-import me.crosswall.lib.coverflow.core.PagerContainer;
 
 public class DiscoverActivity extends AppCompatActivity {
 
@@ -40,14 +42,15 @@ public class DiscoverActivity extends AppCompatActivity {
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.loading_dialog) LoadingDialog loadingDialog;
     @BindView(R.id.swiperefresh) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.recycler_view) RecyclerView recyclerView;
     @BindView(R.id.overlay_message) OverlayMessageView overlayMessageView;
-    @BindView(R.id.videos_carousel) PagerContainer videosCarousel;
 
     //Params
     private AppBarLayout.LayoutParams appbarParams;
 
     //Adapters
-    private CarouselAdapter mAdapter;
+    private DiscoverAdapter mAdapter;
+    private List<DiscoverModel> discoverModels;
 
     //TGB Api
     @Inject TgbAPI tgbAPI;
@@ -80,21 +83,21 @@ public class DiscoverActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //Adapters
-        mAdapter = new CarouselAdapter(getBaseContext());
+        mAdapter = new DiscoverAdapter(getBaseContext());
+        discoverModels = new LinkedList<>();
 
-        //Carousel pager
-//        ViewPager pager =  videosCarousel.getViewPager();
-//
-//        pager.setAdapter(mAdapter);
-//        pager.setClipChildren(false);
-//        pager.setOffscreenPageLimit(15);
-//        pager.setCurrentItem(1);
-//
-//        new CoverFlow.Builder()
-//                .with(pager)
-//                .scale(0.13f)
-//                .spaceSize(300f)
-//                .build();
+        discoverModels.add(
+                new DiscoverModel(DiscoverModel.CAROUSEL)
+        );
+
+        //Recycler view grid
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext(),
+                LinearLayoutManager.VERTICAL, false);
+
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new SpacesItemDecoration(5));
+        recyclerView.setAdapter(mAdapter);
 
         //UI
         appbarParams = (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
@@ -103,9 +106,6 @@ public class DiscoverActivity extends AppCompatActivity {
             videos = null;
             loadingDialog.show(view -> refresh());
         });
-
-        videosCarousel.setPageItemClickListener((view, position) ->
-                Toast.makeText(getBaseContext(),"position:" + position,Toast.LENGTH_SHORT).show());
 
         refresh();
     }
@@ -135,8 +135,8 @@ public class DiscoverActivity extends AppCompatActivity {
                 .doOnNext(item -> {
                     videos[item.position] = item;
 
-                    if(item.position % 4 == 0 && currentPosition.incrementAndGet() < 5)
-                        mAdapter.addItem(item);
+                    if(item.position > 25 && item.position % 4 == 0 && currentPosition.incrementAndGet() < 4)
+                        discoverModels.get(0).getList().add(item.getMovie());
                 })
                 .doOnComplete(this::onCompleted)
                 .subscribe();
@@ -178,6 +178,8 @@ public class DiscoverActivity extends AppCompatActivity {
                     | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
 
             toolbar.setLayoutParams(appbarParams);
+
+            mAdapter.addItem(discoverModels.get(0));
         }
         else
         {
@@ -185,22 +187,6 @@ public class DiscoverActivity extends AppCompatActivity {
             overlayMessageView.show();
         }
 
-        //swipeRefreshLayout.setEnabled(true);
-
-        //Carousel pager
-        ViewPager pager =  videosCarousel.getViewPager();
-
-        pager.setAdapter(mAdapter);
-        pager.setClipChildren(false);
-        pager.setOffscreenPageLimit(15);
-        pager.setCurrentItem(1);
-
-        new CoverFlow.Builder()
-                .with(pager)
-                .pagerMargin(5)
-                .spaceSize(0f)
-                .scale(0.13f)
-                .build();
     }
 
     @Override

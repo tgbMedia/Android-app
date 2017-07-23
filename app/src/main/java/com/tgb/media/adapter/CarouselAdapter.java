@@ -28,6 +28,11 @@ public class CarouselAdapter extends PagerAdapter{
         this.videos = new ArrayList<>();
     }
 
+    public CarouselAdapter(Context context, List<MovieOverviewModel> videos){
+        this.context = context;
+        this.videos = videos;
+    }
+
     public void clear() {
         videos.clear();
         notifyDataSetChanged();
