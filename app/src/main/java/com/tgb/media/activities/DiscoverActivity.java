@@ -18,6 +18,7 @@ import com.tgb.media.R;
 import com.tgb.media.TgbApp;
 import com.tgb.media.adapter.DiscoverAdapter;
 import com.tgb.media.adapter.model.DiscoverModel;
+import com.tgb.media.database.GenreModel;
 import com.tgb.media.helper.LoadingDialog;
 import com.tgb.media.helper.MovieObservableResult;
 import com.tgb.media.helper.OverlayMessageView;
@@ -26,8 +27,10 @@ import com.tgb.media.server.TgbAPI;
 import com.tgb.media.server.models.Response;
 import com.tgb.media.videos.VideosLibrary;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -54,7 +57,10 @@ public class DiscoverActivity extends AppCompatActivity {
 
     //Adapters
     private DiscoverAdapter mAdapter;
-    private List<DiscoverModel> discoverModels;
+
+    //Lists & Maps
+    private DiscoverModel carouselModel;
+    private Map<Long, DiscoverModel> videosByGenre;
 
     //TGB Api
     @Inject TgbAPI tgbAPI;
@@ -66,6 +72,7 @@ public class DiscoverActivity extends AppCompatActivity {
 
     //Finals
     private static final int REQUEST_TIMEOUT = 5; //Seconds
+    private static final int MIN_VIDEOS_IN_LLST = 2;
     private static final String VIDEOS_KEY = "videos";
 
     @Override
@@ -90,6 +97,9 @@ public class DiscoverActivity extends AppCompatActivity {
         WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
 
+        //Lists & Maps
+        this.videosByGenre = new HashMap<>();
+
         screenDimensions = new Point();
         display.getSize(screenDimensions);
 
@@ -99,15 +109,8 @@ public class DiscoverActivity extends AppCompatActivity {
                 screenDimensions
         );
 
-        discoverModels = new LinkedList<>();
+        carouselModel = new DiscoverModel(DiscoverModel.CAROUSEL);
 
-        discoverModels.add(
-                new DiscoverModel(DiscoverModel.CAROUSEL)
-        );
-
-        discoverModels.add(
-                new DiscoverModel(DiscoverModel.LIST, "Most recent")
-        );
 
         //Recycler view grid
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext(),
@@ -154,11 +157,24 @@ public class DiscoverActivity extends AppCompatActivity {
                 .doOnNext(item -> {
                     videos[item.position] = item;
 
-                    if(item.position > 18 && currentPosition.incrementAndGet() < 4)
-                        discoverModels.get(0).getList().add(item.getMovie());
+                    for(GenreModel genere : item.getMovie().getGenres()){
+                        //Create new list if doesn't exists
+                        if(!videosByGenre.containsKey(genere.getId()))
+                        {
+                            videosByGenre.put(
+                                    genere.getId(),
+                                    new DiscoverModel(DiscoverModel.LIST, genere.getName())
+                            );
+                        }
 
-                    if(item.position > 8 && currentPosition.get() < 10)
-                        discoverModels.get(1).getList().add(item.getMovie());
+                        videosByGenre.get(genere.getId())
+                                .getList()
+                                .add(item.getMovie());
+                    }
+
+                    if(item.position > 18 && currentPosition.incrementAndGet() < 4)
+                        carouselModel.getList().add(item.getMovie());
+
                 })
                 .doOnComplete(this::onCompleted)
                 .subscribe();
@@ -201,11 +217,15 @@ public class DiscoverActivity extends AppCompatActivity {
 
             toolbar.setLayoutParams(appbarParams);
 
-            mAdapter.addItem(discoverModels.get(0));
-            mAdapter.addItem(discoverModels.get(1));
-            mAdapter.addItem(discoverModels.get(1));
-            mAdapter.addItem(discoverModels.get(1));
-            mAdapter.addItem(discoverModels.get(1));
+            //Add carousel
+            mAdapter.addItem(carouselModel);
+
+            //Add genres
+            for(DiscoverModel model : videosByGenre.values())
+            {
+                if(model.getList().size() > MIN_VIDEOS_IN_LLST)
+                    mAdapter.addItem(model);
+            }
         }
         else
         {
