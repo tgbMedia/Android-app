@@ -33,6 +33,10 @@ public class DiscoverModel {
         this.type = type;
     }
 
+    public void setList(List<MovieOverviewModel> list) {
+        this.list = list;
+    }
+
     public List<MovieOverviewModel> getList() {
         return list;
     }

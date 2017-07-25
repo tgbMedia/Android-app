@@ -27,10 +27,12 @@ import com.tgb.media.server.TgbAPI;
 import com.tgb.media.server.models.Response;
 import com.tgb.media.videos.VideosLibrary;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -59,7 +61,6 @@ public class DiscoverActivity extends AppCompatActivity {
     private DiscoverAdapter mAdapter;
 
     //Lists & Maps
-    private DiscoverModel carouselModel;
     private Map<Long, DiscoverModel> videosByGenre;
 
     //TGB Api
@@ -72,7 +73,9 @@ public class DiscoverActivity extends AppCompatActivity {
 
     //Finals
     private static final int REQUEST_TIMEOUT = 5; //Seconds
-    private static final int MIN_VIDEOS_IN_LLST = 2;
+    private static final int MIN_VIDEOS_IN_LIST = 2;
+    private static final int MAX_VIDEOS_LIST = 5;
+    private static final int MAX_VIDEOS_CAROUSEL = 3;
     private static final String VIDEOS_KEY = "videos";
 
     @Override
@@ -108,9 +111,6 @@ public class DiscoverActivity extends AppCompatActivity {
                 getResources().getConfiguration().orientation,
                 screenDimensions
         );
-
-        carouselModel = new DiscoverModel(DiscoverModel.CAROUSEL);
-
 
         //Recycler view grid
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext(),
@@ -171,10 +171,6 @@ public class DiscoverActivity extends AppCompatActivity {
                                 .getList()
                                 .add(item.getMovie());
                     }
-
-                    if(item.position > 18 && currentPosition.incrementAndGet() < 4)
-                        carouselModel.getList().add(item.getMovie());
-
                 })
                 .doOnComplete(this::onCompleted)
                 .subscribe();
@@ -217,14 +213,34 @@ public class DiscoverActivity extends AppCompatActivity {
 
             toolbar.setLayoutParams(appbarParams);
 
-            //Add carousel
-            mAdapter.addItem(carouselModel);
+            //Sort genres list
+            List<DiscoverModel> models = new ArrayList<>(videosByGenre.values());
+
+            Collections.sort(models, (modelA, modelB) ->
+                    Integer.compare(modelB.getList().size(), modelA.getList().size()));
 
             //Add genres
-            for(DiscoverModel model : videosByGenre.values())
-            {
-                if(model.getList().size() > MIN_VIDEOS_IN_LLST)
-                    mAdapter.addItem(model);
+            for(int i = 0; i < MAX_VIDEOS_LIST; i++){
+                if(models.get(i).getList().size() > MIN_VIDEOS_IN_LIST)
+                {
+                    long seed = System.nanoTime();
+                    Collections.shuffle(models.get(i).getList(), new Random(seed));
+
+                    //Create carousel videos list
+                    if(i == 0){
+                        //mAdapter.addItem(new DiscoverModel(DiscoverModel.CAROUSEL));
+                        DiscoverModel model = new DiscoverModel(DiscoverModel.CAROUSEL);
+
+                        model.setList(models.get(i)
+                                .getList()
+                                .subList(0, MAX_VIDEOS_CAROUSEL)
+                        );
+
+                        mAdapter.addItem(model);
+                    }
+
+                    mAdapter.addItem(models.get(i));
+                }
             }
         }
         else

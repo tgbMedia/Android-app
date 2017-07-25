@@ -187,7 +187,8 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             adapter.setList(model.getList());
 
             videosList.setItemAnimator(new DefaultItemAnimator());
-            videosList.addItemDecoration(new SpacesItemDecoration(5));
+            //videosList.addItemDecoration(new SpacesItemDecoration(5));
+            videosList.setHasFixedSize(true);
             videosList.setAdapter(adapter);
 
             if(!TextUtils.isEmpty(model.getTitle()))
