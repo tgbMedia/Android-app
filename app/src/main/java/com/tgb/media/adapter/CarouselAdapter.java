@@ -1,6 +1,8 @@
 package com.tgb.media.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.tgb.media.R;
+import com.tgb.media.activities.OverviewActivity;
 import com.tgb.media.database.MovieOverviewModel;
 import com.tgb.media.helper.MovieObservableResult;
 
@@ -67,6 +70,15 @@ public class CarouselAdapter extends PagerAdapter{
         movieReleaseDate.setTimeInMillis(movie.getReleaseDate());
 
         subtitle.setText(movieReleaseDate.get(Calendar.YEAR) + "");
+
+        view.setOnClickListener(v -> {
+            Intent detailsActivityIntent = new Intent(context, OverviewActivity.class);
+
+            detailsActivityIntent.setAction(OverviewActivity.MOVIE_ACTION);
+            detailsActivityIntent.putExtra(OverviewActivity.MOVIE_ID, movie.getId());
+
+            context.startActivity(detailsActivityIntent);
+        });
 
         container.addView(view);
 

@@ -12,15 +12,18 @@ import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.merhold.extensiblepageindicator.ExtensiblePageIndicator;
 import com.tgb.media.R;
 import com.tgb.media.adapter.model.DiscoverModel;
+import com.tgb.media.helper.PageIndicator;
 import com.tgb.media.helper.SpacesItemDecoration;
 
 import java.util.LinkedList;
@@ -107,7 +110,7 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         @BindView(R.id.videos_carousel) PagerContainer videosCarousel;
         @BindView(R.id.overlap_pager) ViewPager pager;
-        @BindView(R.id.indicator) ExtensiblePageIndicator indicator;
+        @BindView(R.id.indicator) PageIndicator indicator;
 
         public CarouselHolder(Activity context, int orientation,
                               Point screenDimensions, View view){
@@ -145,8 +148,6 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     .scale(0.13f)
                     .build();
 
-
-
             indicator.initViewPager(pager);
         }
     }
@@ -173,9 +174,6 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
 
             videosList.setLayoutManager(layoutManager);
-
-            //SnapHelper snapHelper = new LinearSnapHelper();
-            //snapHelper.attachToRecyclerView(videosList);
         }
 
         @Override

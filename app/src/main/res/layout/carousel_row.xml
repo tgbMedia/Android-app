@@ -22,7 +22,7 @@
 
     </me.crosswall.lib.coverflow.core.PagerContainer>
 
-    <com.merhold.extensiblepageindicator.ExtensiblePageIndicator
+    <com.tgb.media.helper.PageIndicator
         android:id="@+id/indicator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
