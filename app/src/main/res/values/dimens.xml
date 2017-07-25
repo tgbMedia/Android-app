@@ -9,9 +9,15 @@
 
     <!-- Discover activity -->
     <dimen name="carousel_top_margin">15dp</dimen>
+    <dimen name="carousel_item_title">14dp</dimen>
+    <dimen name="carousel_item_subtitle">10sp</dimen>
+    <dimen name="carousel_padding">0dp</dimen>
     <dimen name="carousel_indicator_top_margin">10dp</dimen>
     <dimen name="carousel_indicator_bottom_margin">17dp</dimen>
     <dimen name="indicator_size">3dp</dimen>
+    <dimen name="videos_list_recycler_top_margin">8dp</dimen>
+    <dimen name="videos_list_title_margin">10dp</dimen>
+    <dimen name="videos_list_title_text_size">18sp</dimen>
 
     <!-- Titles -->
     <dimen name="high_title">18sp</dimen>

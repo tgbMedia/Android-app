@@ -68,7 +68,6 @@ public class CarouselAdapter extends PagerAdapter{
 
         subtitle.setText(movieReleaseDate.get(Calendar.YEAR) + "");
 
-
         container.addView(view);
 
         return view;

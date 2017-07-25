@@ -125,16 +125,13 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             //Dimensions
             final int carouselHeight = orientation == Configuration.ORIENTATION_PORTRAIT
-                    ? (int)(screenDimensions.y * 0.33)
+                    ? (int)(screenDimensions.y * 0.37)
                     : (int)(screenDimensions.y * 0.61);
 
             FrameLayout.LayoutParams carouselParams = new FrameLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, carouselHeight);
 
             pager.setLayoutParams(carouselParams);
-
-            //Carousel pager
-            ViewPager pager =  videosCarousel.getViewPager();
 
             pager.setAdapter(adapter);
             pager.setClipChildren(false);
@@ -147,6 +144,8 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     .spaceSize(10)
                     .scale(0.13f)
                     .build();
+
+
 
             indicator.initViewPager(pager);
         }
@@ -175,8 +174,8 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             videosList.setLayoutManager(layoutManager);
 
-            SnapHelper snapHelper = new LinearSnapHelper();
-            snapHelper.attachToRecyclerView(videosList);
+            //SnapHelper snapHelper = new LinearSnapHelper();
+            //snapHelper.attachToRecyclerView(videosList);
         }
 
         @Override

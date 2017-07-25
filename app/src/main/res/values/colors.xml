@@ -11,7 +11,8 @@
     <color name="discover_list_title">#c1c1c1</color>
 
     <!--Carousel item -->
-    <color name="carousel_item_title">#eeeeee</color>
+    <color name="carousel_item_title">#fff</color>
+    <color name="carousel_item_subtitle">#eeeeee</color>
     <color name="carousel_item_background">#272728</color>
 
     <!-- Gallery thumb -->

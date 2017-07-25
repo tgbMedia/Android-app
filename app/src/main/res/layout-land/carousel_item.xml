@@ -7,27 +7,36 @@
     android:layout_height="match_parent"
     android:background="@color/carousel_item_background">
 
+
     <android.support.constraint.Guideline
         android:id="@+id/thumb_guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent=".8" />
+        app:layout_constraintGuide_percent=".65"
+        android:orientation="vertical" />
+
+    <ImageView
+        android:id="@+id/video_thumb"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toStartOf="@+id/thumb_guideline"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <TextView
         android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.011"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/thumb_guideline"
-        app:layout_constraintVertical_bias="0.174"
+        app:layout_constraintStart_toStartOf="@+id/thumb_guideline"
+        app:layout_constraintTop_toTopOf="parent"
         android:textSize="@dimen/carousel_item_title"
         android:textColor="@color/carousel_item_title"
         android:singleLine="true"
@@ -41,24 +50,10 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
         android:textSize="@dimen/carousel_item_subtitle"
-        android:textColor="#fff"
         app:layout_constraintEnd_toEndOf="@+id/title"
         app:layout_constraintStart_toStartOf="@+id/title"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
-
-    <ImageView
-        android:id="@+id/video_thumb"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/thumb_guideline"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:scaleType="centerCrop"/>
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        android:textColor="@color/carousel_item_subtitle"/>
 
 
 </android.support.constraint.ConstraintLayout>

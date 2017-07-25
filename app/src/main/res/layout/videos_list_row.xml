@@ -3,21 +3,22 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="10dp">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/discover_list_title"
-        android:textSize="18sp"/>
+        android:layout_marginTop="@dimen/videos_list_title_margin"
+        android:layout_marginStart="@dimen/videos_list_title_margin"
+        android:textSize="@dimen/videos_list_title_text_size"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/videos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
-        android:layout_marginTop="9dp"/>
+        android:layout_marginTop="@dimen/videos_list_recycler_top_margin"/>
 
 </RelativeLayout>
