@@ -57,7 +57,7 @@ public class OverviewActivity extends AppCompatActivity {
 
     //Elements
     @BindView(R.id.theme_poster) ImageView theme;
-    @BindView(R.id.theme_play_container) View themePlayButtonContainer;
+    @BindView(R.id.trailer_button) View themePlayButtonContainer;
     @BindView(R.id.poster) ImageView poster;
     @BindView(R.id.title) TextView title;
     @BindView(R.id.subtitle) TextView subtitle;
@@ -148,6 +148,24 @@ public class OverviewActivity extends AppCompatActivity {
                 }
             });
         }
+//        if(!TextUtils.isEmpty(movie.getYoutubeTrailer())){
+//            themePlayButtonContainer.setVisibility(View.VISIBLE);
+//
+//            themePlayButtonContainer.setOnClickListener(view -> {
+//
+//                Intent intent = YouTubeStandalonePlayer.createVideoIntent(
+//                        this, getString(R.string.google_api_key),
+//                        movie.getYoutubeTrailer(), 0, true, false);
+//
+//                if (canResolveIntent(intent)) {
+//                    startActivityForResult(intent, REQ_START_STANDALONE_PLAYER);
+//                } else {
+//                    // Could not resolve the intent - must need to install or update the YouTube API service.
+//                    YouTubeInitializationResult.SERVICE_MISSING
+//                            .getErrorDialog(this, REQ_RESOLVE_SERVICE_MISSING).show();
+//                }
+//            });
+//        }
 
         //Play button
         playButton.setOnClickListener(v -> {

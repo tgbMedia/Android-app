@@ -37,13 +37,13 @@ android {
         }
     }
 
-    flavorDimensions("dev", "prod")
+    flavorDimensions("dev2", "prod")
 
     productFlavors {
         dev {
-            dimension "dev"
+            dimension "dev2"
             versionNameSuffix "-dev"
-            applicationIdSuffix '.dev'
+            applicationIdSuffix '.dev2'
             minSdkVersion 21
         }
 

@@ -71,7 +71,6 @@
                 android:orientation="vertical">
 
                 <android.support.percent.PercentRelativeLayout
-                    android:id="@id/content_container"
                     app:layout_widthPercent="92%"
                     android:layout_height="wrap_content"
                     app:layout_marginStartPercent="4%">
@@ -188,11 +187,20 @@
                             android:adjustViewBounds="true"
                             android:layout_marginStart="@dimen/details_icons_start_margin"/> -->
 
+                        <ImageView
+                            android:id="@+id/trailer_button"
+                            android:layout_height="match_parent"
+                            android:layout_width="@dimen/details_icons_size"
+                            app:srcCompat="@drawable/ic_trailer_button"
+                            android:adjustViewBounds="true"
+                            android:layout_marginStart="@dimen/details_icons_start_margin"/>
+
                         <android.support.percent.PercentRelativeLayout
                             android:orientation="horizontal"
                             android:layout_height="match_parent"
                             android:layout_width="@dimen/details_icons_huge_size"
-                            android:layout_marginStart="@dimen/details_icons_start_margin">
+                            android:layout_marginStart="@dimen/details_icons_start_margin"
+                            android:visibility="gone">
 
                             <TextView
                                 android:id="@+id/rating"

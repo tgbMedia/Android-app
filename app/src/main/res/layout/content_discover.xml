@@ -20,8 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scrollbars="none"
-            android:focusable="true"
-            android:layoutDirection="ltr"/>
+            android:focusable="true"/>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
