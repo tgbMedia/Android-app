@@ -273,7 +273,10 @@ public class VideoPlayerActivity extends AppCompatActivity
                 stateString = "ExoPlayer.STATE_BUFFERING -";
                 break;
             case ExoPlayer.STATE_READY:
-                loadingDialog.hide(v -> playerView.setUseController(true));
+                loadingDialog.hide(v -> {
+                    playerView.setUseController(true);
+                    playerView.showController();
+                });
                 stateString = "ExoPlayer.STATE_READY     -";
                 break;
             case ExoPlayer.STATE_ENDED:

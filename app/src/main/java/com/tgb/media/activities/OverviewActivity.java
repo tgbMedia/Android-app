@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -76,6 +77,7 @@ public class OverviewActivity extends AppCompatActivity {
     @BindView(R.id.cast_list) RecyclerView castList;
     @BindView(R.id.play_button) FloatingActionButton playButton;
     @BindView(R.id.container) LinearLayout container;
+    @BindView(R.id.cast_container) RelativeLayout castContainer;
 
     //Properties
     private boolean alreadyPushedDown = false;
@@ -267,16 +269,13 @@ public class OverviewActivity extends AppCompatActivity {
             //int width = size.x;
 
             LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams)
-                    findViewById(R.id.cast_container).getLayoutParams();
+                    castContainer.getLayoutParams();
 
             int screenHeight = size.y - lp.topMargin;
-
-
             int containerHeight = container.getHeight();
-
             int topMargin = screenHeight - containerHeight - 50;
 
-            ((LinearLayout.LayoutParams) findViewById(R.id.cast_container).getLayoutParams())
+            ((LinearLayout.LayoutParams) castContainer.getLayoutParams())
                     .setMargins(0, topMargin < 60 ? 60 : topMargin, 0, 0);
 
             alreadyPushedDown = true;
