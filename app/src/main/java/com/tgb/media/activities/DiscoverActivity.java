@@ -249,6 +249,7 @@ public class DiscoverActivity extends AppCompatActivity {
             overlayMessageView.show();
         }
 
+        swipeRefreshLayout.setEnabled(true);
     }
 
     @Override

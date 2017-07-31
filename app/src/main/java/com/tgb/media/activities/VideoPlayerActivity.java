@@ -91,6 +91,7 @@ public class VideoPlayerActivity extends AppCompatActivity
         //Player settings
         player.addListener(this);
         player.setPlayWhenReady(true);
+        playerView.setUseController(false);
     }
 
     private void initializePlayer(){
