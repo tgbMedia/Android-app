@@ -48,8 +48,12 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 public class OverviewActivity extends AppCompatActivity {
+
+    //Tags
+    private static final String TAG = OverviewActivity.class.getName();
 
     //Tmdb API
     @Inject VideosLibrary videosLibrary;
@@ -119,7 +123,8 @@ public class OverviewActivity extends AppCompatActivity {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(poster);
 
-        Log.i("yoni", "Title: " + movie.getTitle() + ", server id: " + movie.getServerId());
+        Timber.tag(TAG)
+                .i("Title: %s, Server id: %s", movie.getTitle(), movie.getServerId());
 
         //Movie backdrop poster
         Glide.with(getBaseContext()).load(
@@ -282,9 +287,8 @@ public class OverviewActivity extends AppCompatActivity {
 
         String url = tgbAPI.getM3u8Url(videoId);
 
-        Intent intent = new Intent(context, PlayerActivity.class);
-        intent.setAction(PlayerActivity.ACTION_VIEW_LIST);
-        intent.putExtra(PlayerActivity.URI_LIST_EXTRA, new String[]{url});
+        Intent intent = new Intent(context, VideoPlayerActivity.class);;
+        intent.putExtra(VideoPlayerActivity.MEDIA_SOURCE_URL, url);
 
         return intent;
     }

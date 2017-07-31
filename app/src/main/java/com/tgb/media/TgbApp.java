@@ -8,6 +8,7 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
+import com.tgb.media.activities.VideoPlayerActivity;
 import com.tgb.media.component.AppComponent;
 import com.tgb.media.component.DaggerAppComponent;
 import com.tgb.media.module.AppModule;
@@ -15,7 +16,12 @@ import com.tgb.media.module.NetModule;
 
 import java.util.Locale;
 
+import timber.log.Timber;
+
 public class TgbApp extends android.app.Application {
+
+    //Tags
+    private static final String TAG = TgbApp.class.getName();
 
     //Dagger components
     private AppComponent appComponent;
@@ -33,17 +39,21 @@ public class TgbApp extends android.app.Application {
     public void onCreate() {
         super.onCreate();
 
+        //Inner properties
         instance = this;
         deviceIdentifier = createUserAgent();
 
-        Log.i("yoni", "Identifier: " + deviceIdentifier);
+        //Timber
+        if (BuildConfig.DEBUG)
+            Timber.plant(new Timber.DebugTree());
 
+        Timber.tag(TAG).i("identifier %s", deviceIdentifier);
+
+        //Dagger
         appComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
                 .netModule(new NetModule())
                 .build();
-        //appComponent = DaggerAppComponent.builder()
-        //        .build();
     }
 
     private String createUserAgent(){

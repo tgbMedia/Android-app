@@ -10,7 +10,6 @@
         android:id="@+id/videos_carousel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/carousel_top_margin"
         android:paddingLeft="@dimen/carousel_padding"
         android:paddingRight="@dimen/carousel_padding">
 

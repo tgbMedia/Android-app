@@ -12,7 +12,6 @@
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#fff"
         card_view:cardBackgroundColor="@android:color/transparent"
         card_view:cardCornerRadius="0dp"
         card_view:cardElevation="@dimen/thumb_elevation">
@@ -28,15 +27,14 @@
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
-                android:transitionName="@string/gallery_transition"
-                android:background="?selectableItemBackground"/>
+                android:transitionName="@string/gallery_transition"/>
 
             <TextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:maxLines="1"
+                android:singleLine="true"
                 android:ellipsize="none"
                 android:padding="@dimen/thumb_title_padding"
                 android:background="@color/gallery_thumb_text_background"

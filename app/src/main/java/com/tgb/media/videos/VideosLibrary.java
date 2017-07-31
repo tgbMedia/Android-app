@@ -2,6 +2,7 @@ package com.tgb.media.videos;
 
 import android.util.Log;
 
+import com.tgb.media.activities.OverviewActivity;
 import com.tgb.media.database.CastRelationModel;
 import com.tgb.media.database.CastRelationModelDao;
 import com.tgb.media.database.CrewRelationModel;
@@ -28,9 +29,12 @@ import tgb.tmdb.models.CastPerson;
 import tgb.tmdb.models.CrewPerson;
 import tgb.tmdb.models.Genre;
 import tgb.tmdb.models.MovieOverview;
+import timber.log.Timber;
 
 public class VideosLibrary {
 
+    //Tags
+    private static final String TAG = VideosLibrary.class.getName();
 
     //Database models
     private MovieOverviewModelDao movieModelDao;
@@ -157,57 +161,7 @@ public class VideosLibrary {
 
         return movieOverviewModel;
     }
-
-    public Observable<MovieObservableResult> movieDetails(final int position, final MovieFile movie){
-        return Observable.create(emitter -> {
-            try{
-                //Search item by keyword
-                MovieOverviewModel movieOverview = searchMovieByKeyword(movie.title);
-
-                if(movieOverview != null)
-                {
-                    if(!movieOverview.getServerId().equals(movie.id))
-                    {
-                        movieOverview.setServerId(movie.id);
-                        movieOverview.update();
-
-                        Log.wtf("videoLibraries", "Movie id is updated "
-                                + movie.title + ", to " + movie.id);
-                    }
-
-                    emitter.onNext(new MovieObservableResult(position, movieOverview));
-                }
-                else
-                {
-                    //Search item in TMDB
-                    int movieYear = (movie.year == null) ? 0 : movie.year;
-
-                    MovieOverview overview = tmdbAPI.searchMovieByName(movie.title, movieYear);
-
-                    if(overview == null)
-                    {
-                        Log.wtf("videoLibraries", "No data for: " + movie.title);
-                        //emitter.onError(new RuntimeException());
-                    }
-                    else
-                    {
-                        //Insert movie to database
-                        movieOverview = insertMovieToDb(overview, movie);
-                        addKeyword(movie.title, movieOverview.getId());
-
-                        emitter.onNext(new MovieObservableResult(position, movieOverview));
-                    }
-                }
-            }
-            catch(Exception e){
-                e.printStackTrace();
-                emitter.onError(e);
-            }
-
-            emitter.onComplete();
-        });
-    }
-
+    
     public MovieObservableResult videoDetails(final int position, final MovieFile movie){
         try{
             //Search item by keyword
@@ -220,8 +174,8 @@ public class VideosLibrary {
                     movieOverview.setServerId(movie.id);
                     movieOverview.update();
 
-                    Log.wtf("videoLibraries", "Movie id is updated "
-                            + movie.title + ", to " + movie.id);
+                    Timber.tag(TAG).wtf("VideosLibrary->videoDetails, %s New movie id: %s",
+                            movie.title, movie.id);
                 }
 
                 return new MovieObservableResult(position, movieOverview);
@@ -234,10 +188,7 @@ public class VideosLibrary {
                 MovieOverview overview = tmdbAPI.searchMovieByName(movie.title, movieYear);
 
                 if(overview == null)
-                {
-                    Log.wtf("videoLibraries", "No data for: " + movie.title);
-                    //emitter.onError(new RuntimeException());
-                }
+                    Timber.tag(TAG).wtf("No data for: %s", movie.title);
                 else
                 {
                     //Insert movie to database

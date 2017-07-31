@@ -110,7 +110,7 @@ dependencies {
     compile project(':tmdb')
 
     //ExoPlayer
-    compile 'com.google.android.exoplayer:exoplayer:r2.3.1'
+    compile 'com.google.android.exoplayer:exoplayer:r2.4.4'
 
     //YouTube
     compile files('libs/YouTubeAndroidPlayerApi.jar')
@@ -122,4 +122,7 @@ dependencies {
 
     //TGB Server(client PC) Api
     compile project(':TGB Media server API')
+
+    //Logging
+    compile 'com.jakewharton.timber:timber:4.5.1'
 }

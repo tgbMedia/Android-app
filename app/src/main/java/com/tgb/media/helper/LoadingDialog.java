@@ -73,7 +73,6 @@ public class LoadingDialog extends RelativeLayout {
         fadeOut.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                Log.i("Fdgdf", "dfgdfgdf");
             }
 
             @Override
