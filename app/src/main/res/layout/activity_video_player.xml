@@ -11,4 +11,9 @@
         android:layout_height="match_parent"
         app:resize_mode="fixed_height"/>
 
+    <com.tgb.media.helper.LoadingDialog
+        android:id="@+id/loading_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </RelativeLayout>

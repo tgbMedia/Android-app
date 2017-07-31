@@ -12,19 +12,26 @@ import android.view.View;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Format;
+import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.AdaptiveMediaSourceEventListener;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DataSpec;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.util.Util;
 import com.tgb.media.R;
 import com.tgb.media.TgbApp;
+import com.tgb.media.helper.LoadingDialog;
 import com.tgb.media.server.TgbAPI;
 import com.tgb.media.server.models.Response;
 
@@ -39,7 +46,7 @@ import retrofit2.Callback;
 import timber.log.Timber;
 
 public class VideoPlayerActivity extends AppCompatActivity
-        implements AdaptiveMediaSourceEventListener{
+        implements AdaptiveMediaSourceEventListener, ExoPlayer.EventListener{
 
     //Tags
     private static final String TAG = VideoPlayerActivity.class.getName();
@@ -49,6 +56,7 @@ public class VideoPlayerActivity extends AppCompatActivity
 
     //Elements
     @BindView(R.id.video_view) SimpleExoPlayerView playerView;
+    @BindView(R.id.loading_dialog) LoadingDialog loadingDialog;
 
     //ExoPlayer
     private SimpleExoPlayer player;
@@ -81,6 +89,7 @@ public class VideoPlayerActivity extends AppCompatActivity
         playerView.setPlayer(player);
 
         //Player settings
+        player.addListener(this);
         player.setPlayWhenReady(true);
     }
 
@@ -139,6 +148,7 @@ public class VideoPlayerActivity extends AppCompatActivity
 //            playbackPosition = player.getCurrentPosition();
 //            currentWindow = player.getCurrentWindowIndex();
 //            playWhenReady = player.getPlayWhenReady();
+            player.removeListener(this);
             player.release();
             player = null;
         }
@@ -190,7 +200,6 @@ public class VideoPlayerActivity extends AppCompatActivity
     }
 
     // AdaptiveMediaSourceEventListener
-
     @Override
     public void onLoadStarted(DataSpec dataSpec, int dataType, int trackType, Format trackFormat,
                               int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs,
@@ -230,5 +239,65 @@ public class VideoPlayerActivity extends AppCompatActivity
     public void onDownstreamFormatChanged(int trackType, Format trackFormat, int trackSelectionReason,
                                           Object trackSelectionData, long mediaTimeMs) {
         Timber.tag(TAG).i("onDownstreamFormatChanged");
+    }
+
+    //ExoPlayer.EventListener
+    @Override
+    public void onTimelineChanged(Timeline timeline, Object manifest) {
+        Timber.tag(TAG).i("onTimeLineChanged");
+    }
+
+    @Override
+    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+
+    }
+
+    @Override
+    public void onLoadingChanged(boolean isLoading) {
+
+    }
+
+    @Override
+    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+        String stateString;
+        switch (playbackState) {
+            case ExoPlayer.STATE_IDLE:
+                stateString = "ExoPlayer.STATE_IDLE      -";
+                break;
+            case ExoPlayer.STATE_BUFFERING:
+                /*loadingDialog.show(v -> {
+                    playerView.setUseController(false);
+                    playerView.hideController();
+                });*/
+                stateString = "ExoPlayer.STATE_BUFFERING -";
+                break;
+            case ExoPlayer.STATE_READY:
+                loadingDialog.hide(v -> playerView.setUseController(true));
+                stateString = "ExoPlayer.STATE_READY     -";
+                break;
+            case ExoPlayer.STATE_ENDED:
+                stateString = "ExoPlayer.STATE_ENDED     -";
+                break;
+            default:
+                stateString = "UNKNOWN_STATE             -";
+                break;
+        }
+        Timber.tag(TAG).d("changed state to " + stateString
+                + " playWhenReady: " + playWhenReady);
+    }
+
+    @Override
+    public void onPlayerError(ExoPlaybackException error) {
+
+    }
+
+    @Override
+    public void onPositionDiscontinuity() {
+
+    }
+
+    @Override
+    public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+
     }
 }
