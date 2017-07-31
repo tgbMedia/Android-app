@@ -2,7 +2,6 @@ package com.tgb.media.videos;
 
 import android.util.Log;
 
-import com.tgb.media.activities.OverviewActivity;
 import com.tgb.media.database.CastRelationModel;
 import com.tgb.media.database.CastRelationModelDao;
 import com.tgb.media.database.CrewRelationModel;
@@ -23,7 +22,7 @@ import com.tgb.media.server.models.MovieFile;
 
 import java.util.List;
 
-import io.reactivex.Observable;
+import hugo.weaving.DebugLog;
 import tgb.tmdb.TmdbAPI;
 import tgb.tmdb.models.CastPerson;
 import tgb.tmdb.models.CrewPerson;
@@ -65,6 +64,7 @@ public class VideosLibrary {
         this.tmdbAPI = tmdbAPI;
     }
 
+    @DebugLog
     public MovieOverviewModel searchMovieById(long id){
         MovieOverviewModel movie = movieModelDao.queryBuilder()
                 .where(MovieOverviewModelDao.Properties.Id.eq(id))
@@ -73,6 +73,7 @@ public class VideosLibrary {
         return movie;
     }
 
+    @DebugLog
     private MovieOverviewModel searchMovieByKeyword(final String searchedKeyword) throws Exception{
         KeywordModel keyword = keywordModelDao.queryBuilder()
                 .where(KeywordModelDao.Properties.Keyword.eq(searchedKeyword))
@@ -82,6 +83,7 @@ public class VideosLibrary {
         return keyword == null ? null : keyword.getMovie();
     }
 
+    @DebugLog
     public List<CrewRelationModel> searchPersonByJob(long movieId, String job){
         return crewRelationModelDao.queryBuilder()
                 .where(
@@ -90,6 +92,7 @@ public class VideosLibrary {
                 .list();
     }
 
+    @DebugLog
     private void addKeyword(String keyword, long movieId) throws Exception
     {
         keywordModelDao.insertOrReplace(
@@ -97,6 +100,7 @@ public class VideosLibrary {
         );
     }
 
+    @DebugLog
     private MovieOverviewModel insertMovieToDb(MovieOverview movieOverview, MovieFile movie)
             throws Exception{
 
@@ -161,7 +165,8 @@ public class VideosLibrary {
 
         return movieOverviewModel;
     }
-    
+
+    @DebugLog
     public MovieObservableResult videoDetails(final int position, final MovieFile movie){
         try{
             //Search item by keyword

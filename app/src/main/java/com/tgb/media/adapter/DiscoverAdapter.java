@@ -8,23 +8,17 @@ import android.graphics.Point;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SnapHelper;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.merhold.extensiblepageindicator.ExtensiblePageIndicator;
 import com.tgb.media.R;
 import com.tgb.media.adapter.model.DiscoverModel;
 import com.tgb.media.helper.PageIndicator;
-import com.tgb.media.helper.SpacesItemDecoration;
 
 import java.util.LinkedList;
 import java.util.List;

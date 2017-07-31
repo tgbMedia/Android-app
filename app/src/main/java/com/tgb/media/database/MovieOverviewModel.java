@@ -5,7 +5,9 @@ import android.os.Parcelable;
 
 import com.tgb.media.server.models.MovieFile;
 
+import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.JoinEntity;
 import org.greenrobot.greendao.annotation.OrderBy;
@@ -15,8 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tgb.tmdb.models.MovieOverview;
-import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.DaoException;
 
 @Entity
 public class MovieOverviewModel implements Parcelable {

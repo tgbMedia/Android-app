@@ -24,6 +24,14 @@ public class MovieObservableResult implements Parcelable {
     }
 
     @Override
+    public String toString() {
+        return "MovieObservableResult{" +
+                "position=" + position +
+                ", movie=" + movie +
+                '}';
+    }
+
+    @Override
     public int describeContents() {
         return 0;
     }
@@ -50,4 +58,6 @@ public class MovieObservableResult implements Parcelable {
             return new MovieObservableResult[size];
         }
     };
+
+
 }

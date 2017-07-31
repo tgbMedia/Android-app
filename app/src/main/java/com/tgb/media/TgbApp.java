@@ -1,14 +1,11 @@
 package com.tgb.media;
 
-import android.util.Log;
-
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
-import com.tgb.media.activities.VideoPlayerActivity;
 import com.tgb.media.component.AppComponent;
 import com.tgb.media.component.DaggerAppComponent;
 import com.tgb.media.module.AppModule;

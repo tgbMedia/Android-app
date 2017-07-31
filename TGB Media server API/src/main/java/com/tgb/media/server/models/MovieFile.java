@@ -17,4 +17,12 @@ public class MovieFile {
     @Expose
     public Integer year;
 
+    @Override
+    public String toString() {
+        return "MovieFile{" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", year=" + year +
+                '}';
+    }
 }

@@ -1,7 +1,6 @@
 package com.tgb.media.helper;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
