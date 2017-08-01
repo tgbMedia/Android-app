@@ -233,13 +233,20 @@ public class OverviewActivity extends AppCompatActivity {
         overviewContent.setText(movie.getOverview());
         overviewContent.setInterpolator(new OvershootInterpolator());
 
-        readMore.setOnClickListener(v -> {
-            overviewContent.toggle();
+        overviewContent.post(() -> {
+            if(overviewContent.getLineCount() >= overviewContent.getMaxLines()){
+                readMore.setOnClickListener(v -> {
+                    overviewContent.toggle();
 
-            readMore.setText(overviewContent.isExpanded()
-                    ? getString(R.string.read_more)
-                    : getString(R.string.collapse));
+                    readMore.setText(overviewContent.isExpanded()
+                            ? getString(R.string.read_more)
+                            : getString(R.string.collapse));
+                });
+
+                readMore.setVisibility(View.VISIBLE);
+            }
         });
+
 
         //Cast
         List<PersonModel> cast = new LinkedList<>();

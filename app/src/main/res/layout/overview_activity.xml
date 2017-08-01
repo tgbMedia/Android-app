@@ -374,7 +374,8 @@
                         android:layout_centerHorizontal="true"
                         android:textSize="@dimen/details_overview_read_more_text_size"
                         android:textColor="@color/button_color"
-                        android:text="@string/read_more"/>
+                        android:text="@string/read_more"
+                        android:visibility="invisible"/>
 
                 </android.support.percent.PercentRelativeLayout>
 
