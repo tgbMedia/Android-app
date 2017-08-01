@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Discover activity -->
+    <dimen name="carousel_item_title">10dp</dimen>
+    <dimen name="carousel_item_subtitle">8sp</dimen>
+
+</resources>

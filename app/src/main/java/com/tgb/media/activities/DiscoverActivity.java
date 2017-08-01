@@ -82,6 +82,8 @@ public class DiscoverActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //TODO: Carousel item, subtitle on 2.7inch
+
         setContentView(R.layout.activity_discover);
 
         if(savedInstanceState != null)
