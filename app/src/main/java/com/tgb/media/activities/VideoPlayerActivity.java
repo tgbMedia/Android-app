@@ -7,9 +7,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -31,9 +37,11 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.util.Util;
 import com.tgb.media.R;
 import com.tgb.media.TgbApp;
+import com.tgb.media.database.MovieOverviewModel;
 import com.tgb.media.helper.LoadingDialog;
 import com.tgb.media.server.TgbAPI;
 import com.tgb.media.server.models.Response;
+import com.tgb.media.videos.VideosLibrary;
 
 import java.io.IOException;
 
@@ -52,11 +60,17 @@ public class VideoPlayerActivity extends AppCompatActivity
     private static final String TAG = VideoPlayerActivity.class.getName();
 
     //TGB API
+    @Inject VideosLibrary videosLibrary;
     @Inject TgbAPI tgbAPI;
 
     //Elements
     @BindView(R.id.video_view) SimpleExoPlayerView playerView;
     @BindView(R.id.loading_dialog) LoadingDialog loadingDialog;
+
+    //ExoPlayer elements
+    private Toolbar toolbar;
+    private ImageView backdrop;
+    private ImageView playerPoster;
 
     //ExoPlayer
     private SimpleExoPlayer player;
@@ -64,6 +78,9 @@ public class VideoPlayerActivity extends AppCompatActivity
 
     //Finals
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
+
+    public static final String MOVIE_ACTION = "com.tgb.media.details.movie";
+    public static final String MOVIE_ID = "movieId";
     public static final String MEDIA_SOURCE_URL = "media_source_url";
 
     @Override
@@ -76,6 +93,17 @@ public class VideoPlayerActivity extends AppCompatActivity
 
         //Butterknife
         ButterKnife.bind(this);
+
+        //Elements
+        toolbar = playerView.findViewById(R.id.toolbar);
+        backdrop = playerView.findViewById(R.id.backdrop);
+        playerPoster = playerView.findViewById(R.id.poster);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        setSupportActionBar(toolbar);
 
         //ExoPlayer
         mainHandler = new Handler();
@@ -91,7 +119,24 @@ public class VideoPlayerActivity extends AppCompatActivity
         //Player settings
         player.addListener(this);
         player.setPlayWhenReady(true);
-        playerView.setUseController(false);
+
+        playerView.showController();
+        playerView.setControllerHideOnTouch(false);
+
+        initializeUI();
+    }
+
+    private void initializeUI(){
+        Intent intent = getIntent();
+
+        if(intent.getAction() == MOVIE_ACTION){
+            MovieOverviewModel movie = videosLibrary.searchMovieById(
+                    intent.getLongExtra(MOVIE_ID, -1)
+            );
+
+            if(movie != null)
+                updateMovieDetails(movie);
+        }
     }
 
     private void initializePlayer(){
@@ -119,19 +164,34 @@ public class VideoPlayerActivity extends AppCompatActivity
         player.prepare(mediaSource, true, false);
     }
 
+    private void updateMovieDetails(MovieOverviewModel movie){
+        //Update player poster
+        Glide.with(getBaseContext())
+                .load("https://image.tmdb.org/t/p/w640/" + movie.getPosterPath())
+                .thumbnail(1)
+                .crossFade()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(playerPoster);
+
+        //Movie backdrop poster
+        Glide.with(getBaseContext()).load(
+                "https://image.tmdb.org/t/p/w1300_and_h730_bestv2/" + movie.getBackdropPath())
+                .thumbnail(1)
+                .crossFade()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(backdrop);
+
+        //Player titles
+        getSupportActionBar().setTitle(movie.getTitle());
+    }
+
     private MediaSource buildMediaSource(Uri uri) {
-
-
         return new HlsMediaSource(
                 uri,
                 ((TgbApp) getApplication()).buildHttpDataSourceFactory(BANDWIDTH_METER),
                 mainHandler,
                 this
         );
-
-//        return new ExtractorMediaSource(uri,
-//                new DefaultHttpDataSourceFactory("ua"),
-//                new DefaultExtractorsFactory(), null, null);
     }
 
     @SuppressLint("InlinedApi")
@@ -153,6 +213,16 @@ public class VideoPlayerActivity extends AppCompatActivity
             player.release();
             player = null;
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -274,8 +344,11 @@ public class VideoPlayerActivity extends AppCompatActivity
                 break;
             case ExoPlayer.STATE_READY:
                 loadingDialog.hide(v -> {
-                    playerView.setUseController(true);
-                    playerView.showController();
+                    playerView.setControllerHideOnTouch(true);
+
+                    backdrop.setVisibility(View.GONE);
+//                    playerView.setUseController(true);
+//                    playerView.showController();
                 });
                 stateString = "ExoPlayer.STATE_READY     -";
                 break;

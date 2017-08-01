@@ -175,7 +175,7 @@ public class OverviewActivity extends AppCompatActivity {
 
         //Play button
         playButton.setOnClickListener(v -> {
-            startActivity(buildVideoPlayerIntent(this, movie.getServerId()));
+            startActivity(buildVideoPlayerIntent(this, movie.getServerId(), movie.getId()));
         });
 
         //Movie title
@@ -281,11 +281,17 @@ public class OverviewActivity extends AppCompatActivity {
         });
     }
 
-    private Intent buildVideoPlayerIntent(Context context, String videoId) {
+    private Intent buildVideoPlayerIntent(Context context, String videoServerId, long videoId) {
 
-        String url = tgbAPI.getM3u8Url(videoId);
+        String url = tgbAPI.getM3u8Url(videoServerId);
 
-        Intent intent = new Intent(context, VideoPlayerActivity.class);;
+        Intent intent = new Intent(context, VideoPlayerActivity.class);
+
+        //Details
+        intent.setAction(OverviewActivity.MOVIE_ACTION);
+        intent.putExtra(OverviewActivity.MOVIE_ID, videoId);
+
+        //Video source
         intent.putExtra(VideoPlayerActivity.MEDIA_SOURCE_URL, url);
 
         return intent;

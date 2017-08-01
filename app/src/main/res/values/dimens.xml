@@ -60,7 +60,6 @@
     <!-- Overlay message -->
     <dimen name="overlay_message_margin">24dp</dimen>
 
-
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="app_bar_height">256dp</dimen>
     <dimen name="details_overview_top_padding">206dp</dimen>

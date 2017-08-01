@@ -6,4 +6,8 @@
     <dimen name="carousel_item_title">18dp</dimen>
     <dimen name="carousel_item_subtitle">14sp</dimen>
 
+    <!-- Video player -->
+    <dimen name="video_player_title_text_size">18sp</dimen>
+    <dimen name="video_player_duration_text_size">14sp</dimen>
+
 </resources>
