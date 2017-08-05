@@ -6,9 +6,17 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.MediaRouteActionProvider;
+import android.support.v7.media.MediaControlIntent;
+import android.support.v7.media.MediaRouteSelector;
+import android.support.v7.media.MediaRouter;
+import android.support.v7.media.RemotePlaybackClient;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,6 +24,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -27,13 +36,17 @@ import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.AdaptiveMediaSourceEventListener;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.MergingMediaSource;
+import com.google.android.exoplayer2.source.SingleSampleMediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DataSpec;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.android.exoplayer2.util.Util;
 import com.tgb.media.R;
 import com.tgb.media.TgbApp;
@@ -75,6 +88,64 @@ public class VideoPlayerActivity extends AppCompatActivity
     //ExoPlayer
     private SimpleExoPlayer player;
     private Handler mainHandler;
+    private DataSource.Factory dataSourceFactory;
+
+    //Media route
+    private MediaRouteSelector mSelector;
+    private MediaRouter mMediaRouter;
+
+    // Variables to hold the currently selected route and its playback client
+    private MediaRouter.RouteInfo mRoute;
+    private RemotePlaybackClient mRemotePlaybackClient;
+
+    // Define the Callback object and its methods, save the object in a class variable
+    private final MediaRouter.Callback mMediaRouterCallback =
+            new MediaRouter.Callback() {
+
+                @Override
+                public void onRouteSelected(MediaRouter router, MediaRouter.RouteInfo route) {
+                    Log.d(TAG, "onRouteSelected: route=" + route);
+
+                    if (route.supportsControlCategory(
+                            MediaControlIntent.CATEGORY_REMOTE_PLAYBACK)){
+                        // Stop local playback (if necessary)
+                        // ...
+
+                        // Save the new route
+                        mRoute = route;
+
+                        // Attach a new playback client
+                        mRemotePlaybackClient = new RemotePlaybackClient(getBaseContext(), mRoute);
+
+                        // Start remote playback (if necessary)
+                        // ...
+                    }
+                }
+
+                @Override
+                public void onRouteUnselected(MediaRouter router, MediaRouter.RouteInfo route, int reason) {
+                    Log.d(TAG, "onRouteUnselected: route=" + route);
+
+                    if (route.supportsControlCategory(
+                            MediaControlIntent.CATEGORY_REMOTE_PLAYBACK)){
+
+                        // Changed route: tear down previous client
+                        if (mRoute != null && mRemotePlaybackClient != null) {
+                            mRemotePlaybackClient.release();
+                            mRemotePlaybackClient = null;
+                        }
+
+                        // Save the new route
+                        mRoute = route;
+
+                        if (reason != MediaRouter.UNSELECT_REASON_ROUTE_CHANGED) {
+                            // Resume local playback  (if necessary)
+                            // ...
+                        }
+                    }
+                }
+            };
+
 
     //Finals
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
@@ -94,6 +165,9 @@ public class VideoPlayerActivity extends AppCompatActivity
         //Butterknife
         ButterKnife.bind(this);
 
+        // Get the media router service.
+        mMediaRouter = MediaRouter.getInstance(this);
+
         //Elements
         toolbar = playerView.findViewById(R.id.toolbar);
         backdrop = playerView.findViewById(R.id.backdrop);
@@ -107,6 +181,13 @@ public class VideoPlayerActivity extends AppCompatActivity
 
         //ExoPlayer
         mainHandler = new Handler();
+        dataSourceFactory = ((TgbApp) getApplication()).buildHttpDataSourceFactory(BANDWIDTH_METER);
+
+        // Create a route selector for the type of routes your app supports.
+        mSelector = new MediaRouteSelector.Builder()
+                // These are the framework-supported intents
+                .addControlCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK)
+                .build();
 
         //Create new player instance
         player = ExoPlayerFactory.newSimpleInstance(
@@ -122,6 +203,7 @@ public class VideoPlayerActivity extends AppCompatActivity
 
         playerView.showController();
         playerView.setControllerHideOnTouch(false);
+
 
         initializeUI();
     }
@@ -160,8 +242,19 @@ public class VideoPlayerActivity extends AppCompatActivity
         Uri uri = Uri.parse(sourceUrl);
         MediaSource mediaSource = buildMediaSource(uri);
 
+        //Subtitles
+//        Format textFormat = Format.createTextSampleFormat(null, MimeTypes.APPLICATION_SUBRIP,
+//                null, Format.NO_VALUE, Format.NO_VALUE, "iw", null);
+//
+//        MediaSource subtitleSource =
+//                new SingleSampleMediaSource(Uri.parse(),
+//                dataSourceFactory, textFormat, C.TIME_UNSET);
+//
+//        MergingMediaSource mergedSource = new MergingMediaSource(mediaSource, subtitleSource);
+
         //Player prepare
         player.prepare(mediaSource, true, false);
+//        player.prepare(mergedSource, true, false);
     }
 
     private void updateMovieDetails(MovieOverviewModel movie){
@@ -188,7 +281,7 @@ public class VideoPlayerActivity extends AppCompatActivity
     private MediaSource buildMediaSource(Uri uri) {
         return new HlsMediaSource(
                 uri,
-                ((TgbApp) getApplication()).buildHttpDataSourceFactory(BANDWIDTH_METER),
+                dataSourceFactory,
                 mainHandler,
                 this
         );
@@ -215,6 +308,28 @@ public class VideoPlayerActivity extends AppCompatActivity
         }
     }
 
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        // Inflate the menu and configure the media router action provider.
+        getMenuInflater().inflate(R.menu.media_route_menu_item, menu);
+
+        // Attach the MediaRouteSelector to the menu item
+        MenuItem mediaRouteMenuItem = menu.findItem(R.id.media_route_menu_item);
+        MediaRouteActionProvider mediaRouteActionProvider =
+                (MediaRouteActionProvider)MenuItemCompat.getActionProvider(
+                        mediaRouteMenuItem);
+        // Attach the MediaRouteSelector that you built in onCreate()
+        mediaRouteActionProvider.setRouteSelector(mSelector);
+
+        // Return true to show the menu.
+        return true;
+    }
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
@@ -228,6 +343,10 @@ public class VideoPlayerActivity extends AppCompatActivity
     @Override
     public void onStart() {
         super.onStart();
+
+        mMediaRouter.addCallback(mSelector, mMediaRouterCallback,
+                MediaRouter.CALLBACK_FLAG_REQUEST_DISCOVERY);
+
         if (Util.SDK_INT > 23) {
             initializePlayer();
         }
@@ -253,6 +372,9 @@ public class VideoPlayerActivity extends AppCompatActivity
     @Override
     public void onStop() {
         super.onStop();
+
+        mMediaRouter.removeCallback(mMediaRouterCallback);
+
         if (Util.SDK_INT > 23) {
             releasePlayer();
         }

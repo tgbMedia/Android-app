@@ -87,7 +87,17 @@ public class DiscoverActivity extends AppCompatActivity {
         setContentView(R.layout.activity_discover);
 
         if(savedInstanceState != null)
-            videos = (MovieObservableResult[]) savedInstanceState.getParcelableArray(VIDEOS_KEY);
+        {
+            try{
+                videos = (MovieObservableResult[]) savedInstanceState.getParcelableArray(VIDEOS_KEY);
+            }
+            catch (Exception e){
+                e.printStackTrace();
+
+                finish();
+                return;
+            }
+        }
 
         //Dagger
         ((TgbApp) getApplication()).getAppComponent().inject(this);
@@ -157,21 +167,29 @@ public class DiscoverActivity extends AppCompatActivity {
         observable
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(item -> {
-                    videos[item.position] = item;
+                    try{
+                        if(item.getMovie() == null)
+                            return; //WTF - Check it!
 
-                    for(GenreModel genere : item.getMovie().getGenres()){
-                        //Create new list if doesn't exists
-                        if(!videosByGenre.containsKey(genere.getId()))
-                        {
-                            videosByGenre.put(
-                                    genere.getId(),
-                                    new DiscoverModel(DiscoverModel.LIST, genere.getName())
-                            );
+                        videos[item.position] = item;
+
+                        for(GenreModel genere : item.getMovie().getGenres()){
+                            //Create new list if doesn't exists
+                            if(!videosByGenre.containsKey(genere.getId()))
+                            {
+                                videosByGenre.put(
+                                        genere.getId(),
+                                        new DiscoverModel(DiscoverModel.LIST, genere.getName())
+                                );
+                            }
+
+                            videosByGenre.get(genere.getId())
+                                    .getList()
+                                    .add(item.getMovie());
                         }
-
-                        videosByGenre.get(genere.getId())
-                                .getList()
-                                .add(item.getMovie());
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
                     }
                 })
                 .doOnComplete(this::onCompleted)

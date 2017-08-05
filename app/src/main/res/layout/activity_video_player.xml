@@ -9,7 +9,7 @@
         android:id="@+id/video_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:resize_mode="fixed_height"/>
+        app:resize_mode="fill"/>
 
     <com.tgb.media.helper.LoadingDialog
         android:id="@+id/loading_dialog"
