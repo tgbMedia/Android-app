@@ -32,6 +32,8 @@ public class TgbAPI {
 
     public TgbAPI(String tgbBaseUrl, final String userIdentifier, String tgbApiKey)
     {
+        //TODO: Rplace GreenDao with ObjectBOX
+
         //API Auth
         this.baseUrl = tgbBaseUrl;
         this.apiKey = tgbApiKey;

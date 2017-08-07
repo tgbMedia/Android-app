@@ -12,6 +12,12 @@ props.load(new FileInputStream(propFile))
 assert propFile.canRead()
 assert props.containsKey('TMDB_API_KEY') && props.containsKey('GOOGLE_API_KEY')
 
+repositories {
+    maven {
+        url 'https://maven.google.com'
+    }
+}
+
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.0"
@@ -66,11 +72,24 @@ android {
 
 
 dependencies {
-    ext.googleLibrariesVersion = '26.+'
-    ext.appcompatVersion = '26.0.0-beta1'
-    ext.daggerVersion = '2.10-rc1'
-    ext.butterknifeVersion = '8.5.1'
+    ext.googleLibrariesVersion = '26.0.0'
+    ext.daggerVersion = '2.11'
+    ext.butterknifeVersion = '8.8.0'
+    ext.greenDaoVersion = '3.2.2'
+    ext.glideVersion = '4.0.0'
     ext.rxAndroidVersion = '2.0.1'
+    ext.rxJavaVersion = '2.1.2'
+    ext.exoPlayerVersion = 'r2.5.0'
+    ext.timberVersion = '4.5.1'
+
+    //Logging
+    compile "com.jakewharton.timber:timber:$timberVersion"
+
+    //UI Libraries
+    ext.shineButtonVersion = '0.1.9'
+    ext.coverFlowVersion = 'release-v1.0.4'
+    ext.smoothIndicatorVersion = '1.0.1'
+
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -80,19 +99,18 @@ dependencies {
     testCompile 'junit:junit:4.12'
 
     //Android support libraries
-    compile "com.android.support:appcompat-v7:26.0.0-beta1"
+    compile "com.android.support:appcompat-v7:$googleLibrariesVersion"
     compile "com.android.support:design:$googleLibrariesVersion"
     compile "com.android.support:cardview-v7:$googleLibrariesVersion"
     compile "com.android.support:mediarouter-v7:$googleLibrariesVersion"
     compile "com.android.support:support-core-utils:$googleLibrariesVersion"
     compile "com.android.support:percent:$googleLibrariesVersion"
     compile "com.android.support:leanback-v17:$googleLibrariesVersion"
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'me.henrytao:smooth-app-bar-layout:25.2.0.0'
-    compile 'me.henrytao:mdcore:3.3.10'
+    compile 'com.android.support.constraint:constraint-layout:1.1.0-beta1'
+    compile 'me.henrytao:smooth-app-bar-layout:25.2.0.0' //Deprecated!
 
     //GreenDao
-    compile 'org.greenrobot:greendao:3.2.0'
+    compile "org.greenrobot:greendao:$greenDaoVersion"
 
     //Dagger
     compile "com.google.dagger:dagger:$daggerVersion"
@@ -104,26 +122,25 @@ dependencies {
 
     //RxJava
     compile "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
-    compile "io.reactivex.rxjava2:rxjava:$rxAndroidVersion"
+    compile "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
 
     //Glide
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile project(':tmdb')
+    compile "com.github.bumptech.glide:glide:$glideVersion"
 
     //ExoPlayer
-    compile 'com.google.android.exoplayer:exoplayer:r2.4.4'
+    compile "com.google.android.exoplayer:exoplayer:$exoPlayerVersion"
 
     //YouTube
     compile files('libs/YouTubeAndroidPlayerApi.jar')
 
     //GUI
-    compile 'com.sackcentury:shinebutton:0.1.7'
-    compile 'com.github.crosswall:Android-Coverflow:release-v1.0.4'
-    compile 'com.merhold.extensiblepageindicator:extensiblepageindicator:1.0.1'
+    compile "com.sackcentury:shinebutton:$shineButtonVersion"
+    compile "com.github.crosswall:Android-Coverflow:$coverFlowVersion"
+    compile "com.merhold.extensiblepageindicator:extensiblepageindicator:$smoothIndicatorVersion"
 
     //TGB Server(client PC) Api
     compile project(':TGB Media server API')
 
-    //Logging
-    compile 'com.jakewharton.timber:timber:4.5.1'
+    //Other TGB Media libraries
+    compile project(':tmdb')
 }

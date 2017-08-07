@@ -262,16 +262,16 @@ public class VideoPlayerActivity extends AppCompatActivity
         Glide.with(getBaseContext())
                 .load("https://image.tmdb.org/t/p/w640/" + movie.getPosterPath())
                 .thumbnail(1)
-                .crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                //.crossFade()
+                //.diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(playerPoster);
 
         //Movie backdrop poster
         Glide.with(getBaseContext()).load(
                 "https://image.tmdb.org/t/p/w1300_and_h730_bestv2/" + movie.getBackdropPath())
                 .thumbnail(1)
-                .crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                //.crossFade()
+                //.diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(backdrop);
 
         //Player titles
@@ -483,6 +483,11 @@ public class VideoPlayerActivity extends AppCompatActivity
         }
         Timber.tag(TAG).d("changed state to " + stateString
                 + " playWhenReady: " + playWhenReady);
+    }
+
+    @Override
+    public void onRepeatModeChanged(int repeatMode) {
+
     }
 
     @Override

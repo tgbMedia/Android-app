@@ -88,8 +88,8 @@ public class DiscoverListAdapter extends RecyclerView.Adapter<DiscoverListAdapte
 
         Glide.with(mContext).load("https://image.tmdb.org/t/p/w640/" + movie.getPosterPath())
                 .thumbnail(1)
-                .crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                //.crossFade()
+                //.diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.thumbnail);
 
         holder.title.setText(movie.getTitle());

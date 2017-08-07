@@ -2,6 +2,7 @@
 
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -12,34 +13,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent=".75" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/left_of_poster"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent=".025" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/top_of_poster"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent=".5" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/right_of_poster"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent=".2" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/bottom_of_poster"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent=".95" />
 
     <!-- Backdrop -->
     <ImageView
@@ -54,7 +27,8 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:elevation="4dp"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:background="@color/video_toolbar_background"/>
 
     <!-- Line background -->
     <View
@@ -64,73 +38,79 @@
         app:layout_constraintTop_toTopOf="@+id/top_of_controllers_line"
         android:background="@color/video_player_bottom_line_background"
         android:layout_marginTop="0dp"
-        android:id="@+id/view" />
+        android:id="@+id/footer_background" />
 
     <!-- Movie details -->
     <ImageView
         android:id="@+id/poster"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.175"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent="0.45"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_of_poster"
-        app:layout_constraintEnd_toStartOf="@+id/right_of_poster"
-        app:layout_constraintStart_toStartOf="@+id/left_of_poster"
-        app:layout_constraintTop_toTopOf="@+id/top_of_poster"
-        android:elevation="8dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:elevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintHorizontal_bias=".025"
+        app:layout_constraintVertical_bias=".95" />
 
     <!-- Footer -->
     <RelativeLayout
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="150dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
         android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="@+id/view"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintStart_toStartOf="@+id/right_of_poster"
-        android:layout_marginStart="8dp"
-        app:layout_constraintTop_toTopOf="@+id/view"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="8dp">
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/poster"
+        app:layout_constraintTop_toTopOf="@+id/footer_background"
+        app:layout_constraintEnd_toEndOf="@+id/footer_background"
+        android:layout_marginTop="16dp">
 
         <LinearLayout
             android:id="@+id/seekbar_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layoutDirection="ltr">
 
             <TextView
                 android:id="@id/exo_position"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/video_player_duration_text_size"
-                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:includeFontPadding="false"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
-                android:includeFontPadding="false"
                 android:textColor="@color/video_player_duration"
-                android:layout_gravity="center"/>
+                android:textSize="@dimen/video_player_duration_text_size"
+                android:textStyle="bold" />
 
             <com.google.android.exoplayer2.ui.DefaultTimeBar
                 android:id="@id/exo_progress"
                 android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="26dp"/>
+                android:layout_height="26dp"
+                android:layout_weight="1"/>
 
             <TextView
                 android:id="@id/exo_duration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/video_player_duration_text_size"
-                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:includeFontPadding="false"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
-                android:includeFontPadding="false"
                 android:textColor="@color/video_player_duration"
-                android:layout_gravity="center"/>
+                android:textSize="@dimen/video_player_duration_text_size"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -138,41 +118,42 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/seekbar_container"
-            android:layout_centerInParent="true">
+            android:layout_centerInParent="true"
+            android:layoutDirection="ltr">
 
             <ImageButton
                 android:id="@id/exo_prev"
-                style="@style/ExoMediaButton.Previous"/>
+                style="@style/ExoMediaButton.Previous" />
 
             <ImageButton
                 android:id="@id/exo_rew"
                 style="@style/ExoMediaButton.Rewind"
                 android:layout_alignTop="@id/exo_prev"
-                android:layout_toEndOf="@id/exo_prev"/>
+                android:layout_toEndOf="@id/exo_prev" />
 
             <ImageButton
                 android:id="@id/exo_play"
                 style="@style/ExoMediaButton.Play"
                 android:layout_alignTop="@id/exo_prev"
-                android:layout_toEndOf="@id/exo_rew"/>
+                android:layout_toEndOf="@id/exo_rew" />
 
             <ImageButton
                 android:id="@id/exo_pause"
                 style="@style/ExoMediaButton.Pause"
                 android:layout_alignTop="@id/exo_prev"
-                android:layout_toEndOf="@id/exo_play"/>
+                android:layout_toEndOf="@id/exo_play" />
 
             <ImageButton
                 android:id="@id/exo_ffwd"
                 style="@style/ExoMediaButton.FastForward"
                 android:layout_alignTop="@id/exo_prev"
-                android:layout_toEndOf="@id/exo_pause"/>
+                android:layout_toEndOf="@id/exo_pause" />
 
             <ImageButton
                 android:id="@id/exo_next"
                 style="@style/ExoMediaButton.Next"
                 android:layout_alignTop="@id/exo_prev"
-                android:layout_toEndOf="@id/exo_ffwd"/>
+                android:layout_toEndOf="@id/exo_ffwd" />
 
         </RelativeLayout>
 

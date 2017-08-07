@@ -95,6 +95,8 @@ public class OverviewActivity extends AppCompatActivity {
 
         setContentView(R.layout.overview_activity);
 
+        //TODO: replace the "smooth scroll" library with the original layouts, This library deprecated in API 26+
+
         //Dagger
         ((TgbApp) getApplication()).getAppComponent().inject(this);
 
@@ -121,7 +123,7 @@ public class OverviewActivity extends AppCompatActivity {
     private void movieDetails(MovieOverviewModel movie){
         //Movie poster
         Glide.with(getBaseContext()).load("https://image.tmdb.org/t/p/w640/" + movie.getPosterPath())
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                //.diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(poster);
 
         Timber.tag(TAG)
@@ -131,8 +133,8 @@ public class OverviewActivity extends AppCompatActivity {
         Glide.with(getBaseContext()).load(
                 "https://image.tmdb.org/t/p/w1300_and_h730_bestv2/" + movie.getBackdropPath())
                 .thumbnail(1)
-                .crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                //.crossFade()
+                //.diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(theme);
 
         //Movie trailer

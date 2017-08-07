@@ -58,7 +58,7 @@ public class CarouselAdapter extends PagerAdapter{
 
         Glide.with(context)
                 .load("https://image.tmdb.org/t/p/w640/" + movie.getBackdropPath())
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                //.diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(imageView);
 
         //Video title

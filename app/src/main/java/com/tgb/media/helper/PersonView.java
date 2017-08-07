@@ -46,8 +46,8 @@ public class PersonView extends PercentRelativeLayout {
     public void setProfilePhoto(String personPhoto){
         Glide.with(context).load("https://image.tmdb.org/t/p/w640/" + personPhoto)
                 .thumbnail(1)
-                .crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                //.crossFade()
+                //.diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(profilePhoto);
     }
 

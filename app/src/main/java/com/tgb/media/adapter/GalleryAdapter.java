@@ -87,8 +87,8 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ThumbHol
 
         Glide.with(mContext).load("https://image.tmdb.org/t/p/w640/" + movie.getPosterPath())
                 .thumbnail(1)
-                .crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                //.crossFade()
+                //.diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.thumbnail);
 
         holder.title.setText(movie.getTitle());

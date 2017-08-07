@@ -31,6 +31,7 @@
 
 
     <!-- Video player -->
+    <color name="video_toolbar_background">#CC000000</color>
     <color name="video_player_bottom_line_background">#CC000000</color>
     <color name="video_player_title">#fff</color>
     <color name="video_player_subtitle">#c1c1c1</color>
