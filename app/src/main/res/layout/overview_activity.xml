@@ -1,420 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <me.henrytao.smoothappbarlayout.SmoothAppBarLayout
-        android:id="@+id/smooth_app_bar_layout"
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/app_bar_height">
+        android:layout_height="@dimen/app_bar_height"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:fitsSystemWindows="true">
 
         <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar_layout"
+            android:id="@+id/main.collapsing"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
+            app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:titleEnabled="false">
 
             <ImageView
                 android:id="@+id/theme_poster"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
+                android:fitsSystemWindows="true"
                 app:layout_collapseMode="parallax" />
 
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:fitsSystemWindows="true"
+                android:elevation="4dp"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:layout_collapseMode="pin"/>
+
         </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
 
-    </me.henrytao.smoothappbarlayout.SmoothAppBarLayout>
-
-    <me.henrytao.smoothappbarlayout.widget.NestedScrollView
-        android:id="@+id/nested_scroll_view"
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:behavior_overlapTop="55dp">
+
+        <include layout="@layout/content_overview" />
+
+    </android.support.v4.widget.NestedScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/play_button"
         android:layout_height="wrap_content"
-        android:fillViewport="true">
-
-        <LinearLayout
-            android:id="@+id/container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/details_overview_top_padding">
-
-                <android.support.percent.PercentFrameLayout
-                    android:id="@+id/theme_play_container"
-                    android:layout_width="@dimen/details_theme_play_container"
-                    android:layout_height="@dimen/details_theme_play_container"
-                    android:layout_gravity="center"
-                    android:visibility="gone">
-
-                    <ImageView
-                        android:id="@+id/theme_play_button"
-                        app:layout_widthPercent="50%"
-                        app:layout_heightPercent="50%"
-                        android:layout_gravity="center"
-                        android:adjustViewBounds="true"
-                        app:srcCompat="@drawable/ic_theme_play"/>
-
-                </android.support.percent.PercentFrameLayout>
-
-            </FrameLayout>
-
-            <!-- Content -->
-            <android.support.percent.PercentRelativeLayout
-                android:id="@id/content_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <android.support.percent.PercentRelativeLayout
-                    app:layout_widthPercent="92%"
-                    android:layout_height="wrap_content"
-                    app:layout_marginStartPercent="4%">
-
-                    <android.support.design.widget.FloatingActionButton
-                        android:id="@+id/play_button"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        app:srcCompat="@drawable/ic_play_button"
-                        android:scaleType="center"
-                        android:layout_marginTop="28dp"
-                        android:layout_alignParentEnd="true"/>
-
-                    <!-- Poster block -->
-                    <android.support.percent.PercentRelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/details_poster_height"
-                        android:id="@+id/poster_block">
-
-                        <ImageView
-                            android:id="@+id/poster"
-                            android:layout_width="@dimen/details_poster_width"
-                            android:layout_height="match_parent"
-                            android:adjustViewBounds="true"
-                            android:scaleType="centerCrop"
-                            android:transitionName="@string/gallery_transition" />
-
-                        <TextView
-                            android:id="@+id/title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/details_poster_title_start_margin"
-                            android:layout_toEndOf="@id/poster"
-                            android:ellipsize="end"
-                            android:maxLines="2"
-                            android:textColor="@color/title_color"
-                            android:textSize="@dimen/details_poster_title_text_size"
-                            app:layout_marginTopPercent="47%" />
-
-                        <TextView
-                            android:id="@+id/subtitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignStart="@+id/title"
-                            android:layout_below="@+id/title"
-                            android:ellipsize="end"
-                            android:maxLines="2"
-                            android:textSize="@dimen/details_poster_subtitle_text_size" />
-
-                    </android.support.percent.PercentRelativeLayout>
-
-                    <!-- Runtime block -->
-                    <FrameLayout
-                        android:id="@+id/runtime_block"
-                        android:layout_width="@dimen/details_poster_width"
-                        android:layout_height="@dimen/details_time_block_height"
-                        android:layout_alignStart="@id/poster_block"
-                        android:layout_marginTop="8dp"
-                        android:layout_below="@id/poster_block">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal"
-                            android:layout_gravity="center">
-
-                            <ImageView
-                                android:layout_width="@dimen/details_time_block_icon_width"
-                                android:layout_height="match_parent"
-                                android:adjustViewBounds="true"
-                                app:srcCompat="@drawable/ic_alarm_clock" />
-
-                            <TextView
-                                android:id="@+id/runtime"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_marginStart="5dp"
-                                android:gravity="start|center"
-                                android:textColor="@color/title_color"
-                                android:textSize="@dimen/details_overview_time_block_text_size" />
-
-                        </LinearLayout>
-
-                    </FrameLayout>
-
-                    <!-- The icons order is very important, do not change direction of this layout! -->
-                    <LinearLayout
-                        android:id="@+id/icons_container"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/details_icons_size"
-                        android:layout_below="@id/runtime_block"
-                        android:layout_marginTop="@dimen/details_icons_block_top_margin"
-                        android:orientation="horizontal"
-                        android:layout_centerHorizontal="true"
-                        android:layoutDirection="ltr">
-
-                        <ImageView
-                            android:layout_height="match_parent"
-                            android:layout_width="@dimen/details_icons_size"
-                            app:srcCompat="@drawable/ic_multimedia"
-                            android:adjustViewBounds="true"/>
-
-                        <ImageView
-                            android:layout_height="match_parent"
-                            android:layout_width="@dimen/details_icons_big_size"
-                            app:srcCompat="@drawable/ic_eye"
-                            android:scaleType="centerCrop"
-                            android:layout_marginStart="@dimen/details_icons_start_margin"/>
-
-                        <!-- <ImageView
-                            android:layout_height="match_parent"
-                            android:layout_width="@dimen/details_icons_size"
-                            app:srcCompat="@drawable/ic_consulting_message"
-                            android:adjustViewBounds="true"
-                            android:layout_marginStart="@dimen/details_icons_start_margin"/> -->
-
-                        <ImageView
-                            android:id="@+id/trailer_button"
-                            android:layout_height="match_parent"
-                            android:layout_width="@dimen/details_icons_size"
-                            app:srcCompat="@drawable/ic_trailer_button"
-                            android:adjustViewBounds="true"
-                            android:layout_marginStart="@dimen/details_icons_start_margin"/>
-
-                        <android.support.percent.PercentRelativeLayout
-                            android:orientation="horizontal"
-                            android:layout_height="match_parent"
-                            android:layout_width="@dimen/details_icons_huge_size"
-                            android:layout_marginStart="@dimen/details_icons_start_margin"
-                            android:visibility="gone">
-
-                            <TextView
-                                android:id="@+id/rating"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:gravity="bottom"
-                                android:textSize="@dimen/details_icons_size"
-                                android:text="8.7"/>
-
-                            <ImageView
-                                android:layout_width="@dimen/details_rating_star_size"
-                                android:layout_height="@dimen/details_rating_star_size"
-                                app:srcCompat="@drawable/ic_star_rating"
-                                android:adjustViewBounds="true"
-                                android:layout_alignParentBottom="true"
-                                android:layout_marginLeft="-3dp"
-                                android:layout_marginBottom="6dp"
-                                android:layout_toRightOf="@id/rating"/>
-
-                        </android.support.percent.PercentRelativeLayout>
-
-                        <com.sackcentury.shinebuttonlib.ShineButton
-                            android:id="@+id/like_button"
-                            android:layout_height="match_parent"
-                            android:layout_width="@dimen/details_icons_size"
-                            android:adjustViewBounds="true"
-                            app:btn_color="@color/no_clicked_button_color"
-                            app:btn_fill_color="@color/button_color"
-                            android:elevation="10dp"
-                            app:siShape="@raw/heart"
-                            android:layout_marginStart="@dimen/details_icons_start_margin"/>
-
-                    </LinearLayout>
-
-                    <!-- Generic details -->
-                    <LinearLayout
-                        android:id="@+id/generic_details"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:layout_below="@id/icons_container"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="3dp"
-                                android:text="@string/genres"
-                                android:textColor="@color/title_color"
-                                android:textSize="@dimen/details_generic_info_title_size" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="3dp"
-                                android:text="@string/details_generic_info_separate_text"
-                                android:textColor="@color/title_color"
-                                android:textSize="@dimen/details_generic_info_title_size" />
-
-                            <TextView
-                                android:id="@+id/genes"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:ellipsize="end"
-                                android:maxLines="1"
-                                android:textColor="@color/overview_text_color"
-                                android:textSize="@dimen/details_generic_info_title_size" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="3dp"
-                                android:text="@string/release_date"
-                                android:textColor="@color/title_color"
-                                android:textSize="@dimen/details_generic_info_title_size" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="3dp"
-                                android:text="@string/details_generic_info_separate_text"
-                                android:textColor="@color/title_color"
-                                android:textSize="@dimen/details_generic_info_title_size" />
-
-                            <TextView
-                                android:id="@+id/release_date"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:ellipsize="end"
-                                android:maxLines="1"
-                                android:textColor="@color/overview_text_color"
-                                android:textSize="@dimen/details_generic_info_title_size" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="3dp"
-                                android:text="@string/director"
-                                android:textColor="@color/title_color"
-                                android:textSize="@dimen/details_generic_info_title_size" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="3dp"
-                                android:text="@string/details_generic_info_separate_text"
-                                android:textColor="@color/title_color"
-                                android:textSize="@dimen/details_generic_info_title_size" />
-
-                            <TextView
-                                android:id="@+id/director"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/overview_text_color"
-                                android:textSize="@dimen/details_generic_info_title_size" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <!-- Overview -->
-                    <TextView
-                        android:id="@+id/overview_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="36dp"
-                        android:layout_below="@id/generic_details"
-                        android:textSize="@dimen/details_overview_title_text_size"
-                        android:textColor="@color/title_color"
-                        android:text="@string/overview"/>
-
-                    <com.tgb.media.helper.ExpandableTextView
-                        android:id="@+id/overview_content"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/details_overview_top_margin"
-                        android:layout_below="@id/overview_title"
-                        android:textSize="@dimen/details_overview_text_size"
-                        android:textColor="@color/overview_text_color"
-                        android:maxLines="5"
-                        android:ellipsize="end"/>
-
-                    <TextView
-                        android:id="@+id/read_more"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/details_read_more_top_margin"
-                        android:layout_below="@id/overview_content"
-                        android:layout_centerHorizontal="true"
-                        android:textSize="@dimen/details_overview_read_more_text_size"
-                        android:textColor="@color/button_color"
-                        android:text="@string/read_more"
-                        android:visibility="invisible"/>
-
-                </android.support.percent.PercentRelativeLayout>
-
-            </android.support.percent.PercentRelativeLayout>
-
-            <!-- Cast -->
-            <RelativeLayout
-                android:id="@+id/cast_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/overview_footer_background"
-                android:layoutDirection="ltr">
-
-                <TextView
-                    android:id="@+id/cast_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:textSize="@dimen/details_footer_title_text_size"
-                    android:textColor="@color/title_color"
-                    android:text="@string/cast"
-                    android:fontFamily="sans-serif-light"/>
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/cast_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/details_cast_list_height"
-                    android:layout_below="@id/cast_title"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp" />
-
-            </RelativeLayout>
-
-        </LinearLayout>
-
-
-    </me.henrytao.smoothappbarlayout.widget.NestedScrollView>
-
+        android:layout_width="wrap_content"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:src="@drawable/ic_play_button"
+        app:layout_anchor="@id/appbar"
+        app:layout_anchorGravity="bottom|end"
+        android:scaleType="center"
+        />
 
 </android.support.design.widget.CoordinatorLayout>

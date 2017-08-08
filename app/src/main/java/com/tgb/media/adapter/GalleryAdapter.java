@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.tgb.media.R;
 import com.tgb.media.activities.OverviewActivity;
 import com.tgb.media.database.MovieOverviewModel;
@@ -25,6 +26,8 @@ import com.tgb.media.helper.MovieObservableResult;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ThumbHolder> {
 
@@ -87,8 +90,10 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ThumbHol
 
         Glide.with(mContext).load("https://image.tmdb.org/t/p/w640/" + movie.getPosterPath())
                 .thumbnail(1)
-                //.crossFade()
-                //.diskCacheStrategy(DiskCacheStrategy.ALL)
+                .transition(withCrossFade())
+                .apply(new RequestOptions()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                )
                 .into(holder.thumbnail);
 
         holder.title.setText(movie.getTitle());

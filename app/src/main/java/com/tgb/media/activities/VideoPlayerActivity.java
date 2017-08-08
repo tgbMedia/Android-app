@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -65,6 +66,8 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import timber.log.Timber;
+
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 public class VideoPlayerActivity extends AppCompatActivity
         implements AdaptiveMediaSourceEventListener, ExoPlayer.EventListener{
@@ -116,6 +119,7 @@ public class VideoPlayerActivity extends AppCompatActivity
 
                         // Attach a new playback client
                         mRemotePlaybackClient = new RemotePlaybackClient(getBaseContext(), mRoute);
+
 
                         // Start remote playback (if necessary)
                         // ...
@@ -262,16 +266,20 @@ public class VideoPlayerActivity extends AppCompatActivity
         Glide.with(getBaseContext())
                 .load("https://image.tmdb.org/t/p/w640/" + movie.getPosterPath())
                 .thumbnail(1)
-                //.crossFade()
-                //.diskCacheStrategy(DiskCacheStrategy.ALL)
+                .transition(withCrossFade())
+                .apply(new RequestOptions()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                )
                 .into(playerPoster);
 
         //Movie backdrop poster
         Glide.with(getBaseContext()).load(
                 "https://image.tmdb.org/t/p/w1300_and_h730_bestv2/" + movie.getBackdropPath())
                 .thumbnail(1)
-                //.crossFade()
-                //.diskCacheStrategy(DiskCacheStrategy.ALL)
+                .transition(withCrossFade())
+                .apply(new RequestOptions()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                )
                 .into(backdrop);
 
         //Player titles

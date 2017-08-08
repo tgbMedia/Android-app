@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/container">
+
+    <ImageView
+        android:id="@+id/poster"
+        android:layout_width="@dimen/details_poster_width"
+        android:layout_height="@dimen/details_poster_height"
+        android:layout_alignParentBottom="true"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.04" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/poster"
+        app:layout_constraintBottom_toBottomOf="@+id/poster"
+        app:layout_constraintVertical_bias="0.6"
+        app:layout_constraintStart_toEndOf="@+id/poster"
+        android:layout_marginStart="@dimen/details_poster_title_start_margin"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textColor="@color/title_color"
+        android:textSize="@dimen/details_poster_title_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintHorizontal_bias="0.0" />
+
+    <TextView
+        android:id="@+id/subtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_constraintStart_toStartOf="@+id/title"
+        android:layout_marginStart="0dp"
+        app:layout_constraintEnd_toEndOf="@+id/title"
+        android:layout_marginEnd="0dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textSize="@dimen/details_poster_subtitle_text_size"/>
+
+    <LinearLayout
+        android:id="@+id/run_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@+id/poster"
+        app:layout_constraintStart_toStartOf="@+id/poster"
+        app:layout_constraintTop_toBottomOf="@+id/poster"
+        android:layout_marginTop="8dp">
+
+        <ImageView
+            android:layout_width="@dimen/details_time_block_icon_width"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            app:srcCompat="@drawable/ic_alarm_clock" />
+
+        <TextView
+            android:id="@+id/runtime"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
+            android:gravity="start|center"
+            android:textColor="@color/title_color"
+            android:textSize="@dimen/details_overview_time_block_text_size" />
+
+    </LinearLayout>
+
+    <!-- The icons order is very important, do not change the layout direction of this element! -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@+id/subtitle"
+        app:layout_constraintStart_toStartOf="@+id/poster"
+        app:layout_constraintTop_toBottomOf="@+id/run_time"
+        android:layout_marginTop="@dimen/details_icons_block_top_margin"
+        android:layoutDirection="ltr"
+        android:id="@+id/linearLayout">
+
+        <ImageView
+            android:layout_height="match_parent"
+            android:layout_width="@dimen/details_icons_size"
+            app:srcCompat="@drawable/ic_multimedia"
+            android:adjustViewBounds="true"/>
+
+        <ImageView
+            android:layout_height="match_parent"
+            android:layout_width="@dimen/details_icons_big_size"
+            app:srcCompat="@drawable/ic_eye"
+            android:scaleType="centerCrop"
+            android:layout_marginStart="@dimen/details_icons_start_margin"/>
+
+        <!-- <ImageView
+            android:layout_height="match_parent"
+            android:layout_width="@dimen/details_icons_size"
+            app:srcCompat="@drawable/ic_consulting_message"
+            android:adjustViewBounds="true"
+            android:layout_marginStart="@dimen/details_icons_start_margin"/> -->
+
+        <ImageView
+            android:id="@+id/trailer_button"
+            android:layout_height="match_parent"
+            android:layout_width="@dimen/details_icons_size"
+            app:srcCompat="@drawable/ic_trailer_button"
+            android:adjustViewBounds="true"
+            android:layout_marginStart="@dimen/details_icons_start_margin"/>
+
+        <android.support.percent.PercentRelativeLayout
+            android:orientation="horizontal"
+            android:layout_height="match_parent"
+            android:layout_width="@dimen/details_icons_huge_size"
+            android:layout_marginStart="@dimen/details_icons_start_margin"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/rating"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="bottom"
+                android:textSize="@dimen/details_icons_size"
+                android:text="8.7"/>
+
+            <ImageView
+                android:layout_width="@dimen/details_rating_star_size"
+                android:layout_height="@dimen/details_rating_star_size"
+                app:srcCompat="@drawable/ic_star_rating"
+                android:adjustViewBounds="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="-3dp"
+                android:layout_marginBottom="6dp"
+                android:layout_toRightOf="@id/rating"/>
+
+        </android.support.percent.PercentRelativeLayout>
+
+        <com.sackcentury.shinebuttonlib.ShineButton
+            android:id="@+id/like_button"
+            android:layout_height="match_parent"
+            android:layout_width="@dimen/details_icons_size"
+            android:adjustViewBounds="true"
+            app:btn_color="@color/no_clicked_button_color"
+            app:btn_fill_color="@color/button_color"
+            android:elevation="10dp"
+            app:siShape="@raw/heart"
+            android:layout_marginStart="@dimen/details_icons_start_margin"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="0dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="24dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="@+id/subtitle"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/poster"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        android:id="@+id/linearLayout2">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="3dp"
+                android:text="@string/genres"
+                android:textColor="@color/title_color"
+                android:textSize="@dimen/details_generic_info_title_size" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="3dp"
+                android:text="@string/details_generic_info_separate_text"
+                android:textColor="@color/title_color"
+                android:textSize="@dimen/details_generic_info_title_size" />
+
+            <TextView
+                android:id="@+id/genes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/overview_text_color"
+                android:textSize="@dimen/details_generic_info_title_size" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="3dp"
+                android:text="@string/release_date"
+                android:textColor="@color/title_color"
+                android:textSize="@dimen/details_generic_info_title_size" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="3dp"
+                android:text="@string/details_generic_info_separate_text"
+                android:textColor="@color/title_color"
+                android:textSize="@dimen/details_generic_info_title_size" />
+
+            <TextView
+                android:id="@+id/release_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/overview_text_color"
+                android:textSize="@dimen/details_generic_info_title_size" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="3dp"
+                android:text="@string/director"
+                android:textColor="@color/title_color"
+                android:textSize="@dimen/details_generic_info_title_size" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="3dp"
+                android:text="@string/details_generic_info_separate_text"
+                android:textColor="@color/title_color"
+                android:textSize="@dimen/details_generic_info_title_size" />
+
+            <TextView
+                android:id="@+id/director"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/overview_text_color"
+                android:textSize="@dimen/details_generic_info_title_size" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/overview_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        app:layout_constraintStart_toStartOf="@+id/poster"
+        android:layout_marginStart="0dp"
+        app:layout_constraintEnd_toEndOf="@+id/title"
+        android:layout_marginEnd="0dp"
+        android:layout_marginTop="36dp"
+        android:textSize="@dimen/details_overview_title_text_size"
+        android:textColor="@color/title_color"
+        android:text="@string/overview"/>
+
+    <com.tgb.media.helper.ExpandableTextView
+        android:id="@+id/overview_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:layout_marginTop="@dimen/details_overview_top_margin"
+        app:layout_constraintTop_toBottomOf="@+id/overview_title"
+        app:layout_constraintEnd_toEndOf="@+id/title"
+        android:layout_marginEnd="0dp"
+        app:layout_constraintStart_toStartOf="@+id/poster"
+        android:layout_marginStart="0dp"
+        android:textSize="@dimen/details_overview_text_size"
+        android:textColor="@color/overview_text_color"
+        android:maxLines="5"
+        android:ellipsize="end"/>
+
+    <TextView
+        android:id="@+id/read_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/overview_content"
+        app:layout_constraintStart_toStartOf="@+id/overview_content"
+        android:layout_marginStart="0dp"
+        app:layout_constraintEnd_toEndOf="@+id/overview_content"
+        android:layout_marginEnd="0dp"
+        android:textSize="@dimen/details_overview_read_more_text_size"
+        android:textColor="@color/button_color"
+        android:text="@string/read_more"
+        android:visibility="invisible"/>
+
+    <RelativeLayout
+        android:id="@+id/cast_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@color/overview_footer_background"
+        android:layoutDirection="ltr"
+        android:layout_marginTop="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/read_more"
+        app:layout_constraintVertical_bias="1.0">
+
+        <TextView
+            android:id="@+id/cast_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:textSize="@dimen/details_footer_title_text_size"
+            android:textColor="@color/title_color"
+            android:text="@string/cast"
+            android:fontFamily="sans-serif-light"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/cast_list"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/details_cast_list_height"
+            android:layout_below="@id/cast_title"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp" />
+
+    </RelativeLayout>
+
+
+</android.support.constraint.ConstraintLayout>

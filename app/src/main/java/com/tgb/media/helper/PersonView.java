@@ -9,10 +9,13 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.tgb.media.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 public class PersonView extends PercentRelativeLayout {
 
@@ -46,8 +49,10 @@ public class PersonView extends PercentRelativeLayout {
     public void setProfilePhoto(String personPhoto){
         Glide.with(context).load("https://image.tmdb.org/t/p/w640/" + personPhoto)
                 .thumbnail(1)
-                //.crossFade()
-                //.diskCacheStrategy(DiskCacheStrategy.ALL)
+                .transition(withCrossFade())
+                .apply(new RequestOptions()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                )
                 .into(profilePhoto);
     }
 

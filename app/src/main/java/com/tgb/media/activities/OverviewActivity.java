@@ -6,10 +6,12 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Display;
 import android.view.View;
@@ -22,6 +24,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.sackcentury.shinebuttonlib.ShineButton;
@@ -50,6 +53,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
+
 public class OverviewActivity extends AppCompatActivity {
 
     //Tags
@@ -60,8 +65,9 @@ public class OverviewActivity extends AppCompatActivity {
     @Inject TgbAPI tgbAPI;
 
     //Elements
+    @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.theme_poster) ImageView theme;
-    @BindView(R.id.trailer_button) View themePlayButtonContainer;
+//    @BindView(R.id.trailer_button) View themePlayButtonContainer;
     @BindView(R.id.poster) ImageView poster;
     @BindView(R.id.title) TextView title;
     @BindView(R.id.subtitle) TextView subtitle;
@@ -75,7 +81,7 @@ public class OverviewActivity extends AppCompatActivity {
     @BindView(R.id.read_more) TextView readMore;
     @BindView(R.id.cast_list) RecyclerView castList;
     @BindView(R.id.play_button) FloatingActionButton playButton;
-    @BindView(R.id.container) LinearLayout container;
+    @BindView(R.id.container) ConstraintLayout container;
     @BindView(R.id.cast_container) RelativeLayout castContainer;
 
     //Properties
@@ -95,16 +101,20 @@ public class OverviewActivity extends AppCompatActivity {
 
         setContentView(R.layout.overview_activity);
 
-        //TODO: replace the "smooth scroll" library with the original layouts, This library deprecated in API 26+
-
         //Dagger
         ((TgbApp) getApplication()).getAppComponent().inject(this);
 
         //Butterknife
         ButterKnife.bind(this);
 
-        initialize();
+        //Toolbar
+        setTitle("");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        initialize();
     }
 
     private void initialize(){
@@ -126,36 +136,21 @@ public class OverviewActivity extends AppCompatActivity {
                 //.diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(poster);
 
-        Timber.tag(TAG)
-                .i("Title: %s, Server id: %s", movie.getTitle(), movie.getServerId());
+//        Timber.tag(TAG)
+//                .i("Title: %s, Server id: %s", movie.getTitle(), movie.getServerId());
+
 
         //Movie backdrop poster
         Glide.with(getBaseContext()).load(
                 "https://image.tmdb.org/t/p/w1300_and_h730_bestv2/" + movie.getBackdropPath())
                 .thumbnail(1)
-                //.crossFade()
-                //.diskCacheStrategy(DiskCacheStrategy.ALL)
+                .transition(withCrossFade())
+                .apply(new RequestOptions()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                )
                 .into(theme);
-
-        //Movie trailer
-        if(!TextUtils.isEmpty(movie.getYoutubeTrailer())){
-            themePlayButtonContainer.setVisibility(View.VISIBLE);
-
-            themePlayButtonContainer.setOnClickListener(view -> {
-
-                Intent intent = YouTubeStandalonePlayer.createVideoIntent(
-                        this, getString(R.string.google_api_key),
-                        movie.getYoutubeTrailer(), 0, true, false);
-
-                if (canResolveIntent(intent)) {
-                    startActivityForResult(intent, REQ_START_STANDALONE_PLAYER);
-                } else {
-                    // Could not resolve the intent - must need to install or update the YouTube API service.
-                    YouTubeInitializationResult.SERVICE_MISSING
-                            .getErrorDialog(this, REQ_RESOLVE_SERVICE_MISSING).show();
-                }
-            });
-        }
+//
+//        //Movie trailer
 //        if(!TextUtils.isEmpty(movie.getYoutubeTrailer())){
 //            themePlayButtonContainer.setVisibility(View.VISIBLE);
 //
@@ -174,8 +169,26 @@ public class OverviewActivity extends AppCompatActivity {
 //                }
 //            });
 //        }
-
-        //Play button
+//        if(!TextUtils.isEmpty(movie.getYoutubeTrailer())){
+//            themePlayButtonContainer.setVisibility(View.VISIBLE);
+//
+//            themePlayButtonContainer.setOnClickListener(view -> {
+//
+//                Intent intent = YouTubeStandalonePlayer.createVideoIntent(
+//                        this, getString(R.string.google_api_key),
+//                        movie.getYoutubeTrailer(), 0, true, false);
+//
+//                if (canResolveIntent(intent)) {
+//                    startActivityForResult(intent, REQ_START_STANDALONE_PLAYER);
+//                } else {
+//                    // Could not resolve the intent - must need to install or update the YouTube API service.
+//                    YouTubeInitializationResult.SERVICE_MISSING
+//                            .getErrorDialog(this, REQ_RESOLVE_SERVICE_MISSING).show();
+//                }
+//            });
+//        }
+//
+//        //Play button
         playButton.setOnClickListener(v -> {
             startActivity(buildVideoPlayerIntent(this, movie.getServerId(), movie.getId()));
         });
@@ -183,7 +196,7 @@ public class OverviewActivity extends AppCompatActivity {
         //Movie title
         title.setText(movie.getTitle());
 
-        //Release year
+//        //Release year
         Calendar movieReleaseDate = Calendar.getInstance();
         movieReleaseDate.setTimeInMillis(movie.getReleaseDate());
 
@@ -193,7 +206,7 @@ public class OverviewActivity extends AppCompatActivity {
         runtime.setText(getString(R.string.runtime, (int)(movie.getRuntime() / 60),
                 (int)(movie.getRuntime() % 60)));
 
-        //Rating
+//        //Rating
         rating.setText(String.format(Locale.ROOT, "%.1f", movie.getVoteAverage()));
 
         //Like button
@@ -276,14 +289,14 @@ public class OverviewActivity extends AppCompatActivity {
 
             //int width = size.x;
 
-            LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams)
+            ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams)
                     castContainer.getLayoutParams();
 
             int screenHeight = size.y - lp.topMargin;
             int containerHeight = container.getHeight();
             int topMargin = screenHeight - containerHeight - 50;
 
-            ((LinearLayout.LayoutParams) castContainer.getLayoutParams())
+            ((ConstraintLayout.LayoutParams) castContainer.getLayoutParams())
                     .setMargins(0, topMargin < 60 ? 60 : topMargin, 0, 0);
 
             alreadyPushedDown = true;
